@@ -897,3 +897,192 @@ body {
 .site-footer {
   padding-bottom: 42px;
 }
+/* ============================================================
+   ガッツリ見た目変更版：カード型アプリデザイン
+   ============================================================ */
+
+body {
+  background:
+    linear-gradient(180deg, #052e2b 0%, #0f766e 220px, #eef4f3 220px, #eef4f3 100%);
+}
+
+.app {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ヘッダーを大きく見せる */
+.site-header {
+  margin: 12px 12px 0;
+  border-radius: 26px;
+  padding: 38px 18px 34px;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,255,255,0.32), transparent 24%),
+    radial-gradient(circle at 88% 12%, rgba(245,158,11,0.35), transparent 28%),
+    linear-gradient(135deg, #064e3b 0%, #0f766e 55%, #111827 100%);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+}
+
+.site-title {
+  font-size: 32px;
+}
+
+.site-tagline {
+  font-size: 15px;
+  opacity: 1;
+}
+
+/* 注意書きを小さくおしゃれに */
+.notice-banner {
+  margin: 14px 16px 0;
+  background: #fff8e7;
+  border: 1px solid #f4d08a;
+  border-radius: 18px;
+}
+
+/* 検索エリアを浮かせる */
+.search-section {
+  margin: 14px 16px;
+  padding: 16px;
+  border-radius: 24px;
+  background: #ffffff;
+  border: none;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+}
+
+.search-row input[type="text"] {
+  border-radius: 16px;
+  background: #f1f5f4;
+  border: 2px solid transparent;
+}
+
+.search-row button {
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+}
+
+/* カテゴリをカードっぽく */
+.category-scroll {
+  margin: 0 0 8px;
+  padding: 12px 16px 14px;
+  background: transparent;
+  border-bottom: none;
+}
+
+.cat-btn {
+  padding: 11px 15px;
+  background: #ffffff;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.10);
+}
+
+.cat-btn.active {
+  background: #111827;
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(17, 24, 39, 0.26);
+}
+
+/* 施設一覧エリア */
+main {
+  padding: 12px 16px 4px;
+}
+
+.section-heading {
+  font-size: 24px;
+}
+
+.result-count {
+  background: #ffffff;
+  display: inline-flex;
+  padding: 5px 10px;
+  border-radius: 999px;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.08);
+}
+
+/* 施設カードをかなり変える */
+.card {
+  border: none;
+  border-left: none;
+  border-radius: 24px;
+  padding: 18px;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  display: block;
+  height: 6px;
+  margin: -18px -18px 14px;
+  background: var(--cat-color, #0f766e);
+}
+
+.card-icon {
+  width: 52px;
+  height: 52px;
+  font-size: 26px;
+  border-radius: 18px;
+}
+
+.card-category {
+  font-size: 12px;
+  padding: 4px 11px;
+}
+
+.card-title {
+  font-size: 21px;
+  font-weight: 900;
+}
+
+.card-info {
+  background: #f1f5f4;
+  border-radius: 16px;
+}
+
+.card-actions a {
+  border-radius: 16px;
+  padding: 13px 8px;
+}
+
+.map-btn {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.official-btn {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+}
+
+.tel-btn {
+  background: linear-gradient(135deg, #0f766e 0%, #064e3b 100%);
+}
+
+/* ランキングを目立たせる */
+.ranking-section {
+  margin: 16px !important;
+  border: none !important;
+  border-radius: 26px !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(245,158,11,0.22), transparent 30%),
+    linear-gradient(135deg, #ffffff 0%, #fff7ed 100%) !important;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.14) !important;
+}
+
+.ranking-title {
+  font-size: 21px !important;
+}
+
+.ranking-rank {
+  background: #111827 !important;
+}
+
+/* 掲載依頼ボタンを目立たせる */
+.post-request-btn {
+  border-radius: 24px;
+  background: linear-gradient(135deg, #111827 0%, #0f766e 100%);
+  box-shadow: 0 16px 30px rgba(17, 24, 39, 0.22);
+}
