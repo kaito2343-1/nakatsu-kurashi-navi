@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ===== SEO用タグ =====
+     公開後、og:url と canonical のURLは自分の公開URLに書き換えてください。 -->
+<title>中津くらしナビ｜大分県中津市の生活便利サイト（病院・薬局・相談窓口さがし）</title>
+<meta name="description" content="大分県中津市周辺の生活便利サイト。病院・歯医者・薬局・ATM・コインランドリー・安いご飯・弁当・雨の日スポット・釣り場・市役所・相談窓口を、カテゴリとキーワードですぐ探せます。スマホ対応。">
+<meta name="robots" content="index,follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="中津くらしナビ">
+<meta property="og:title" content="中津くらしナビ｜中津で困った時にすぐ見る生活便利サイト">
+<meta property="og:description" content="病院・薬局・ATM・コインランドリー・相談窓口など、大分県中津市周辺の暮らしに役立つ施設をすぐ探せます。">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary">
+
+<meta name="theme-color" content="#146b64">
+
+<!-- 画像ファイル不要の絵文字ファビコン -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AD%3C/text%3E%3C/svg%3E">
+
+<!-- style.cssと同じフォルダに置いてください -->
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== ヘッダー ===== -->
+  <header class="site-header">
+    <h1 class="site-title">🧭 中津くらしナビ</h1>
+    <p class="site-tagline">中津で困った時にすぐ見る、生活便利サイト</p>
+  </header>
+
+  <!-- ===== 上部の注意書きバナー ===== -->
+  <div class="notice-banner" role="note">
+    ⚠️ このサイトは現在<strong>サンプルデータで運用中</strong>です。掲載されている施設名・電話番号・営業時間は<strong>実在の情報ではありません</strong>。
+  </div>
+
+  <!-- ===== 検索・絞り込みエリア ===== -->
+  <section class="search-section">
+    <form class="search-row" id="searchForm">
+      <label for="keywordInput" class="visually-hidden">キーワード検索</label>
+      <input
+        type="text"
+        id="keywordInput"
+        placeholder="施設名やキーワードで検索（例：薬局、内科）"
+        autocomplete="off"
+      >
+      <button type="submit" id="searchBtn">検索</button>
+    </form>
+
+    <label class="open-now-toggle">
+      <input type="checkbox" id="openNowToggle">
+      <span>営業中っぽい施設だけ表示</span>
+    </label>
+
+    <div class="action-row">
+      <button type="button" id="favOnlyBtn" class="fav-only-btn">⭐ お気に入りだけ表示</button>
+      <button type="button" id="resetBtn" class="reset-btn">ぜんぶ表示に戻す</button>
+    </div>
+  </section>
+
+  <!-- ===== カテゴリボタン（横スクロール・JSで生成） ===== -->
+  <nav class="category-scroll" id="categoryScroll" aria-label="カテゴリで絞り込み"></nav>
+
+  <!-- ===== メインコンテンツ：施設一覧 ===== -->
+  <main>
+    <h2 class="section-heading">施設一覧</h2>
+    <p id="resultCount" class="result-count" aria-live="polite"></p>
+
+    <div id="cardList" class="card-list"></div>
+
+    <p id="noResult" class="no-result" hidden>
+      条件に合う施設が見つかりませんでした
+    </p>
+  </main>
+
+  <!-- ===== 掲載依頼ボタン（目立つデザイン） ===== -->
+  <div class="post-request-wrap">
+    <button type="button" class="post-request-btn" id="postRequestBtn">
+      <span class="post-request-icon">📩</span>
+      <span class="post-request-text">
+        <strong>掲載依頼はこちら</strong>
+        <small>お店の情報を載せたい・直したい方へ</small>
+      </span>
+    </button>
+  </div>
+
+  <!-- ===== フッター ===== -->
+  <footer class="site-footer">
+    <p class="footer-warning">
+      ⚠️ 掲載中のデータはすべてサンプルであり、実在の施設情報ではありません。
+    </p>
+    <p class="footer-notice">
+      掲載している情報は変更される可能性があります。<br>
+      お出かけ前に、電話または各施設の公式情報でご確認ください。
+    </p>
+    <p class="footer-copy">&copy; 2026 中津くらしナビ（サンプルサイト）</p>
+  </footer>
+
+</div>
+
+<!-- ===== 掲載依頼の案内モーダル（普段は非表示） ===== -->
+<div class="modal-overlay" id="requestModal" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 class="modal-title" id="modalTitle">📩 掲載依頼について</h2>
+    <p class="modal-text">
+      掲載依頼フォームは現在準備中です。<br>
+      公開後は、こちらから以下の情報をお送りいただく予定です。
+    </p>
+    <ul class="modal-list">
+      <li>施設名・カテゴリ</li>
+      <li>住所・電話番号</li>
+      <li>営業時間・定休日</li>
+      <li>ひとこと紹介文</li>
+    </ul>
+    <p class="modal-text modal-text-sub">
+      正式なお問い合わせ先は、フォーム完成後にこのページでご案内します。
+    </p>
+    <button type="button" class="modal-close-btn" id="modalCloseBtn">閉じる</button>
+  </div>
+</div>
+
+<!-- ===== お気に入り操作時のトースト通知（普段は非表示） ===== -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- script.jsも同じフォルダに置いてください -->
+<script src="script.js"></script>
+</body>
+</html>
