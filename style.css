@@ -705,4 +705,195 @@ input:focus-visible {
   outline: 3px solid #2e9e5b;
   outline-offset: 2px;
 }
-</style>
+/* ============================================================
+   追加デザイン：中津くらしナビをもっとアプリっぽくする
+   ============================================================ */
+
+/* 全体背景を少し高級感あるグラデーションに */
+body {
+  background:
+    radial-gradient(circle at top left, rgba(20, 107, 100, 0.18), transparent 34%),
+    radial-gradient(circle at top right, rgba(233, 151, 57, 0.16), transparent 32%),
+    #e9eeee;
+}
+
+/* アプリ本体を少し浮かせる */
+.app {
+  overflow: hidden;
+  border-left: 1px solid rgba(255, 255, 255, 0.7);
+  border-right: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+/* ヘッダーをもっと今っぽく */
+.site-header {
+  position: relative;
+  padding: 34px 20px 28px;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.22), transparent 28%),
+    linear-gradient(135deg, #0f766e 0%, #0e4f4a 58%, #093c38 100%);
+}
+
+.site-header::after {
+  content: "生活・ご飯・駐車場をすぐ探せる";
+  display: inline-flex;
+  margin-top: 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #0e4f4a;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.site-title {
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+}
+
+.site-tagline {
+  font-weight: 700;
+}
+
+/* 注意書きをカード風に */
+.notice-banner {
+  margin: 12px 14px 0;
+  border: 1px solid #f0d9a8;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(80, 60, 20, 0.06);
+}
+
+/* 検索エリアをカードっぽく */
+.search-section {
+  margin: 12px 14px 0;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 5px 18px rgba(20, 40, 36, 0.08);
+}
+
+/* 検索ボックス */
+.search-row input[type="text"] {
+  background: #f8fbfa;
+  border: 1px solid #d9e4e1;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.search-row button {
+  box-shadow: 0 4px 10px rgba(20, 107, 100, 0.24);
+}
+
+/* カテゴリを上に吸い付く感じに */
+.category-scroll {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-top: 10px;
+  background: rgba(246, 249, 248, 0.92);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* カテゴリボタンを少し立体的に */
+.cat-btn {
+  border: 1px solid rgba(20, 107, 100, 0.12);
+  box-shadow: 0 3px 9px rgba(20, 40, 36, 0.06);
+}
+
+.cat-btn.active {
+  box-shadow: 0 5px 14px rgba(20, 107, 100, 0.28);
+}
+
+/* 施設一覧の見出し */
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-heading::before {
+  content: "";
+  width: 6px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-primary);
+}
+
+/* カードをもっとアプリ風に */
+.card {
+  border: 1px solid rgba(226, 232, 230, 0.9);
+  box-shadow:
+    0 8px 20px rgba(20, 40, 36, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.card:active {
+  transform: scale(0.985);
+  box-shadow: 0 4px 12px rgba(20, 40, 36, 0.08);
+}
+
+/* カード内アイコンを少し大きく見せる */
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+}
+
+/* 店名を少し強く */
+.card-title {
+  font-size: 20px;
+  font-weight: 850;
+}
+
+/* タグをきれいに */
+.tag {
+  background: var(--cat-color-soft, #eef7f5);
+  border: none;
+  font-weight: 700;
+}
+
+/* 地図・公式・電話ボタンを押しやすく */
+.card-actions a {
+  box-shadow: 0 3px 10px rgba(20, 40, 36, 0.07);
+}
+
+.map-btn {
+  background: linear-gradient(135deg, #e4f2f0 0%, #d7ece9 100%);
+}
+
+.tel-btn {
+  background: linear-gradient(135deg, #146b64 0%, #0e4f4a 100%);
+}
+
+/* 追加カテゴリの色 */
+.cat-10 { --cat-color: #b45309; --cat-color-soft: #fff1df; } /* 居酒屋・夜ご飯 */
+.cat-11 { --cat-color: #dc2626; --cat-color-soft: #fee2e2; } /* ラーメン */
+.cat-12 { --cat-color: #2563eb; --cat-color-soft: #dbeafe; } /* 駐車場 */
+
+/* ランキング部分をさらに馴染ませる */
+.ranking-section {
+  margin: 16px 14px 0 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 22px rgba(20, 40, 36, 0.09) !important;
+}
+
+.ranking-title {
+  letter-spacing: 0.01em;
+}
+
+.ranking-item {
+  box-shadow: 0 3px 9px rgba(20, 40, 36, 0.05);
+}
+
+/* 掲載依頼ボタンを少し高級感 */
+.post-request-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #c05621 100%);
+  box-shadow: 0 8px 20px rgba(201, 100, 29, 0.28);
+}
+
+/* スマホ下部に余白 */
+.site-footer {
+  padding-bottom: 42px;
+}
