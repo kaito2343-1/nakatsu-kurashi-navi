@@ -1,19 +1,18 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ===== SEO用タグ =====
-     公開後、og:url と canonical のURLは自分の公開URLに書き換えてください。 -->
+<!-- ===== SEO用タグ ===== -->
 <title>中津くらしナビ｜大分県中津市の生活便利サイト（病院・薬局・相談窓口さがし）</title>
-<meta name="description" content="大分県中津市周辺の生活便利サイト。病院・歯医者・薬局・ATM・コインランドリー・安いご飯・弁当・雨の日スポット・釣り場・市役所・相談窓口を、カテゴリとキーワードですぐ探せます。スマホ対応。">
+<meta name="description" content="大分県中津市周辺の生活便利サイト。市役所・病院・薬局・ATM・コインランドリー・安いご飯・弁当・雨の日スポット・釣り場・相談窓口を、カテゴリとキーワードですぐ探せます。スマホ対応。">
 <meta name="robots" content="index,follow">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="中津くらしナビ">
 <meta property="og:title" content="中津くらしナビ｜中津で困った時にすぐ見る生活便利サイト">
-<meta property="og:description" content="病院・薬局・ATM・コインランドリー・相談窓口など、大分県中津市周辺の暮らしに役立つ施設をすぐ探せます。">
+<meta property="og:description" content="市役所・病院・薬局・ATM・コインランドリー・相談窓口など、大分県中津市周辺の暮らしに役立つ施設をすぐ探せます。">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary">
 
@@ -37,7 +36,8 @@
 
   <!-- ===== 上部の注意書きバナー ===== -->
   <div class="notice-banner" role="note">
-    ⚠️ このサイトは現在<strong>サンプルデータで運用中</strong>です。掲載されている施設名・電話番号・営業時間は<strong>実在の情報ではありません</strong>。
+    ℹ️ <strong>実在施設を掲載していますが、情報は変更される場合があります。</strong><br>
+    掲載情報は変更されている場合があります。お出かけ前・利用前に、各施設の公式情報または電話でご確認ください。
   </div>
 
   <!-- ===== 検索・絞り込みエリア ===== -->
@@ -47,7 +47,7 @@
       <input
         type="text"
         id="keywordInput"
-        placeholder="施設名やキーワードで検索（例：薬局、内科）"
+        placeholder="施設名やキーワードで検索（例：薬局、図書館）"
         autocomplete="off"
       >
       <button type="submit" id="searchBtn">検索</button>
@@ -55,7 +55,7 @@
 
     <label class="open-now-toggle">
       <input type="checkbox" id="openNowToggle">
-      <span>営業中っぽい施設だけ表示</span>
+      <span>営業中っぽい施設だけ表示（営業時間が確認できた施設のみ対象）</span>
     </label>
 
     <div class="action-row">
@@ -79,13 +79,13 @@
     </p>
   </main>
 
-  <!-- ===== 掲載依頼ボタン（目立つデザイン） ===== -->
+  <!-- ===== 掲載依頼・修正依頼ボタン ===== -->
   <div class="post-request-wrap">
     <button type="button" class="post-request-btn" id="postRequestBtn">
       <span class="post-request-icon">📩</span>
       <span class="post-request-text">
-        <strong>掲載依頼はこちら</strong>
-        <small>お店の情報を載せたい・直したい方へ</small>
+        <strong>掲載依頼・修正依頼はこちら</strong>
+        <small>お店の情報を載せたい・間違いを直したい方へ</small>
       </span>
     </button>
   </div>
@@ -93,33 +93,34 @@
   <!-- ===== フッター ===== -->
   <footer class="site-footer">
     <p class="footer-warning">
-      ⚠️ 掲載中のデータはすべてサンプルであり、実在の施設情報ではありません。
+      掲載情報は変更されている場合があります。<br>
+      お出かけ前・利用前に、各施設の公式情報または電話でご確認ください。
     </p>
     <p class="footer-notice">
-      掲載している情報は変更される可能性があります。<br>
-      お出かけ前に、電話または各施設の公式情報でご確認ください。
+      「要確認」と表示されている施設は、営業時間・電話番号などが未確認の施設です。<br>
+      本サイトの情報によって生じた損害について、当サイトは責任を負いかねます。
     </p>
-    <p class="footer-copy">&copy; 2026 中津くらしナビ（サンプルサイト）</p>
+    <p class="footer-copy">&copy; 2026 中津くらしナビ</p>
   </footer>
 
 </div>
 
-<!-- ===== 掲載依頼の案内モーダル（普段は非表示） ===== -->
+<!-- ===== 掲載依頼・修正依頼の案内モーダル（普段は非表示） ===== -->
 <div class="modal-overlay" id="requestModal" hidden>
   <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <h2 class="modal-title" id="modalTitle">📩 掲載依頼について</h2>
+    <h2 class="modal-title" id="modalTitle">📩 掲載依頼・修正依頼について</h2>
     <p class="modal-text">
-      掲載依頼フォームは現在準備中です。<br>
-      公開後は、こちらから以下の情報をお送りいただく予定です。
+      掲載希望・情報修正は、<strong>施設名、住所、変更内容、確認できる公式URL</strong>を添えてご連絡ください。
     </p>
     <ul class="modal-list">
-      <li>施設名・カテゴリ</li>
-      <li>住所・電話番号</li>
-      <li>営業時間・定休日</li>
-      <li>ひとこと紹介文</li>
+      <li>施設名</li>
+      <li>住所</li>
+      <li>変更・掲載してほしい内容（営業時間・電話番号など）</li>
+      <li>内容が確認できる公式URL（公式サイト・公式SNSなど）</li>
     </ul>
     <p class="modal-text modal-text-sub">
-      正式なお問い合わせ先は、フォーム完成後にこのページでご案内します。
+      連絡用フォームは現在準備中です。公開後、このページでご案内します。<br>
+      公式URLで確認できない情報は「要確認」として掲載する場合があります。
     </p>
     <button type="button" class="modal-close-btn" id="modalCloseBtn">閉じる</button>
   </div>
