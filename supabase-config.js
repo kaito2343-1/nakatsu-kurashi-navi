@@ -13,13 +13,11 @@
 
 window.NAKATSU_SUPABASE_CONFIG = {
   // Supabaseを使う時は true に変更
-  enabled: false,
+   enabled: true,
 
-  // 例: "https://xxxxxxxxxxxx.supabase.co"
-  url: "",
+url: "https://hhzqdnaaeseiaakhhttm.supabase.co",
 
-  // Supabaseの公開用キーを入れる
-  publicKey: "",
+publicKey: "sb_publishable_hLXGGFyqYRjDWC39C0BoQQ_d9kmfVtK",
 
   table: "facilities",
 
