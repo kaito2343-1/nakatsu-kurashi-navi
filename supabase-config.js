@@ -15,9 +15,11 @@ window.NAKATSU_SUPABASE_CONFIG = {
   // Supabaseを使う時は true に変更
    enabled: true,
 
-url: "https://wygzjhtbwhgmlvghhxpv.supabase.co",
+url: "https://hhzqdnaaeseiaakhhttm.supabase.co",
 
-publicKey: "sb_publishable_hLXGGFyqYRjDWC39C0BoQQ_d9kmfVtK",
+publicKey: "sb_publishable_wuYGKU1eBcfdRzI_t3Jzig_YxRDUdsd",
+
+
 
   table: "facilities",
 
