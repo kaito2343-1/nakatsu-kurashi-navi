@@ -114,6 +114,7 @@
       mapUrl: String(row.map_url || "").trim(),
       officialUrl: String(row.official_url || "").trim(),
       instagram: String(row.instagram || "").trim(),
+      imageUrl: String(row.image_url || "").trim(),
       sourceMemo: String(row.source_memo || "Supabaseから取得").trim(),
       tags: normalizeTags(row.tags),
       memo: String(row.memo || "").trim(),
