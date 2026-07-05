@@ -863,7 +863,10 @@ function createCardHtml(facility) {
   const isFavorite = state.favorites.indexOf(facility.id) !== -1;
   const status = getOpenStatus(facility);
   const icon = CATEGORY_ICON_MAP[facility.category] || "📍";
-
+  const imageUrl = getFacilityImageUrl(facility);
+  const iconHtml = imageUrl
+    ? '<div class="card-icon card-photo"><img src="' + escapeAttribute(imageUrl) + '" alt="' + escapeAttribute(facility.name + "の写真") + '" loading="lazy"></div>'
+    : '<div class="card-icon" aria-hidden="true">' + icon + "</div>";
   // カテゴリ色分け用のクラス（.cat-0 〜 .cat-9）
   const colorIndex = CATEGORY_COLOR_INDEX[facility.category];
   const colorClass = colorIndex !== undefined ? "cat-" + colorIndex : "";
@@ -926,7 +929,7 @@ function createCardHtml(facility) {
   return (
     '<article class="card ' + colorClass + '" data-id="' + facility.id + '">' +
       '<div class="card-top">' +
-        '<div class="card-icon" aria-hidden="true">' + icon + "</div>" +
+                iconHtml +
         '<div class="card-top-text">' +
           '<span class="card-category">' + facility.category + "</span>" +
           '<h3 class="card-title">' + facility.name + "</h3>" +
