@@ -982,3 +982,8 @@ main {
 .modal-form-btn:active {
   transform: scale(0.98);
 }
+/* トップの重複バナーを非表示 */
+.notice-banner,
+.free-listing-banner {
+  display: none !important;
+}
