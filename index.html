@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- ===== SEO用タグ ===== -->
-<title>中津くらしナビ｜大分県中津市の生活便利サイト（病院・薬局・相談窓口さがし）</title>
-<meta name="description" content="大分県中津市周辺の生活便利サイト。市役所・病院・薬局・ATM・コインランドリー・安いご飯・弁当・雨の日スポット・釣り場・相談窓口を、カテゴリとキーワードですぐ探せます。スマホ対応。">
+<title>中津くらしナビ｜中津市のお店・生活情報を探せる地域サイト</title>
+<meta name="description" content="大分県中津市周辺の飲食店、カフェ、居酒屋、病院、薬局、駐車場、観光・生活情報をまとめた地域ナビ。店舗掲載・情報修正は無料で受付中。">
 <meta name="robots" content="index,follow">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="中津くらしナビ">
-<meta property="og:title" content="中津くらしナビ｜中津で困った時にすぐ見る生活便利サイト">
-<meta property="og:description" content="市役所・病院・薬局・ATM・コインランドリー・相談窓口など、大分県中津市周辺の暮らしに役立つ施設をすぐ探せます。">
+<meta property="og:title" content="中津くらしナビ｜中津市のお店・生活情報を探せる地域サイト">
+<meta property="og:description" content="中津のお店・グルメ・生活便利施設をスマホで探せる地域サイト。店舗掲載・情報修正は無料で受付中。">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary">
 
@@ -22,7 +22,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AD%3C/text%3E%3C/svg%3E">
 
 <!-- style.cssと同じフォルダに置いてください -->
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 
 <body>
@@ -32,13 +32,24 @@
   <!-- ===== ヘッダー ===== -->
   <header class="site-header">
     <h1 class="site-title">🧭 中津くらしナビ</h1>
-    <p class="site-tagline">中津で困った時にすぐ見る、生活便利サイト</p>
+    <p class="site-tagline">中津のお店・暮らし情報を探せる地域ナビ。店舗掲載は無料受付中。</p>
   </header>
 
   <!-- ===== 上部の注意書きバナー ===== -->
   <div class="notice-banner" role="note">
     ℹ️ <strong>実在施設を掲載していますが、情報は変更される場合があります。</strong><br>
     掲載情報は変更されている場合があります。お出かけ前・利用前に、各施設の公式情報または電話でご確認ください。
+  </div>
+
+  <!-- ===== 店舗掲載無料バナー ===== -->
+  <div class="free-listing-banner" role="note">
+    <div class="free-listing-main">
+      <strong>📣 中津市のお店・施設 掲載無料</strong>
+      <span>公式SNS・住所など確認できる情報があれば掲載依頼できます。</span>
+    </div>
+    <button type="button" class="free-listing-btn" onclick="document.getElementById('postRequestBtn').click()">
+      無料掲載を依頼
+    </button>
   </div>
 
   <!-- ===== 検索・絞り込みエリア ===== -->
@@ -85,8 +96,8 @@
     <button type="button" class="post-request-btn" id="postRequestBtn">
       <span class="post-request-icon">📩</span>
       <span class="post-request-text">
-        <strong>掲載依頼・修正依頼はこちら</strong>
-        <small>お店の情報を載せたい・間違いを直したい方へ</small>
+        <strong>無料掲載・修正依頼はこちら</strong>
+        <small>中津のお店・施設の掲載依頼を無料で受付中</small>
       </span>
     </button>
   </div>
@@ -111,7 +122,7 @@
   <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <h2 class="modal-title" id="modalTitle">📩 掲載依頼・修正依頼について</h2>
     <p class="modal-text">
-      掲載希望・情報修正は、<strong>施設名、住所、変更内容、確認できる公式URL</strong>を添えてご連絡ください。
+      中津市周辺のお店・施設の掲載希望、情報修正は無料で受付中です。<strong>施設名、住所、変更内容、確認できる公式URL</strong>を添えてご連絡ください。
     </p>
     <ul class="modal-list">
       <li>施設名</li>
@@ -160,6 +171,7 @@
 <script src="official-url-extra-003.js?v=1"></script>
 <script src="real-only-extra.js?v=1"></script>
 <script src="instagram-extra-001.js?v=1"></script>
+<script src="instagram-extra-002.js?v=1"></script>
 <!-- ===== 表示・ランキング系 ===== -->
 <script src="ranking.js?v=1"></script>
 <script src="ui-extra.js?v=1"></script>
@@ -173,5 +185,3 @@
 
 </body>
 </html>
-
-
