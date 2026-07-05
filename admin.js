@@ -21,7 +21,7 @@
     mapUrl: document.getElementById("mapUrl"),
     officialUrl: document.getElementById("officialUrl"),
     instagram: document.getElementById("instagram"),
-    tags: document.getElementById("tags"),
+         imageUrl: document.getElementById("imageUrl"),
     memo: document.getElementById("memo"),
     sourceMemo: document.getElementById("sourceMemo"),
     sortOrder: document.getElementById("sortOrder"),
