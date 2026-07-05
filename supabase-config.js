@@ -29,5 +29,5 @@ publicKey: "sb_publishable_wuYGKU1eBcfdRzI_t3Jzig_YxRDUdsd",
   // 既存の静的データIDとSupabaseのIDが被らないようにする
   dynamicIdBase: 900000,
 
-  selectColumns: "id,name,category,description,address,phone,hours,closed,map_url,official_url,instagram,source_memo,tags,memo,verified,is_published,sort_order,created_at,updated_at"
+  selectColumns: "*"
 };
