@@ -98,6 +98,7 @@
       map_url: fields.mapUrl.value.trim(),
       official_url: fields.officialUrl.value.trim(),
       instagram: fields.instagram.value.trim(),
+             image_url: fields.imageUrl.value.trim(),
       tags: parseTags(fields.tags.value),
       memo: fields.memo.value.trim(),
       source_memo: fields.sourceMemo.value.trim(),
