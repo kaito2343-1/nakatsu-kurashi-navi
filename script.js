@@ -753,6 +753,49 @@ function getMapUrl(facility) {
   return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
 }
 
+/* ---------------------------------------------------------
+   8-2. InstagramのURLを整えて返す
+   - instagram / instagramUrl / insta / instaUrl のどれでもOK
+   - 「@アカウント名」→ https://www.instagram.com/アカウント名/ に変換
+   - https:// が無い instagram.com/... には自動で付ける
+   - 空欄・「なし」・「未確認」・null や instagram.com 以外のURLは
+     null を返す（＝ボタンを表示しない）
+--------------------------------------------------------- */
+function getInstagramUrl(facility) {
+  const raw =
+    facility.instagram ||
+    facility.instagramUrl ||
+    facility.insta ||
+    facility.instaUrl;
+
+  if (!raw) return null;
+
+  let s = String(raw).trim();
+
+  const invalidValues = ["", "なし", "未確認", "不明", "null", "undefined", "-"];
+  if (invalidValues.indexOf(s.toLowerCase()) !== -1) return null;
+
+  // 「@アカウント名」だけの場合はフルURLに変換
+  if (s.charAt(0) === "@") {
+    s = "https://www.instagram.com/" + s.slice(1).replace(/\/+$/, "") + "/";
+  }
+
+  // 「instagram.com/xxx」のように https:// が無い場合は付ける
+  if (/^(www\.)?instagram\.com\//i.test(s)) {
+    s = "https://" + s;
+  }
+
+  // http:// は https:// に統一
+  s = s.replace(/^http:\/\//i, "https://");
+
+  // instagram.com 以外のURLや、危険な文字を含むURLは表示しない（安全対策）
+  if (!/^https:\/\/(www\.)?instagram\.com\/[A-Za-z0-9._%\-\/?=&]+$/.test(s)) {
+    return null;
+  }
+
+  return s;
+}
+
 
 /* ---------------------------------------------------------
    9. 絞り込み処理
@@ -844,6 +887,13 @@ function createCardHtml(facility) {
     ? '<a class="official-btn" href="' + facility.officialUrl + '" target="_blank" rel="noopener">🔗 公式情報を見る</a>'
     : "";
 
+  // Instagramを見る（instagram / instagramUrl / insta / instaUrl のどれかに
+  // 有効なURLがある施設のみ表示。無い施設にはボタンを出さない）
+  const instaUrl = getInstagramUrl(facility);
+  const instaButton = instaUrl
+    ? '<a class="insta-btn" href="' + instaUrl + '" target="_blank" rel="noopener noreferrer">📷 Instagram</a>'
+    : "";
+
   // 電話する（電話番号が確認できた施設のみ。#9110のような番号も安全にリンク化）
   const telButton = facility.phone
     ? '<a class="tel-btn" href="tel:' + encodeURIComponent(facility.phone) + '">📞 電話する</a>'
@@ -881,6 +931,7 @@ function createCardHtml(facility) {
       '<div class="card-actions">' +
         mapButton +
         officialButton +
+        instaButton +
         telButton +
       "</div>" +
     "</article>"
