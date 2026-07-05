@@ -15,7 +15,7 @@ window.NAKATSU_SUPABASE_CONFIG = {
   // Supabaseを使う時は true に変更
    enabled: true,
 
-url: "https://hhzqdnaaeseiaakhhttm.supabase.co",
+url: "https://wygzjhtbwhgmlvghhxpv.supabase.co",
 
 publicKey: "sb_publishable_hLXGGFyqYRjDWC39C0BoQQ_d9kmfVtK",
 
