@@ -51,12 +51,20 @@
     return String(value || "").startsWith("eyJ");
   }
 
-  function getHeaders(config, preferRepresentation) {
-    const headers = {
-      "apikey": config.publicKey,
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-    };
+function getHeaders(config, preferRepresentation) {
+  const headers = {
+    "apikey": config.publicKey,
+    "Authorization": "Bearer " + config.publicKey,
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  };
+
+  if (preferRepresentation) {
+    headers.Prefer = "return=representation";
+  }
+
+  return headers;
+}
 
     if (preferRepresentation) {
       headers.Prefer = "return=representation";
