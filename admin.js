@@ -53,7 +53,7 @@
   function getHeaders(config, preferRepresentation) {
     const headers = {
       "apikey": config.publicKey,
-      "Authorization": "Bearer " + config.publicKey,
+   
       "Accept": "application/json",
       "Content-Type": "application/json"
     };
