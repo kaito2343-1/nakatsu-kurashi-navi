@@ -58,8 +58,8 @@
       "Content-Type": "application/json"
     };
 
-    if (preferRepresentation) {
-      headers.Prefer = "return=representation";
+        if (preferRepresentation) {
+      headers.Prefer = "return=minimal";
     }
 
     return headers;
