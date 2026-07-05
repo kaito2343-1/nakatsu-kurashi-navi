@@ -177,14 +177,16 @@ body {
 
 .fav-only-btn,
 .reset-btn {
-  flex: 1;
-  min-width: 140px;
-  padding: 12px 10px;
-  font-size: 14px;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 12px 8px;
+  font-size: 13px;
   font-weight: 700;
   border-radius: 999px;
   cursor: pointer;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.35;
+  text-align: center;
 }
 
 .fav-only-btn {
@@ -192,7 +194,13 @@ body {
   background: #fbf1de;
   border: 2px solid #f0dcae;
 }
+.fav-only-btn {
+  overflow-wrap: anywhere;
+}
 
+.reset-btn {
+  white-space: nowrap;
+}
 .fav-only-btn.active {
   color: #fff;
   background: var(--color-gold);
