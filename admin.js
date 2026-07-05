@@ -50,34 +50,23 @@
   function isJwtLike(value) {
     return String(value || "").startsWith("eyJ");
   }
-
-function getHeaders(config, preferRepresentation) {
-  const headers = {
-    "apikey": config.publicKey,
-    "Authorization": "Bearer " + config.publicKey,
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-  };
-
-  if (preferRepresentation) {
-    headers.Prefer = "return=representation";
-  }
-
-  return headers;
-}
+  function getHeaders(config, preferRepresentation) {
+    const headers = {
+      "apikey": config.publicKey,
+      "Authorization": "Bearer " + config.publicKey,
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    };
 
     if (preferRepresentation) {
       headers.Prefer = "return=representation";
-    }
-
-    if (isJwtLike(config.publicKey)) {
-      headers.Authorization = "Bearer " + config.publicKey;
     }
 
     return headers;
   }
 
   function tableUrl(config) {
+
     return cleanBaseUrl(config.url) + "/rest/v1/" + encodeURIComponent(config.table);
   }
 
