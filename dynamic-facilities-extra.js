@@ -29,29 +29,21 @@
   function cleanBaseUrl(url) {
     return String(url || "").replace(/\/+$/, "");
   }
-
   function isJwtLike(value) {
     return String(value || "").startsWith("eyJ");
   }
 
-function getHeaders(config) {
-  return {
-    "apikey": config.publicKey,
-    "Authorization": "Bearer " + config.publicKey,
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-  };
-}
-
-    // legacy anon key の場合だけ Authorization を付ける
-    if (isJwtLike(config.publicKey)) {
-      headers.Authorization = "Bearer " + config.publicKey;
-    }
-
-    return headers;
+  function getHeaders(config) {
+    return {
+      "apikey": config.publicKey,
+      "Authorization": "Bearer " + config.publicKey,
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    };
   }
 
   function buildUrl(config) {
+
     const base = cleanBaseUrl(config.url);
     const table = encodeURIComponent(config.table);
     const params = new URLSearchParams();
