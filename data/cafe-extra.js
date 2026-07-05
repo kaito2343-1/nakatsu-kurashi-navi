@@ -35,11 +35,13 @@
 
   const cafeData = [
     {
-      id: 601,
-      name: "コメダ珈琲店 大分中津店",
-      description: "モーニング・軽食・休憩に使いやすいカフェ候補。"
-    },
-    {
+  id: 601,
+  name: "コメダ珈琲店 大分中津店",
+  description: "モーニング・軽食・休憩に使いやすいカフェ候補。",
+  instagram: "https://www.instagram.com/komeda_coffee_official/"
+},
+      
+    
       id: 602,
       name: "古民家かふぇ こずえ",
       description: "古民家系の雰囲気でゆっくりしたい時のカフェ候補。"
@@ -149,7 +151,8 @@
         closed: "",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(item.name + " 中津市"),
         officialUrl: "",
-        sourceMemo: "2026年7月時点の追加候補。営業時間・住所・定休日はGoogleマップ等で要確認",
+instagram: item.instagram || "",
+sourceMemo: "2026年7月時点の追加候補。営業時間・住所・定休日はGoogleマップ等で要確認",
         tags: ["カフェ", "喫茶店", "中津市", "ランチ", "休憩", "スイーツ"],
         memo: "営業時間・定休日・料金・閉店情報は変わる場合があります。行く前にGoogleマップや公式情報で確認してください。",
         verified: false
