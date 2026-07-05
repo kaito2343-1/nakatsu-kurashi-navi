@@ -8,34 +8,32 @@
    ============================================================ */
 
 :root {
-  /* --- 新パレット --- */
-  --ink: #1b2422;
-  --ink-sub: #5c6a66;
-  --paper: #f2f1ec;          /* 和紙っぽい生成り */
+  --ink: #000000;
+  --ink-sub: #6b6b6b;
+  --paper: #f3f1ea;
   --surface: #ffffff;
-  --hairline: #e3e2da;
+  --hairline: #dbd9d3;
 
-  --pine: #0e5148;           /* 松葉色（メイン） */
-  --pine-deep: #093a34;
-  --pine-soft: #e3efec;
+  --pine: #1e3a5f;
+  --pine-deep: #12263f;
+  --pine-soft: #e0e3e9;
 
-  --kaki: #e05a2b;           /* 柿色（アクセント・1色のみ） */
-  --kaki-deep: #c44a1f;
-  --kaki-soft: #fdeee6;
+  --kaki: #e8a33d;
+  --kaki-deep: #c8842a;
+  --kaki-soft: #fcf4e8;
 
   --green-ok: #1d7a4f;
   --green-ok-bg: #e4f4ea;
   --amber-warn: #a3641a;
   --amber-warn-bg: #faf1e2;
 
-  --r-l: 20px;
-  --r-m: 14px;
-  --r-s: 10px;
+  --r-l: 18px;
+  --r-m: 13px;
+  --r-s: 9px;
 
   --shadow-s: 0 1px 2px rgba(27, 36, 34, 0.05), 0 4px 12px rgba(27, 36, 34, 0.06);
   --shadow-m: 0 2px 4px rgba(27, 36, 34, 0.05), 0 10px 28px rgba(27, 36, 34, 0.10);
 
-  /* --- index.html内インラインCSSのトークンを差し替え --- */
   --main: var(--pine);
   --main-dark: var(--pine-deep);
   --main-soft: var(--pine-soft);
@@ -52,7 +50,6 @@
   --card: var(--surface);
   --shadow: var(--shadow-s);
 
-  /* --- style.css側のトークンも差し替え（注入UI用） --- */
   --color-bg: var(--paper);
   --color-card-bg: var(--surface);
   --color-primary: var(--pine);
@@ -70,7 +67,7 @@
   --radius-l: var(--r-l);
   --radius-m: var(--r-m);
 }
-
+  
 /* ---------- 書体 ---------- */
 body {
   font-family: "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont,
