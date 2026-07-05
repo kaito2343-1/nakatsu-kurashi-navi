@@ -1021,7 +1021,18 @@ function render() {
 
   renderFavOnlyButton();
 }
+function scrollToResults() {
+  const resultCountEl = document.getElementById("resultCount");
+  const cardListEl = document.getElementById("cardList");
+  const target = resultCountEl || cardListEl;
 
+  if (!target) return;
+
+  target.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
 
 /* ---------------------------------------------------------
    14. 掲載依頼・修正依頼モーダルの開閉
@@ -1053,9 +1064,10 @@ function setupEvents() {
   if (searchForm && keywordInput) {
     searchForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      state.keyword = keywordInput.value.trim();
+         state.keyword = keywordInput.value.trim();
       render();
-    });
+      setTimeout(scrollToResults, 50);
+    }
 
     keywordInput.addEventListener("input", function () {
       state.keyword = keywordInput.value.trim();
