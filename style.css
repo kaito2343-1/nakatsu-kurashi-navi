@@ -18,9 +18,9 @@
   --color-closed: #8a8f8e;
   --color-closed-bg: #eef0f0;
 
-  --color-verified: #2e7d32;      /* 確認済みバッジ（緑） */
+  --color-verified: #2e7d32;
   --color-verified-bg: #e8f5e9;
-  --color-unverified: #b26a00;    /* 要確認バッジ（オレンジ） */
+  --color-unverified: #b26a00;
   --color-unverified-bg: #fff3e0;
 
   --color-gold: #b9852a;
@@ -109,6 +109,52 @@ body {
   font-weight: 700;
 }
 
+/* ---------- 店舗掲載無料バナー ---------- */
+.free-listing-banner {
+  margin: 14px 16px 0;
+  padding: 14px;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 2px solid #fed7aa;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.16);
+}
+
+.free-listing-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.free-listing-main strong {
+  color: #9a3412;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.free-listing-main span {
+  color: #7c2d12;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.free-listing-btn {
+  width: 100%;
+  padding: 12px 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.28);
+}
+
+.free-listing-btn:active {
+  transform: scale(0.98);
+}
+
 /* ---------- 検索・絞り込みエリア ---------- */
 .search-section {
   padding: 18px 16px 14px;
@@ -193,14 +239,13 @@ body {
   color: var(--color-gold);
   background: #fbf1de;
   border: 2px solid #f0dcae;
-}
-.fav-only-btn {
   overflow-wrap: anywhere;
 }
 
 .reset-btn {
   white-space: nowrap;
 }
+
 .fav-only-btn.active {
   color: #fff;
   background: var(--color-gold);
@@ -284,8 +329,7 @@ main {
   font-weight: 700;
 }
 
-/* ---------- 施設カード ----------
-   左端にカテゴリ色の帯を付けて、アプリのリストらしい見た目にする */
+/* ---------- 施設カード ---------- */
 .card {
   background: #fff;
   border: 1px solid var(--color-border);
@@ -338,8 +382,7 @@ main {
   line-height: 1.4;
 }
 
-/* ---------- お気に入りボタン ----------
-   押した瞬間にポンッと弾むアニメーションを付ける */
+/* ---------- お気に入りボタン ---------- */
 .fav-btn {
   flex: none;
   border: none;
@@ -364,14 +407,13 @@ main {
   100% { transform: scale(1); }
 }
 
-/* アニメーションが苦手な人の設定を尊重する */
 @media (prefers-reduced-motion: reduce) {
   .fav-btn.pop {
     animation: none;
   }
 }
 
-/* ---------- ステータスバッジの行（営業状況＋確認済み/要確認） ---------- */
+/* ---------- ステータスバッジ ---------- */
 .card-head-status {
   display: flex;
   flex-wrap: wrap;
@@ -379,7 +421,8 @@ main {
   margin-bottom: 10px;
 }
 
-.badge-status {
+.badge-status,
+.badge-verified {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -397,17 +440,6 @@ main {
 .badge-status.status-closed {
   background: var(--color-closed-bg);
   color: var(--color-closed);
-}
-
-/* 確認済み／要確認バッジ */
-.badge-verified {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 999px;
 }
 
 .badge-verified.is-verified {
@@ -452,13 +484,11 @@ main {
   color: var(--color-text);
 }
 
-/* 「要確認」の値はオレンジで表示して目立たせる */
 .value-unverified {
   color: var(--color-unverified);
   font-weight: 700;
 }
 
-/* 情報源メモ（いつ・どこで確認したか） */
 .card-source {
   font-size: 12px;
   color: var(--color-text-sub);
@@ -491,7 +521,7 @@ main {
   margin: 0 0 14px;
 }
 
-/* ---------- カードのボタン（地図・公式・電話） ---------- */
+/* ---------- カードのボタン ---------- */
 .card-actions {
   display: flex;
   gap: 8px;
@@ -532,23 +562,19 @@ main {
   }
 }
 
-/* ---------- カテゴリごとの色分け ----------
-   script.js側でカードに .cat-0 〜 .cat-9 のクラスが付き、
-   その番号に応じて --cat-color（濃い色）と
-   --cat-color-soft（薄い色）が切り替わります。
-   カテゴリを増やした場合は、ここに .cat-10 ... を足してください。 */
-.cat-0 { --cat-color: #556b2f; --cat-color-soft: #eef2e3; } /* 市役所・手続き：深緑 */
-.cat-1 { --cat-color: #c0504d; --cat-color-soft: #fbe9e8; } /* 病院・歯医者：赤 */
-.cat-2 { --cat-color: #2e8b57; --cat-color-soft: #e6f4ec; } /* 薬局：緑 */
-.cat-3 { --cat-color: #3465a4; --cat-color-soft: #e7eef8; } /* ATM・銀行：青 */
-.cat-4 { --cat-color: #1f9e9e; --cat-color-soft: #e3f5f5; } /* コインランドリー：水色 */
-.cat-5 { --cat-color: #d2691e; --cat-color-soft: #fcefe2; } /* 安いご飯：オレンジ */
-.cat-6 { --cat-color: #b8860b; --cat-color-soft: #faf2dc; } /* 弁当・惣菜：からし色 */
-.cat-7 { --cat-color: #6a5acd; --cat-color-soft: #edeafa; } /* 雨の日：紫 */
-.cat-8 { --cat-color: #1e7fb8; --cat-color-soft: #e4f1f9; } /* 釣り場：海の青 */
-.cat-9 { --cat-color: #d0562f; --cat-color-soft: #fdeae2; } /* 相談先：目立つ朱色 */
+/* ---------- カテゴリごとの色分け ---------- */
+.cat-0 { --cat-color: #556b2f; --cat-color-soft: #eef2e3; }
+.cat-1 { --cat-color: #c0504d; --cat-color-soft: #fbe9e8; }
+.cat-2 { --cat-color: #2e8b57; --cat-color-soft: #e6f4ec; }
+.cat-3 { --cat-color: #3465a4; --cat-color-soft: #e7eef8; }
+.cat-4 { --cat-color: #1f9e9e; --cat-color-soft: #e3f5f5; }
+.cat-5 { --cat-color: #d2691e; --cat-color-soft: #fcefe2; }
+.cat-6 { --cat-color: #b8860b; --cat-color-soft: #faf2dc; }
+.cat-7 { --cat-color: #6a5acd; --cat-color-soft: #edeafa; }
+.cat-8 { --cat-color: #1e7fb8; --cat-color-soft: #e4f1f9; }
+.cat-9 { --cat-color: #d0562f; --cat-color-soft: #fdeae2; }
 
-/* ---------- 掲載依頼・修正依頼ボタン（目立たせる） ---------- */
+/* ---------- 掲載依頼・修正依頼ボタン ---------- */
 .post-request-wrap {
   padding: 8px 16px 24px;
 }
@@ -558,14 +584,29 @@ main {
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: 16px;
+  padding: 18px 16px;
   text-align: left;
   color: #fff;
-  background: linear-gradient(135deg, #e0862f 0%, #c9641d 100%);
+  background: linear-gradient(135deg, #f97316 0%, #c2410c 100%);
   border: none;
-  border-radius: var(--radius-l);
+  border-radius: 22px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(201, 100, 29, 0.35);
+  box-shadow: 0 8px 22px rgba(201, 100, 29, 0.36);
+  position: relative;
+  overflow: hidden;
+}
+
+.post-request-btn::after {
+  content: "無料";
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: #fff;
+  color: #c2410c;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 3px 9px;
+  border-radius: 999px;
 }
 
 .post-request-btn:active {
@@ -584,12 +625,12 @@ main {
 }
 
 .post-request-text strong {
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .post-request-text small {
-  font-size: 12px;
-  opacity: 0.9;
+  font-size: 13px;
+  opacity: 0.95;
 }
 
 /* ---------- フッター ---------- */
@@ -681,7 +722,7 @@ main {
   cursor: pointer;
 }
 
-/* ---------- トースト通知（お気に入り操作時） ---------- */
+/* ---------- トースト通知 ---------- */
 .toast {
   position: fixed;
   left: 50%;
@@ -706,207 +747,15 @@ main {
   transform: translateX(-50%) translateY(0);
 }
 
-/* キーボード操作をしている人向けのフォーカス表示 */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible {
   outline: 3px solid #2e9e5b;
   outline-offset: 2px;
 }
+
 /* ============================================================
-   追加デザイン：中津くらしナビをもっとアプリっぽくする
-   ============================================================ */
-
-/* 全体背景を少し高級感あるグラデーションに */
-body {
-  background:
-    radial-gradient(circle at top left, rgba(20, 107, 100, 0.18), transparent 34%),
-    radial-gradient(circle at top right, rgba(233, 151, 57, 0.16), transparent 32%),
-    #e9eeee;
-}
-
-/* アプリ本体を少し浮かせる */
-.app {
-  overflow: hidden;
-  border-left: 1px solid rgba(255, 255, 255, 0.7);
-  border-right: 1px solid rgba(255, 255, 255, 0.7);
-}
-
-/* ヘッダーをもっと今っぽく */
-.site-header {
-  position: relative;
-  padding: 34px 20px 28px;
-  background:
-    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.22), transparent 28%),
-    linear-gradient(135deg, #0f766e 0%, #0e4f4a 58%, #093c38 100%);
-}
-
-.site-header::after {
-  content: "生活・ご飯・駐車場をすぐ探せる";
-  display: inline-flex;
-  margin-top: 14px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 800;
-  color: #0e4f4a;
-  background: rgba(255, 255, 255, 0.9);
-}
-
-.site-title {
-  letter-spacing: 0.02em;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
-}
-
-.site-tagline {
-  font-weight: 700;
-}
-
-/* 注意書きをカード風に */
-.notice-banner {
-  margin: 12px 14px 0;
-  border: 1px solid #f0d9a8;
-  border-radius: 14px;
-  box-shadow: 0 3px 10px rgba(80, 60, 20, 0.06);
-}
-
-/* 検索エリアをカードっぽく */
-.search-section {
-  margin: 12px 14px 0;
-  padding: 14px;
-  border: 1px solid var(--color-border);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 5px 18px rgba(20, 40, 36, 0.08);
-}
-
-/* 検索ボックス */
-.search-row input[type="text"] {
-  background: #f8fbfa;
-  border: 1px solid #d9e4e1;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
-}
-
-.search-row button {
-  box-shadow: 0 4px 10px rgba(20, 107, 100, 0.24);
-}
-
-/* カテゴリを上に吸い付く感じに */
-.category-scroll {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  margin-top: 10px;
-  background: rgba(246, 249, 248, 0.92);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(255, 255, 255, 0.8);
-}
-
-/* カテゴリボタンを少し立体的に */
-.cat-btn {
-  border: 1px solid rgba(20, 107, 100, 0.12);
-  box-shadow: 0 3px 9px rgba(20, 40, 36, 0.06);
-}
-
-.cat-btn.active {
-  box-shadow: 0 5px 14px rgba(20, 107, 100, 0.28);
-}
-
-/* 施設一覧の見出し */
-.section-heading {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.section-heading::before {
-  content: "";
-  width: 6px;
-  height: 22px;
-  border-radius: 999px;
-  background: var(--color-primary);
-}
-
-/* カードをもっとアプリ風に */
-.card {
-  border: 1px solid rgba(226, 232, 230, 0.9);
-  box-shadow:
-    0 8px 20px rgba(20, 40, 36, 0.08),
-    0 1px 0 rgba(255, 255, 255, 0.9) inset;
-  transition: transform 0.16s ease, box-shadow 0.16s ease;
-}
-
-.card:active {
-  transform: scale(0.985);
-  box-shadow: 0 4px 12px rgba(20, 40, 36, 0.08);
-}
-
-/* カード内アイコンを少し大きく見せる */
-.card-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
-}
-
-/* 店名を少し強く */
-.card-title {
-  font-size: 20px;
-  font-weight: 850;
-}
-
-/* タグをきれいに */
-.tag {
-  background: var(--cat-color-soft, #eef7f5);
-  border: none;
-  font-weight: 700;
-}
-
-/* 地図・公式・電話ボタンを押しやすく */
-.card-actions a {
-  box-shadow: 0 3px 10px rgba(20, 40, 36, 0.07);
-}
-
-.map-btn {
-  background: linear-gradient(135deg, #e4f2f0 0%, #d7ece9 100%);
-}
-
-.tel-btn {
-  background: linear-gradient(135deg, #146b64 0%, #0e4f4a 100%);
-}
-
-/* 追加カテゴリの色 */
-.cat-10 { --cat-color: #b45309; --cat-color-soft: #fff1df; } /* 居酒屋・夜ご飯 */
-.cat-11 { --cat-color: #dc2626; --cat-color-soft: #fee2e2; } /* ラーメン */
-.cat-12 { --cat-color: #2563eb; --cat-color-soft: #dbeafe; } /* 駐車場 */
-
-/* ランキング部分をさらに馴染ませる */
-.ranking-section {
-  margin: 16px 14px 0 !important;
-  border-radius: 20px !important;
-  box-shadow: 0 8px 22px rgba(20, 40, 36, 0.09) !important;
-}
-
-.ranking-title {
-  letter-spacing: 0.01em;
-}
-
-.ranking-item {
-  box-shadow: 0 3px 9px rgba(20, 40, 36, 0.05);
-}
-
-/* 掲載依頼ボタンを少し高級感 */
-.post-request-btn {
-  background: linear-gradient(135deg, #f59e0b 0%, #c05621 100%);
-  box-shadow: 0 8px 20px rgba(201, 100, 29, 0.28);
-}
-
-/* スマホ下部に余白 */
-.site-footer {
-  padding-bottom: 42px;
-}
-/* ============================================================
-   ガッツリ見た目変更版：カード型アプリデザイン
+   追加デザイン：アプリ風デザイン
    ============================================================ */
 
 body {
@@ -917,9 +766,9 @@ body {
 .app {
   background: transparent;
   box-shadow: none;
+  overflow: hidden;
 }
 
-/* ヘッダーを大きく見せる */
 .site-header {
   margin: 12px 12px 0;
   border-radius: 26px;
@@ -938,9 +787,9 @@ body {
 .site-tagline {
   font-size: 15px;
   opacity: 1;
+  font-weight: 700;
 }
 
-/* 注意書きを小さくおしゃれに */
 .notice-banner {
   margin: 14px 16px 0;
   background: #fff8e7;
@@ -948,7 +797,6 @@ body {
   border-radius: 18px;
 }
 
-/* 検索エリアを浮かせる */
 .search-section {
   margin: 14px 16px;
   padding: 16px;
@@ -969,8 +817,10 @@ body {
   background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
 }
 
-/* カテゴリをカードっぽく */
 .category-scroll {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   margin: 0 0 8px;
   padding: 12px 16px 14px;
   background: transparent;
@@ -991,13 +841,23 @@ body {
   box-shadow: 0 10px 22px rgba(17, 24, 39, 0.26);
 }
 
-/* 施設一覧エリア */
 main {
   padding: 12px 16px 4px;
 }
 
 .section-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 24px;
+}
+
+.section-heading::before {
+  content: "";
+  width: 6px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-primary);
 }
 
 .result-count {
@@ -1008,14 +868,12 @@ main {
   box-shadow: 0 5px 14px rgba(15, 23, 42, 0.08);
 }
 
-/* 施設カードをかなり変える */
 .card {
   border: none;
   border-left: none;
   border-radius: 24px;
   padding: 18px;
-  background:
-    linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%);
   box-shadow: 0 16px 34px rgba(15, 23, 42, 0.12);
   overflow: hidden;
 }
@@ -1028,16 +886,15 @@ main {
   background: var(--cat-color, #0f766e);
 }
 
+.card:active {
+  transform: scale(0.985);
+}
+
 .card-icon {
   width: 52px;
   height: 52px;
   font-size: 26px;
   border-radius: 18px;
-}
-
-.card-category {
-  font-size: 12px;
-  padding: 4px 11px;
 }
 
 .card-title {
@@ -1053,6 +910,7 @@ main {
 .card-actions a {
   border-radius: 16px;
   padding: 13px 8px;
+  box-shadow: 0 3px 10px rgba(20, 40, 36, 0.07);
 }
 
 .map-btn {
@@ -1069,7 +927,11 @@ main {
   background: linear-gradient(135deg, #0f766e 0%, #064e3b 100%);
 }
 
-/* ランキングを目立たせる */
+/* 追加カテゴリ */
+.cat-10 { --cat-color: #b45309; --cat-color-soft: #fff1df; }
+.cat-11 { --cat-color: #dc2626; --cat-color-soft: #fee2e2; }
+.cat-12 { --cat-color: #2563eb; --cat-color-soft: #dbeafe; }
+
 .ranking-section {
   margin: 16px !important;
   border: none !important;
@@ -1088,18 +950,7 @@ main {
   background: #111827 !important;
 }
 
-/* 掲載依頼ボタンを目立たせる */
-.post-request-btn {
-  border-radius: 24px;
-  background: linear-gradient(135deg, #111827 0%, #0f766e 100%);
-  box-shadow: 0 16px 30px rgba(17, 24, 39, 0.22);
-}
-/* ============================================================
-   Instagramボタン（2026-07 追加）
-   instagram / instagramUrl / insta / instaUrl のどれかに
-   有効なURLがあるカードだけに表示される。
-   サイズ・角丸・タップしやすさは既存の .card-actions a を継承。
-   ============================================================ */
+/* Instagramボタン */
 .insta-btn {
   background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 55%, #fae8ff 100%);
   color: #9d174d;
@@ -1108,4 +959,8 @@ main {
 
 .insta-btn:active {
   background: #fbcfe8;
+}
+
+.site-footer {
+  padding-bottom: 42px;
 }
