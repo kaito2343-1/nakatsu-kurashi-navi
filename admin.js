@@ -130,6 +130,7 @@
     fields.mapUrl.value = row.map_url || "";
     fields.officialUrl.value = row.official_url || "";
     fields.instagram.value = row.instagram || "";
+         fields.imageUrl.value = row.image_url || "";
     fields.tags.value = Array.isArray(row.tags) ? row.tags.join(", ") : "";
     fields.memo.value = row.memo || "";
     fields.sourceMemo.value = row.source_memo || "";
