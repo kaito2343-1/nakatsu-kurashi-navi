@@ -36,7 +36,7 @@
   function getHeaders(config) {
     return {
       "apikey": config.publicKey,
-      "Authorization": "Bearer " + config.publicKey,
+      
       "Accept": "application/json",
       "Content-Type": "application/json"
     };
