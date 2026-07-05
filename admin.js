@@ -22,6 +22,7 @@
     officialUrl: document.getElementById("officialUrl"),
     instagram: document.getElementById("instagram"),
          imageUrl: document.getElementById("imageUrl"),
+         tags: document.getElementById("tags"),
     memo: document.getElementById("memo"),
     sourceMemo: document.getElementById("sourceMemo"),
     sortOrder: document.getElementById("sortOrder"),
