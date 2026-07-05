@@ -830,7 +830,31 @@ function getFilteredFacilities() {
     return true;
   });
 }
+function getFacilityImageUrl(facility) {
+  const raw =
+    facility.imageUrl ||
+    facility.image_url ||
+    facility.photoUrl ||
+    facility.photo_url;
 
+  if (!raw) return "";
+
+  const url = String(raw).trim();
+
+  if (!/^https?:\/\//i.test(url)) {
+    return "";
+  }
+
+  return url;
+}
+
+function escapeAttribute(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
 
 /* ---------------------------------------------------------
    10. 1件分の施設カードのHTMLを作る
