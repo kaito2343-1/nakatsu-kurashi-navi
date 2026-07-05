@@ -1086,3 +1086,18 @@ main {
   background: linear-gradient(135deg, #111827 0%, #0f766e 100%);
   box-shadow: 0 16px 30px rgba(17, 24, 39, 0.22);
 }
+/* ============================================================
+   Instagramボタン（2026-07 追加）
+   instagram / instagramUrl / insta / instaUrl のどれかに
+   有効なURLがあるカードだけに表示される。
+   サイズ・角丸・タップしやすさは既存の .card-actions a を継承。
+   ============================================================ */
+.insta-btn {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 55%, #fae8ff 100%);
+  color: #9d174d;
+  border: 1px solid rgba(190, 24, 93, 0.16);
+}
+
+.insta-btn:active {
+  background: #fbcfe8;
+}
