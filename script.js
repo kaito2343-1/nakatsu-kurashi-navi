@@ -1067,7 +1067,7 @@ function setupEvents() {
          state.keyword = keywordInput.value.trim();
       render();
       setTimeout(scrollToResults, 50);
-    }
+    });
 
     keywordInput.addEventListener("input", function () {
       state.keyword = keywordInput.value.trim();
