@@ -32,20 +32,20 @@
     `;
     document.head.appendChild(style);
   }
-
   const cafeData = [
     {
-  id: 601,
-  name: "コメダ珈琲店 大分中津店",
-  description: "モーニング・軽食・休憩に使いやすいカフェ候補。",
-  instagram: "https://www.instagram.com/komeda_coffee_official/"
-},
-      
-    
+      id: 601,
+      name: "コメダ珈琲店 大分中津店",
+      description: "モーニング・軽食・休憩に使いやすいカフェ候補。",
+      instagram: "https://www.instagram.com/komeda_coffee_official/"
+    },
+    {
       id: 602,
       name: "古民家かふぇ こずえ",
       description: "古民家系の雰囲気でゆっくりしたい時のカフェ候補。"
     },
+
+   
     {
       id: 603,
       name: "ツバメ珈琲舎",
