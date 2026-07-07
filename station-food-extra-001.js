@@ -44,7 +44,7 @@
     return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(keyword);
   }
 
-  const追加店舗 = [
+  const 追加店舗 = [
     /* ===== 居酒屋・夜ご飯 ===== */
     {
       name: "や台ずし 中津駅南口町",
