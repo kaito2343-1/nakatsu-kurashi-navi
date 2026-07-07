@@ -13,7 +13,7 @@
    上げないと、古いキャッシュのままになることがあります。
    ============================================================ */
 
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const CACHE_NAME = "nakatsu-kurashi-navi-" + CACHE_VERSION;
 
 /* アプリの土台として最初にキャッシュしておくファイル一覧 */
@@ -63,6 +63,7 @@ const APP_SHELL = [
   "./home-page-extra.js?v=1",
   "./about-extra.js?v=1",
   "./phase1-features.js?v=1",
+  "./phase2-features.js?v=1",
 
   "./icons/icon-192.png",
   "./icons/icon-512.png",
