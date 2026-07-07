@@ -804,7 +804,6 @@ body {
 
 <!-- ===== ご飯系追加データまとめ ===== -->
 <script src="food-extra-all.js?v=1"></script>
-<script src="station-food-extra-001.js?v=3"></script>
 
 <!-- ===== データ整理・公式URL補正 ===== -->
 <script src="safety-cleanup-extra.js?v=1"></script>
@@ -1364,6 +1363,10 @@ body {
     }
   }
 
+  /* 後から読み込むファイル（phase1/phase2など）がカテゴリ判定を再利用できるように公開 */
+  window.NAKATSU_CATEGORY_PRESETS = CATEGORY_PRESETS;
+  window.NAKATSU_MATCHES_PRESET = matchesPreset;
+
   function initializeUpgrade() {
     try {
       if (typeof loadFavorites === "function") {
@@ -1374,8 +1377,10 @@ body {
       window.render();
 
       // Supabaseなど非同期追加データが後から来る場合の再描画
-      setTimeout(window.render, 800);
-      setTimeout(window.render, 1800);
+      // ※ window.render を直接渡すと「その時点の関数」が固定されてしまい、
+      //   後から読み込む改善レイヤーのrenderが無視されるため、関数で包んで呼ぶ
+      setTimeout(function () { window.render(); }, 800);
+      setTimeout(function () { window.render(); }, 1800);
     } catch (error) {
       console.error("中津くらしナビ改善パッチでエラー:", error);
     }
@@ -1393,6 +1398,7 @@ body {
 <link rel="stylesheet" href="design-refresh.css?v=2">
 <script src="design-refresh.js?v=2"></script>
 <script src="phase1-features.js?v=1"></script>
+<script src="phase2-features.js?v=1"></script>
 
 <script>
 /* PWA: service worker登録（対応ブラウザのみ。失敗しても通常表示に影響しません） */
