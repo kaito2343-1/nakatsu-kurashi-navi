@@ -312,11 +312,20 @@
   function extendedGetFiltered() {
     var list = facilities.filter(function (facility) {
 
-      /* --- 既存と同じ：カテゴリ／お気に入り --- */
+      /* --- 既存と同じ：カテゴリ／お気に入り
+             ※index.html内の改善パッチが「言葉のプリセット」でカテゴリ判定している場合は
+               その判定を使う（カテゴリボタンの件数と検索結果を一致させるため） --- */
       if (state.category === "favorites") {
         if (state.favorites.indexOf(facility.id) === -1) return false;
       } else if (state.category !== "all") {
-        if (facility.category !== state.category) return false;
+        var preset = (window.NAKATSU_CATEGORY_PRESETS || []).find(function (p) {
+          return p.key === state.category;
+        });
+        if (preset && typeof window.NAKATSU_MATCHES_PRESET === "function") {
+          if (!window.NAKATSU_MATCHES_PRESET(facility, preset)) return false;
+        } else if (facility.category !== state.category) {
+          return false;
+        }
       }
 
       /* --- 強化版キーワード検索（かな対応・複数語対応・住所も対象） --- */
@@ -1176,6 +1185,9 @@
       originalRender();
       annotateDistances();
     };
+
+    /* phase2以降が render を置き換えた場合も距離バッジを付けられるようにする */
+    document.addEventListener("nakatsu:rendered", annotateDistances);
 
     buildSearchExtensions();
     hookResetButton();
