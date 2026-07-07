@@ -141,6 +141,57 @@
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  /* =========================================================
+     0b. ページの種類（複数ページ構成のためのルーティング）
+     各HTMLの <script src="app-shell.js"> の手前で
+       <script>window.NAKATSU_PAGE = "shops";</script>
+     のように設定してある前提。未設定なら "shops" 扱い
+     （1ページ構成のままの環境でも今まで通り動くように）。
+  ========================================================= */
+  var PAGE = window.NAKATSU_PAGE || "shops";
+
+  var PAGE_URL = {
+    home: "index.html",
+    shops: "shops.html",
+    tourism: "tourism.html",
+    rankings: "rankings.html",
+    favorites: "favorites.html",
+    business: "business.html"
+  };
+
+  /* 施設検索を「今のページで実行」するか「shops.htmlに移動して実行」するかを自動判定 */
+  function searchFor(keyword) {
+    if (PAGE === "shops" || PAGE === "favorites") {
+      setKeywordAndSearch(keyword);
+      scrollToEl($("main"));
+    } else {
+      window.location.href = PAGE_URL.shops + "?q=" + encodeURIComponent(keyword);
+    }
+  }
+
+  /* shops.html を ?q=キーワード 付きで開いた時に、検索欄へ反映する */
+  function applyIncomingQuery() {
+    if (PAGE !== "shops") return;
+    var params = new URLSearchParams(window.location.search);
+    var q = params.get("q");
+    if (q) searchFor(q);
+  }
+
+  /* お気に入りページでは最初から「お気に入りだけ表示」にする */
+  function forceFavoritesViewIfNeeded() {
+    if (PAGE !== "favorites") return;
+    state.category = "favorites";
+  }
+
+  function goToPage(pageKey, hash) {
+    if (PAGE === pageKey) {
+      if (hash) scrollToEl($(hash));
+      return;
+    }
+    window.location.href = PAGE_URL[pageKey] + (hash ? hash : "");
+  }
+  window.NAKATSU_GO_TO_PAGE = goToPage;
+
   /* Googleマップの検索URL（APIキー不要の公式リンク形式） */
   function mapsSearchUrl(query) {
     return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query + " 中津市");
@@ -577,8 +628,7 @@
         if (sub.keyword) {
           state.category = "all";
           renderCategoryNav();
-          setKeywordAndSearch(sub.keyword);
-          scrollToEl($("main"));
+          searchFor(sub.keyword);
         }
       });
     });
@@ -654,8 +704,7 @@
 
     $all(".p1-facility-chip", section).forEach(function (btn) {
       btn.addEventListener("click", function () {
-        setKeywordAndSearch(btn.dataset.name);
-        scrollToEl($("main"));
+        searchFor(btn.dataset.name);
       });
     });
   }
@@ -729,8 +778,7 @@
 
     $all(".p1-mini-btn[data-keyword]", section).forEach(function (btn) {
       btn.addEventListener("click", function () {
-        setKeywordAndSearch(btn.dataset.keyword);
-        scrollToEl($("main"));
+              searchFor(btn.dataset.keyword);
       });
     });
   }
@@ -821,8 +869,7 @@
 
     $all(".p1-mini-btn[data-keyword]", section).forEach(function (btn) {
       btn.addEventListener("click", function () {
-        setKeywordAndSearch(btn.dataset.keyword);
-        scrollToEl($("main"));
+        searchFor(btn.dataset.keyword);
       });
     });
   }
@@ -929,8 +976,7 @@
 
       $all(".p1-facility-chip", listEl).forEach(function (btn) {
         btn.addEventListener("click", function () {
-          setKeywordAndSearch(btn.dataset.name);
-          scrollToEl($("main"));
+          searchFor(btn.dataset.name);
         });
       });
     }
@@ -970,19 +1016,29 @@
     overlay.innerHTML =
       '<nav class="p1-menu-drawer" aria-label="サイトメニュー">' +
         '<p class="p1-menu-title">メニュー</p>' +
+        '<button type="button" class="p1-menu-item" data-action="home">🧭 ホーム</button>' +
         '<button type="button" class="p1-menu-item" data-action="shops">🏪 店舗一覧</button>' +
-        '<button type="button" class="p1-menu-item" data-action="new">🆕 新着</button>' +
-        '<button type="button" class="p1-menu-item" data-action="meibutsu">🏯 名物・見どころ</button>' +
-        '<button type="button" class="p1-menu-item" data-action="course">🗺️ 観光モデルコース</button>' +
-        '<button type="button" class="p1-menu-item" data-action="pickup">📋 条件別ピックアップ</button>' +
+        '<button type="button" class="p1-menu-item" data-action="tourism">🏯 観光・名物・モデルコース</button>' +
+        '<button type="button" class="p1-menu-item" data-action="rankings">📋 ランキング・ピックアップ</button>' +
         '<button type="button" class="p1-menu-item" data-action="favorites">⭐ お気に入り</button>' +
         '<hr class="p1-menu-hr">' +
-        '<button type="button" class="p1-menu-item" data-action="listing">📣 店舗向け掲載案内（無料）</button>' +
+        '<button type="button" class="p1-menu-item" data-action="business">📣 店舗向け掲載案内（無料）</button>' +
         '<button type="button" class="p1-menu-item" data-action="contact">✉️ お問い合わせ</button>' +
         '<button type="button" class="p1-menu-item" data-action="login">👤 ログイン（準備中）</button>' +
         '<button type="button" class="p1-menu-close">閉じる</button>' +
       "</nav>";
     document.body.appendChild(overlay);
+
+    /* 今開いているページのメニュー項目を目立たせる */
+    var CURRENT_ACTION_BY_PAGE = {
+      home: "home", shops: "shops", tourism: "tourism",
+      rankings: "rankings", favorites: "favorites", business: "business"
+    };
+    var currentAction = CURRENT_ACTION_BY_PAGE[PAGE];
+    if (currentAction) {
+      var currentItem = overlay.querySelector('.p1-menu-item[data-action="' + currentAction + '"]');
+      if (currentItem) currentItem.classList.add("is-current");
+    }
 
     function openMenu() {
       overlay.hidden = false;
@@ -1009,19 +1065,18 @@
         var action = item.dataset.action;
         closeMenu();
 
-        if (action === "shops") scrollToEl($("main"));
-        if (action === "new") scrollToEl($("#newArrivalsSection"));
-        if (action === "meibutsu") scrollToEl($("#meibutsuSection"));
-        if (action === "course") scrollToEl($("#modelCourseSection"));
-        if (action === "pickup") scrollToEl($("#pickupSection"));
-        if (action === "favorites") {
-          var favBtn = document.getElementById("favOnlyBtn");
-          if (favBtn && state.category !== "favorites") favBtn.click();
-          scrollToEl($("main"));
-        }
-        if (action === "listing") scrollToEl($(".free-listing-banner"));
+        if (action === "home") goToPage("home");
+        if (action === "shops") goToPage("shops");
+        if (action === "tourism") goToPage("tourism");
+        if (action === "rankings") goToPage("rankings");
+        if (action === "business") goToPage("business");
+        if (action === "favorites") goToPage("favorites");
         if (action === "contact") {
-          if (typeof openRequestModal === "function") openRequestModal();
+          if (typeof openRequestModal === "function") {
+            openRequestModal();
+          } else {
+            goToPage("business", "#requestModal");
+          }
         }
         if (action === "login") openLoginModal();
       });
@@ -1152,6 +1207,7 @@
       ".p1-menu-title { margin: 0 0 8px; font-size: 15px; font-weight: 900; color: var(--ink, #1b2422); }",
       ".p1-menu-item { border: none; background: transparent; text-align: left; padding: 12px 10px; border-radius: 10px; font-size: 14px; font-weight: 700; color: var(--ink, #1b2422); font-family: inherit; cursor: pointer; }",
       ".p1-menu-item:active { background: var(--pine-soft, #e3efec); }",
+      ".p1-menu-item.is-current { background: var(--pine-soft, #e3efec); color: var(--pine, #0e5148); }",
       ".p1-menu-hr { border: none; border-top: 1px solid var(--hairline, #e3e2da); margin: 6px 0; }",
       ".p1-menu-close { margin-top: auto; border: 1px solid var(--hairline, #e3e2da); background: var(--paper, #f2f1ec); border-radius: 12px; padding: 12px; font-size: 13px; font-weight: 700; font-family: inherit; color: var(--ink, #1b2422); cursor: pointer; }",
 
@@ -1159,7 +1215,20 @@
       ".p1-login-form { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }",
       ".p1-login-form label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 700; color: var(--ink-sub, #5c6a66); }",
       ".p1-login-form input { border: 1.5px solid var(--hairline, #e3e2da); border-radius: 10px; padding: 11px 12px; font-size: 14px; font-family: inherit; background: var(--paper, #f2f1ec); }",
-      ".p1-login-submit[disabled] { opacity: .55; cursor: not-allowed; }"
+      ".p1-login-submit[disabled] { opacity: .55; cursor: not-allowed; }",
+
+      /* --- ホームページ（index.html）専用 --- */
+      ".home-hero { margin: 16px 16px 0; padding: 16px; background: var(--surface, #fff); border: 1px solid var(--hairline, #e3e2da); border-radius: var(--r-l, 20px); box-shadow: 0 1px 2px rgba(27,36,34,.05), 0 4px 12px rgba(27,36,34,.06); }",
+      ".home-search-row { display: flex; gap: 8px; margin: 10px 0; }",
+      ".home-search-row input { flex: 1; min-width: 0; border: 1.5px solid var(--hairline, #e3e2da); border-radius: 12px; padding: 12px 13px; font-size: 15px; font-family: inherit; background: var(--paper, #f2f1ec); }",
+      ".home-search-row button { border: none; background: var(--pine, #0e5148); color: #fff; border-radius: 12px; padding: 0 18px; font-size: 14px; font-weight: 800; font-family: inherit; cursor: pointer; }",
+      ".home-category-pills { display: flex; gap: 6px; flex-wrap: wrap; }",
+      ".home-category-pills a { border: 1px solid var(--hairline, #e3e2da); background: var(--paper, #f2f1ec); color: var(--ink, #1b2422); border-radius: 999px; padding: 7px 12px; font-size: 12.5px; font-weight: 700; text-decoration: none; }",
+      ".home-nav-grid { display: flex; flex-direction: column; gap: 10px; margin: 14px 16px 0; }",
+      ".home-nav-card { display: flex; align-items: center; gap: 12px; background: var(--surface, #fff); border: 1px solid var(--hairline, #e3e2da); border-radius: var(--r-l, 20px); padding: 14px; text-decoration: none; box-shadow: 0 1px 2px rgba(27,36,34,.05), 0 4px 12px rgba(27,36,34,.06); }",
+      ".home-nav-icon { flex: none; display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 13px; background: var(--pine-soft, #e3efec); font-size: 22px; }",
+      ".home-nav-title { display: block; font-size: 15px; font-weight: 800; color: var(--ink, #1b2422); }",
+      ".home-nav-desc { display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-sub, #5c6a66); line-height: 1.5; }"
     ].join("\n");
     document.head.appendChild(style);
   }
@@ -1189,14 +1258,26 @@
     /* phase2以降が render を置き換えた場合も距離バッジを付けられるようにする */
     document.addEventListener("nakatsu:rendered", annotateDistances);
 
-    buildSearchExtensions();
-    hookResetButton();
-    buildNewArrivals();
-    buildMeibutsu();
-    buildCourses();
-    buildPickup();
     buildMenu();
     buildLoginModal();
+
+    /* ページごとに必要なものだけ組み立てる */
+    if (PAGE === "shops" || PAGE === "favorites") {
+      buildSearchExtensions();
+      hookResetButton();
+      forceFavoritesViewIfNeeded();
+      applyIncomingQuery();
+    }
+    if (PAGE === "home") {
+      buildNewArrivals();
+    }
+    if (PAGE === "tourism") {
+      buildMeibutsu();
+      buildCourses();
+    }
+    if (PAGE === "rankings") {
+      buildPickup();
+    }
 
     /* 追加データ（Supabase等）が後から入った時にセクションを更新 */
     document.addEventListener("nakatsu:facilities-updated", function () {
