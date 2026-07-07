@@ -805,6 +805,7 @@ body {
 <!-- ===== ご飯系追加データまとめ ===== -->
 <script src="food-extra-all.js?v=1"></script>
 <script src="station-food-extra-001.js?v=3"></script>
+
 <!-- ===== データ整理・公式URL補正 ===== -->
 <script src="safety-cleanup-extra.js?v=1"></script>
 <script src="official-url-extra.js?v=1"></script>
@@ -1399,14 +1400,6 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
     navigator.serviceWorker.register("service-worker.js").catch(function (err) {
       console.warn("service worker 登録に失敗しました（通常表示には影響しません）", err);
-    });
-  });
-}
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker.register("./service-worker.js").catch(function (error) {
-      console.warn("Service Worker registration failed:", error);
     });
   });
 }
