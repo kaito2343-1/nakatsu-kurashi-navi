@@ -377,4 +377,183 @@
     if (!nav || typeof facilities === "undefined") return;
 
     normalizeAllFacilities();
+    let html = "";
+
+    CATEGORY_PRESETS.forEach(function (preset) {
+      const count = preset.key === "all"
+        ? facilities.length
+        : facilities.filter(function (facility) {
+            return matchesPreset(facility, preset);
+          }).length;
+
+      const active = state.category === preset.key ? "active" : "";
+
+      html += '<button class="cat-btn ' + active + '" type="button" data-category="' + safeText(preset.key) + '">' +
+        safeText(preset.icon + " " + preset.label) +
+        ' <span class="cat-count">(' + count + ')</span>' +
+      '</button>';
+    });
+
+    nav.innerHTML = html;
+
+    nav.querySelectorAll(".cat-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.category = btn.dataset.category;
+        window.render();
+      });
+    });
+  };
+
+  window.renderFavOnlyButton = function () {
+    const btn = document.getElementById("favOnlyBtn");
+    if (!btn) return;
+
+    const active = state.category === "favorites";
+    btn.classList.toggle("active", active);
+    btn.textContent = active ? "⭐ お気に入り表示中" : "⭐ お気に入りだけ表示";
+  };
+
+  window.render = function () {
+    normalizeAllFacilities();
+
+    const list = document.getElementById("cardList");
+    const resultCount = document.getElementById("resultCount");
+    const noResult = document.getElementById("noResult");
+
+    if (!list) return;
+
+    window.renderCategoryNav();
+    window.renderFavOnlyButton();
+
+    const filtered = window.getFilteredFacilities();
+
+    list.innerHTML = filtered.map(window.createCardHtml).join("");
+
+    if (resultCount) {
+      const catLabel = state.category === "all"
+        ? "すべて"
+        : state.category === "favorites"
+          ? "お気に入り"
+          : state.category;
+
+      resultCount.textContent = filtered.length + "件表示中｜カテゴリ：" + catLabel +
+        (state.keyword ? "｜検索：" + state.keyword : "");
+    }
+
+    if (noResult) {
+      noResult.hidden = filtered.length !== 0;
+    }
+
+    list.querySelectorAll(".fav-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const id = Number(btn.dataset.id);
+        if (typeof toggleFavorite === "function") {
+          toggleFavorite(id, btn);
+        }
+      });
+    });
+  };
+
+  function setupEvents() {
+    const searchForm = document.getElementById("searchForm");
+    const keywordInput = document.getElementById("keywordInput");
+    const openNowToggle = document.getElementById("openNowToggle");
+    const favOnlyBtn = document.getElementById("favOnlyBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const postRequestBtn = document.getElementById("postRequestBtn");
+    const modal = document.getElementById("requestModal");
+    const modalCloseBtn = document.getElementById("modalCloseBtn");
+
+    if (searchForm) {
+      searchForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        state.keyword = keywordInput ? keywordInput.value.trim() : "";
+        window.render();
+      });
+    }
+
+    if (keywordInput) {
+      keywordInput.addEventListener("input", function () {
+        state.keyword = keywordInput.value.trim();
+        window.render();
+      });
+    }
+
+    if (openNowToggle) {
+      openNowToggle.addEventListener("change", function () {
+        state.openNowOnly = openNowToggle.checked;
+        window.render();
+      });
+    }
+
+    if (favOnlyBtn) {
+      favOnlyBtn.addEventListener("click", function () {
+        state.category = state.category === "favorites" ? "all" : "favorites";
+        window.render();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", function () {
+        state.category = "all";
+        state.keyword = "";
+        state.openNowOnly = false;
+
+        if (keywordInput) keywordInput.value = "";
+        if (openNowToggle) openNowToggle.checked = false;
+
+        window.render();
+      });
+    }
+
+    if (postRequestBtn && modal) {
+      postRequestBtn.addEventListener("click", function () {
+        modal.hidden = false;
+      });
+    }
+
+    if (modalCloseBtn && modal) {
+      modalCloseBtn.addEventListener("click", function () {
+        modal.hidden = true;
+      });
+    }
+
+    if (modal) {
+      modal.addEventListener("click", function (e) {
+        if (e.target === modal) {
+          modal.hidden = true;
+        }
+      });
+    }
+  }
+
+  /* 後から読み込むファイル（phase1/phase2など）がカテゴリ判定を再利用できるように公開 */
+  window.NAKATSU_CATEGORY_PRESETS = CATEGORY_PRESETS;
+  window.NAKATSU_MATCHES_PRESET = matchesPreset;
+
+  function initializeUpgrade() {
+    try {
+      if (typeof loadFavorites === "function") {
+        loadFavorites();
+      }
+
+      setupEvents();
+      window.render();
+
+      // Supabaseなど非同期追加データが後から来る場合の再描画
+      // ※ window.render を直接渡すと「その時点の関数」が固定されてしまい、
+      //   後から読み込む改善レイヤーのrenderが無視されるため、関数で包んで呼ぶ
+      setTimeout(function () { window.render(); }, 800);
+      setTimeout(function () { window.render(); }, 1800);
+    } catch (error) {
+      console.error("中津くらしナビ改善パッチでエラー:", error);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeUpgrade);
+  } else {
+    initializeUpgrade();
+  }
+})();
 
