@@ -13,57 +13,26 @@
    上げないと、古いキャッシュのままになることがあります。
    ============================================================ */
 
-const CACHE_VERSION = "v2";
+const CACHE_VERSION = "v3";
 const CACHE_NAME = "nakatsu-kurashi-navi-" + CACHE_VERSION;
 
-/* アプリの土台として最初にキャッシュしておくファイル一覧 */
+/* アプリの土台として最初にキャッシュしておくファイル一覧
+   ※ページの中身が増えても、読み込むJS/CSSの一覧は app-shell.js
+     1箇所にまとまっているので、ここでは各HTMLページと
+     app-shell.js・manifest・アイコンだけ書けばOK */
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./shops.html",
+  "./tourism.html",
+  "./rankings.html",
+  "./favorites.html",
+  "./business.html",
+
   "./style.css?v=9",
   "./design-refresh.css?v=2",
   "./manifest.webmanifest",
-
-  "./script.js?v=9",
-  "./design-refresh.js?v=2",
-
-  "./data/izakaya2-extra.js?v=1",
-  "./data/ramen-extra.js?v=1",
-  "./data/parking-extra.js?v=1",
-  "./data/cafe-extra.js?v=1",
-  "./data/lunch-extra.js?v=2",
-  "./data/yakiniku-sushi-extra.js?v=1",
-  "./data/shopping-extra.js?v=1",
-  "./data/hotel-extra.js?v=1",
-  "./data/beauty-extra.js?v=1",
-  "./data/car-extra.js?v=1",
-
-  "./bulk-facilities-001.js?v=1",
-  "./bulk-facilities-002.js?v=1",
-  "./bulk-facilities-003.js?v=1",
-  "./bulk-facilities-004.js?v=1",
-
-  "./food-extra-all.js?v=1",
-  "./station-food-extra-001.js?v=3",
-  "./station-food-extra-002.js?v=2",
-  "./station-food-extra-003.js?v=1",
-  "./safety-cleanup-extra.js?v=1",
-  "./official-url-extra.js?v=1",
-  "./official-url-extra-002.js?v=1",
-  "./official-url-extra-003.js?v=1",
-  "./real-only-extra.js?v=1",
-  "./instagram-extra-001.js?v=1",
-  "./instagram-extra-002.js?v=1",
-  "./supabase-config.js?v=3",
-  "./dynamic-facilities-extra.js?v=4",
-
-  "./ranking.js?v=1",
-  "./ui-extra.js?v=1",
-  "./ai-detail-extra.js?v=1",
-  "./home-page-extra.js?v=1",
-  "./about-extra.js?v=1",
-  "./phase1-features.js?v=1",
-  "./phase2-features.js?v=1",
+  "./app-shell.js",
 
   "./icons/icon-192.png",
   "./icons/icon-512.png",
