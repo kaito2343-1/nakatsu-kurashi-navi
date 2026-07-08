@@ -140,7 +140,7 @@
     msg.textContent = "✅ 店舗情報を保存しました";
   }
 
-   async function enhancePublicCards() {
+    async function enhancePublicCards() {
     var cardList = document.getElementById("cardList");
     if (!cardList) return;
 
@@ -171,12 +171,7 @@
       var customHours = entry.custom_hours || "";
       var customClosed = entry.custom_closed || "";
 
-      if ((customHours || customClosed) && !card.querySelector(".p6-shop-extra-info")) {
-        var info = document.createElement("div");
-        info.className = "p6-shop-extra-info";
-
-        var html = "";
-           if (customHours || customClosed) {
+      if (customHours || customClosed) {
         var info = card.querySelector(".p6-shop-extra-info");
 
         if (!info) {
@@ -211,6 +206,8 @@
           card.appendChild(info);
         }
       }
+    });
+  }
 
   async function buildTodayRecommendSection() {
     if (window.NAKATSU_PAGE !== "home") return;
