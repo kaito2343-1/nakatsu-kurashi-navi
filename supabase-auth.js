@@ -58,8 +58,13 @@
   async function signUp(email, password) {
     var c = initClient();
     if (!c) return { data: null, error: { message: "Supabase未設定です" } };
-    return c.auth.signUp({ email: email, password: password });
+    return c.auth.signUp({
+  email: email,
+  password: password,
+  options: {
+    emailRedirectTo: "https://kaito2343-1.github.io/nakatsu-kurashi-navi/"
   }
+});
 
   async function signIn(email, password) {
     var c = initClient();
