@@ -89,6 +89,156 @@
     border-radius: 999px; padding: 7px 12px; font-size: 11.5px; font-weight: 700;
     font-family: inherit; cursor: pointer;
   }
+  .dash-shop-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .dash-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 4px 9px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .dash-pill.is-approved {
+    background: #e4f4ea;
+    color: #1d7a4f;
+  }
+
+  .dash-pill.is-pending {
+    background: #faf1e2;
+    color: #a3641a;
+  }
+
+  .dash-status-btn {
+    min-height: 62px;
+  }
+
+  .dash-status-main {
+    display: block;
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  .dash-status-hint {
+    display: block;
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--ink-sub, #5c6a66);
+    font-weight: 500;
+  }
+
+  .dash-note-label {
+    display: block;
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--ink, #1b2422);
+  }
+
+  .dash-note-input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 6px;
+    border: 1.5px solid var(--hairline, #e3e2da);
+    border-radius: 12px;
+    padding: 10px 11px;
+    font-size: 13px;
+    font-family: inherit;
+    background: #fff;
+    resize: vertical;
+  }
+
+  .dash-save-note-btn,
+  .dash-small-btn,
+  .dash-approve-btn,
+  .dash-reject-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 9px 13px;
+    font-size: 12px;
+    font-weight: 800;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .dash-save-note-btn {
+    width: 100%;
+    margin-top: 8px;
+    background: var(--pine, #0e5148);
+    color: #fff;
+  }
+
+  .dash-admin-section {
+    border: 2px solid rgba(232, 163, 61, .55);
+    background: #fffaf0;
+  }
+
+  .dash-admin-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .dash-small-btn {
+    background: var(--pine, #0e5148);
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .dash-pending-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--hairline, #e3e2da);
+    border-radius: 14px;
+    padding: 11px;
+    margin-bottom: 9px;
+    background: #fff;
+  }
+
+  .dash-mini-text {
+    margin: 3px 0 0;
+    font-size: 10.5px;
+    color: var(--ink-sub, #5c6a66);
+    word-break: break-all;
+  }
+
+  .dash-admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .dash-approve-btn {
+    background: #1d7a4f;
+    color: #fff;
+  }
+
+  .dash-reject-btn {
+    background: #b3261e;
+    color: #fff;
+  }
+
+  .dash-search-result span {
+    display: grid;
+    gap: 2px;
+  }
+
+  .dash-search-result small {
+    color: var(--ink-sub, #5c6a66);
+    font-size: 11px;
+  }
 </style>
 </head>
 <body data-page="business">
