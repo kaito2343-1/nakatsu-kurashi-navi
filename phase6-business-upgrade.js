@@ -166,29 +166,37 @@
         }
       }
 
-      if ((entry.custom_hours || entry.custom_closed) && !card.querySelector(".p6-shop-extra-info")) {
+          var customHours = entry.custom_hours || "";
+      var customClosed = entry.custom_closed || "";
+
+      if ((customHours || customClosed) && !card.querySelector(".p6-shop-extra-info")) {
         var info = document.createElement("div");
         info.className = "p6-shop-extra-info";
 
         var html = "";
-        if (entry.custom_hours) {
-          html += '<p><strong>店舗更新の営業時間</strong><span>' + escapeHtml(entry.custom_hours) + "</span></p>";
+        if (customHours) {
+          html += '<p><strong>店舗更新の営業時間</strong><span>' + escapeHtml(customHours) + "</span></p>";
         }
-        if (entry.custom_closed) {
-          html += '<p><strong>店舗更新の定休日</strong><span>' + escapeHtml(entry.custom_closed) + "</span></p>";
+        if (customClosed) {
+          html += '<p><strong>店舗更新の定休日</strong><span>' + escapeHtml(customClosed) + "</span></p>";
         }
 
         info.innerHTML = html;
 
-        var memo = card.querySelector(".card-note") || card.querySelector(".card-tags");
-        if (memo) {
-          memo.insertAdjacentElement("beforebegin", info);
+        var photo = card.querySelector(".p6-shop-photo");
+        var todayNote = card.querySelector(".p5-today-note");
+        var statusBadge = card.querySelector(".p4-status-badge");
+
+        if (photo) {
+          photo.insertAdjacentElement("afterend", info);
+        } else if (todayNote) {
+          todayNote.insertAdjacentElement("afterend", info);
+        } else if (statusBadge) {
+          statusBadge.insertAdjacentElement("afterend", info);
         } else {
           card.appendChild(info);
         }
       }
-    });
-  }
 
   async function buildTodayRecommendSection() {
     if (window.NAKATSU_PAGE !== "home") return;
