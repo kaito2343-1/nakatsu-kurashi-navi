@@ -70,6 +70,8 @@
     "phase2-features.js?v=1",
     "phase3-features.js?v=1",
     "phase4-shop-status.js?v=1"
+     "phase4-shop-status.js?v=1",
+"status-note-extra.js?v=1"
   ];
 
   /* 現在実行中の app-shell.js 自身のURLから、サイトのベースパスを割り出す
