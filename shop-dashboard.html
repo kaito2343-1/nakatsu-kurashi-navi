@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>店舗管理画面｜中津くらしナビ</title>
+<meta name="description" content="店舗の空き状況・混雑状況を更新するための管理画面。">
+<meta name="robots" content="noindex,nofollow">
+
+<meta name="theme-color" content="#093a34">
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AD%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="中津くらしナビ">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>window.NAKATSU_PAGE = "business";</script>
+
+<style>
+  .dash-wrap { padding: 4px 16px 24px; }
+  .dash-loading, .dash-empty, .dash-error {
+    font-size: 13px; color: var(--ink-sub, #5c6a66); padding: 10px 0;
+  }
+  .dash-error { color: #b3261e; }
+
+  .dash-logged-out {
+    margin: 16px; padding: 20px; text-align: center;
+    background: var(--surface, #fff); border: 1px solid var(--hairline, #e3e2da);
+    border-radius: var(--r-l, 20px);
+  }
+  .dash-logged-out p { font-size: 13.5px; color: var(--ink-sub, #5c6a66); margin: 0 0 14px; }
+  .dash-login-btn {
+    display: inline-block; background: var(--pine, #0e5148); color: #fff;
+    border-radius: 12px; padding: 12px 20px; font-weight: 800; font-size: 14px;
+    text-decoration: none; border: none; cursor: pointer; font-family: inherit;
+  }
+
+  .dash-user-bar {
+    margin: 16px 16px 0; font-size: 12.5px; color: var(--ink-sub, #5c6a66);
+  }
+
+  .dash-section {
+    margin: 12px 16px 0; padding: 16px;
+    background: var(--surface, #fff); border: 1px solid var(--hairline, #e3e2da);
+    border-radius: var(--r-l, 20px);
+    box-shadow: 0 1px 2px rgba(27,36,34,.05), 0 4px 12px rgba(27,36,34,.06);
+  }
+  .dash-section h2 { margin: 0 0 4px; font-size: 16px; font-weight: 900; color: var(--ink, #1b2422); }
+  .dash-section-lead { margin: 0 0 12px; font-size: 12px; color: var(--ink-sub, #5c6a66); }
+
+  .dash-shop-card {
+    border: 1px solid var(--hairline, #e3e2da); border-radius: 14px;
+    padding: 12px; margin-bottom: 10px; background: var(--paper, #f2f1ec);
+  }
+  .dash-shop-card:last-child { margin-bottom: 0; }
+  .dash-shop-name { margin: 0 0 4px; font-size: 14.5px; font-weight: 800; color: var(--ink, #1b2422); }
+  .dash-current-status { margin: 0 0 10px; font-size: 12.5px; color: var(--ink-sub, #5c6a66); }
+  .dash-pending-note { margin: 0; font-size: 12px; color: #a3641a; }
+  .dash-status-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dash-status-btn {
+    flex: 1; min-width: 90px; border: 1px solid var(--hairline, #e3e2da);
+    background: var(--surface, #fff); color: var(--ink, #1b2422);
+    border-radius: 10px; padding: 10px 6px; font-size: 12.5px; font-weight: 700;
+    font-family: inherit; cursor: pointer;
+  }
+  .dash-status-btn:active { background: var(--pine-soft, #e3efec); }
+  .dash-update-msg { min-height: 16px; font-size: 11.5px; color: var(--pine, #0e5148); font-weight: 700; margin: 6px 0 0; }
+
+  .dash-search-input {
+    width: 100%; box-sizing: border-box; border: 1.5px solid var(--hairline, #e3e2da);
+    border-radius: 12px; padding: 11px 12px; font-size: 14px; font-family: inherit;
+    background: var(--paper, #f2f1ec); margin-bottom: 10px;
+  }
+  .dash-search-result {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 9px 0; border-bottom: 1px solid var(--hairline, #e3e2da);
+    font-size: 13px;
+  }
+  .dash-search-result:last-child { border-bottom: none; }
+  .dash-request-btn {
+    flex: none; border: none; background: var(--kaki, #e05a2b); color: #fff;
+    border-radius: 999px; padding: 7px 12px; font-size: 11.5px; font-weight: 700;
+    font-family: inherit; cursor: pointer;
+  }
+</style>
+</head>
+<body data-page="business">
+  <div id="homeUiPanel" hidden></div>
+  <div id="izakayaRanking" hidden></div>
+  <div class="home-hero-extra" hidden></div>
+<div class="app">
+
+  <header class="site-header">
+    <h1 class="site-title">🧭 中津くらしナビ</h1>
+    <p class="site-tagline">店舗管理画面</p>
+  </header>
+
+  <main>
+    <div class="dash-wrap">
+
+      <div class="dash-logged-out" id="dashLoggedOut" hidden>
+        <p>店舗管理画面を利用するには、ログインが必要です。右上メニューの「ログイン」からログイン・新規登録してください。</p>
+        <button type="button" class="dash-login-btn" id="dashOpenLoginBtn">ログイン画面を開く</button>
+      </div>
+
+      <div id="dashLoggedIn" hidden>
+        <p class="dash-user-bar">ログイン中：<span id="dashUserEmail"></span></p>
+
+        <section class="dash-section">
+          <h2>あなたが管理する店舗</h2>
+          <p class="dash-section-lead">承認済みの店舗は、ボタン1つで今の空き状況を更新できます。</p>
+          <div id="dashMyShops"></div>
+        </section>
+
+        <section class="dash-section">
+          <h2>新しい店舗を管理したい</h2>
+          <p class="dash-section-lead">店名で検索して申請してください。サイト運営側の確認後、更新できるようになります。</p>
+          <input type="text" id="dashSearchInput" class="dash-search-input" placeholder="例：マルイチ">
+          <div id="dashSearchResults"></div>
+        </section>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-warning">
+      この画面は店舗の方向けです。一般のお客様は各施設カードで空き状況をご確認いただけます。
+    </p>
+    <p class="footer-copy">&copy; 2026 中津くらしナビ</p>
+  </footer>
+</div>
+
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app-shell.js"></script>
+<script src="shop-dashboard.js?v=1"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function () {
+      var btn = document.getElementById("dashOpenLoginBtn");
+      if (btn) {
+        btn.addEventListener("click", function () {
+          var menuBtn = document.getElementById("p1MenuBtn");
+          if (menuBtn) menuBtn.click();
+        });
+      }
+    }, 400);
+  });
+</script>
+</body>
+</html>
