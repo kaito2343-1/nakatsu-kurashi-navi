@@ -176,6 +176,15 @@
         info.className = "p6-shop-extra-info";
 
         var html = "";
+           if (customHours || customClosed) {
+        var info = card.querySelector(".p6-shop-extra-info");
+
+        if (!info) {
+          info = document.createElement("div");
+          info.className = "p6-shop-extra-info";
+        }
+
+        var html = "";
         if (customHours) {
           html += '<p><strong>店舗更新の営業時間</strong><span>' + escapeHtml(customHours) + "</span></p>";
         }
@@ -202,8 +211,6 @@
           card.appendChild(info);
         }
       }
-    });
-  }
 
   async function buildTodayRecommendSection() {
     if (window.NAKATSU_PAGE !== "home") return;
