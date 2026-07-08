@@ -13,7 +13,7 @@
    上げないと、古いキャッシュのままになることがあります。
    ============================================================ */
 
-const CACHE_VERSION = "v3";
+const CACHE_VERSION = "v4";
 const CACHE_NAME = "nakatsu-kurashi-navi-" + CACHE_VERSION;
 
 /* アプリの土台として最初にキャッシュしておくファイル一覧
@@ -28,11 +28,15 @@ const APP_SHELL = [
   "./rankings.html",
   "./favorites.html",
   "./business.html",
+  "./shop-dashboard.html",
 
   "./style.css?v=9",
   "./design-refresh.css?v=2",
   "./manifest.webmanifest",
   "./app-shell.js",
+  "./supabase-auth.js?v=1",
+  "./phase4-shop-status.js?v=1",
+  "./shop-dashboard.js?v=1",
 
   "./icons/icon-192.png",
   "./icons/icon-512.png",
