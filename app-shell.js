@@ -53,6 +53,8 @@
     "instagram-extra-002.js?v=1",
 
     "supabase-config.js?v=3",
+    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
+    "supabase-auth.js?v=1",
     "dynamic-facilities-extra.js?v=4",
 
     "ranking.js?v=1",
@@ -66,7 +68,8 @@
     "design-refresh.js?v=2",
     "phase1-features.js?v=1",
     "phase2-features.js?v=1",
-    "phase3-features.js?v=1"
+    "phase3-features.js?v=1",
+    "phase4-shop-status.js?v=1"
   ];
 
   /* 現在実行中の app-shell.js 自身のURLから、サイトのベースパスを割り出す
@@ -91,11 +94,14 @@
   function loadScriptsSequentially(list, index, done) {
     if (index >= list.length) { done(); return; }
 
+    var src = list[index];
+    var isAbsolute = /^https?:\/\//.test(src);
+
     var script = document.createElement("script");
-    script.src = BASE + list[index];
+    script.src = isAbsolute ? src : BASE + src;
     script.onload = function () { loadScriptsSequentially(list, index + 1, done); };
     script.onerror = function () {
-      console.warn("[app-shell] 読み込み失敗（続行します）:", list[index]);
+      console.warn("[app-shell] 読み込み失敗（続行します）:", src);
       loadScriptsSequentially(list, index + 1, done);
     };
     document.body.appendChild(script);
