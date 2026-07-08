@@ -1,24 +1,26 @@
 /* ============================================================
    中津くらしナビ phase6-business-upgrade.js
-
-   追加機能：
-   1. 店舗管理画面の承認・編集UIを見やすくする
-   2. 店舗ごとに営業時間・定休日・写真URLを編集
-   3. 利用者側カードへ写真・店舗更新情報を反映
-   4. トップページに「本日おすすめのお店」コーナー
-   5. 店舗向け「無料掲載・更新できます」案内を強化
+   店舗情報編集・写真・トップおすすめ・店舗向け案内
    ============================================================ */
 
 (function () {
   "use strict";
 
-  function $(sel, root) { return (root || document).querySelector(sel); }
-  function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function $(sel, root) {
+    return (root || document).querySelector(sel);
+  }
+
+  function $all(sel, root) {
+    return Array.prototype.slice.call((root || document).querySelectorAll(sel));
+  }
 
   function escapeHtml(value) {
     return String(value == null ? "" : value)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
 
   var statusCache = null;
@@ -50,10 +52,6 @@
       return statusCache || {};
     }
   }
-
-  /* =========================================================
-     1. 店舗管理画面：営業時間・定休日・写真URL 編集欄
-  ========================================================= */
 
   async function enhanceDashboardCards() {
     if (document.body.dataset.page !== "business") return;
@@ -87,31 +85,30 @@
           '<input type="url" class="p6-photo-input" placeholder="https://..." value="' + escapeHtml(entry.photo_url || "") + '">' +
         '</label>' +
 
-        '<p class="p6-editor-help">写真は、GitHubに画像をアップロードして、その画像URLを貼る形で使えます。</p>' +
-
-        '<button type="button" class="p6-save-info-btn">営業時間・写真を保存</button>' +
+        '<p class="p6-editor-help">写真は、画像URLを貼ると利用者側カードに表示できます。</p>' +
+        '<button type="button" class="p6-save-info-btn">営業時間・定休日・写真を保存</button>' +
         '<p class="p6-save-msg" aria-live="polite"></p>';
 
       card.appendChild(editor);
 
-      var saveBtn = $(".p6-save-info-btn", editor);
-      saveBtn.addEventListener("click", function () {
+      $(".p6-save-info-btn", editor).addEventListener("click", function () {
         saveShopExtraInfo(card, editor, entry);
       });
     });
   }
 
   async function saveShopExtraInfo(card, editor, oldEntry) {
-    var client = window.NAKATSU_AUTH && window.NAKATSU_AUTH.client;
+    var auth = window.NAKATSU_AUTH;
+    var client = auth && auth.client;
     if (!client) return;
 
-    var session = await window.NAKATSU_AUTH.getSession();
+    var session = await auth.getSession();
     var userId = session && session.user && session.user.id;
 
     var facilityId = Number(card.dataset.facilityId);
     var facilityName = card.dataset.facilityName || "";
-    var msg = $(".p6-save-msg", editor);
 
+    var msg = $(".p6-save-msg", editor);
     var hours = $(".p6-hours-input", editor).value.trim();
     var closed = $(".p6-closed-input", editor).value.trim();
     var photo = $(".p6-photo-input", editor).value.trim();
@@ -130,7 +127,9 @@
       photo_url: photo
     };
 
-    var res = await client.from("shop_status").upsert(payload, { onConflict: "facility_id" });
+    var res = await client.from("shop_status").upsert(payload, {
+      onConflict: "facility_id"
+    });
 
     if (res.error) {
       msg.textContent = "保存に失敗しました：" + res.error.message;
@@ -140,10 +139,6 @@
     statusCache = null;
     msg.textContent = "✅ 店舗情報を保存しました";
   }
-
-  /* =========================================================
-     2. 利用者側カード：写真・営業時間・定休日を追加表示
-  ========================================================= */
 
   async function enhancePublicCards() {
     var cardList = document.getElementById("cardList");
@@ -163,7 +158,7 @@
         img.alt = "店舗写真";
         img.loading = "lazy";
 
-        var title = card.querySelector(".card-title") || card.firstElementChild;
+        var title = card.querySelector(".card-title") || card.querySelector("h3");
         if (title) {
           title.insertAdjacentElement("afterend", img);
         } else {
@@ -185,19 +180,15 @@
 
         info.innerHTML = html;
 
-        var metaBox = card.querySelector(".card-info") || card.querySelector(".card-detail") || card.querySelector(".card-tags");
-        if (metaBox) {
-          metaBox.insertAdjacentElement("afterend", info);
+        var memo = card.querySelector(".card-note") || card.querySelector(".card-tags");
+        if (memo) {
+          memo.insertAdjacentElement("beforebegin", info);
         } else {
           card.appendChild(info);
         }
       }
     });
   }
-
-  /* =========================================================
-     3. トップページ：本日おすすめのお店
-  ========================================================= */
 
   async function buildTodayRecommendSection() {
     if (window.NAKATSU_PAGE !== "home") return;
@@ -215,13 +206,11 @@
       if (!facility || !row.today_note) return null;
 
       return {
-        id: id,
         name: facility.name,
         category: facility.category,
-        status: row.status || "",
+        status: row.status || "更新あり",
         note: row.today_note,
-        photo: row.photo_url || "",
-        keyword: facility.name
+        photo: row.photo_url || ""
       };
     }).filter(Boolean).slice(0, 6);
 
@@ -238,43 +227,34 @@
       '<div class="p6-today-grid">' +
         items.map(function (item) {
           return (
-            '<button type="button" class="p6-today-card" data-keyword="' + escapeHtml(item.keyword) + '">' +
+            '<button type="button" class="p6-today-card" data-keyword="' + escapeHtml(item.name) + '">' +
               (item.photo ? '<img src="' + escapeHtml(item.photo) + '" alt="" loading="lazy">' : "") +
               '<span class="p6-today-cat">' + escapeHtml(item.category || "店舗") + "</span>" +
               '<strong>' + escapeHtml(item.name) + "</strong>" +
-              '<em>' + escapeHtml(item.status || "更新あり") + "</em>" +
+              '<em>' + escapeHtml(item.status) + "</em>" +
               '<p>📣 ' + escapeHtml(item.note) + "</p>" +
             "</button>"
           );
         }).join("") +
       "</div>";
 
-    var anchor = document.querySelector("main") || document.querySelector(".hero-search") || document.querySelector(".app");
-    if (anchor && anchor.parentNode) {
-      anchor.parentNode.insertBefore(section, anchor);
+    var main = document.querySelector("main");
+    if (main && main.parentNode) {
+      main.parentNode.insertBefore(section, main);
     }
 
     $all(".p6-today-card", section).forEach(function (btn) {
       btn.addEventListener("click", function () {
-        var url = "shops.html?q=" + encodeURIComponent(btn.dataset.keyword || "");
-        window.location.href = url;
+        window.location.href = "shops.html?q=" + encodeURIComponent(btn.dataset.keyword || "");
       });
     });
   }
 
-  /* =========================================================
-     4. 店舗向け無料掲載案内を強化
-  ========================================================= */
-
   function addBusinessGuideBanner() {
     if (document.getElementById("p6BusinessGuide")) return;
 
-    var shouldShow =
-      window.NAKATSU_PAGE === "home" ||
-      window.NAKATSU_PAGE === "shops" ||
-      window.NAKATSU_PAGE === "business";
-
-    if (!shouldShow) return;
+    var page = window.NAKATSU_PAGE;
+    if (page !== "home" && page !== "shops" && document.body.dataset.page !== "business") return;
 
     var banner = document.createElement("section");
     banner.id = "p6BusinessGuide";
@@ -291,10 +271,6 @@
       footer.parentNode.insertBefore(banner, footer);
     }
   }
-
-  /* =========================================================
-     5. スタイル
-  ========================================================= */
 
   function addStyle() {
     if (document.getElementById("p6Style")) return;
@@ -315,7 +291,7 @@
       ".p6-shop-extra-info p { margin: 4px 0; display: grid; grid-template-columns: 118px 1fr; gap: 8px; font-size: 12px; line-height: 1.55; }",
       ".p6-shop-extra-info strong { color: var(--pine, #0e5148); }",
 
-      ".p6-today-section { margin: 16px 16px 18px; padding: 16px; border-radius: 22px; background: #fffaf0; border: 1px solid #f1d69d; box-shadow: 0 2px 10px rgba(27,36,34,.06); }",
+      ".p6-today-section { margin: 16px; padding: 16px; border-radius: 22px; background: #fffaf0; border: 1px solid #f1d69d; box-shadow: 0 2px 10px rgba(27,36,34,.06); }",
       ".p6-section-head h2 { margin: 0 0 4px; font-size: 18px; font-weight: 900; color: var(--ink, #1b2422); }",
       ".p6-section-head p { margin: 0 0 12px; font-size: 12.5px; color: var(--ink-sub, #5c6a66); }",
       ".p6-today-grid { display: grid; gap: 10px; }",
@@ -335,25 +311,31 @@
     document.head.appendChild(style);
   }
 
+  function run() {
+    enhanceDashboardCards();
+    enhancePublicCards();
+    buildTodayRecommendSection();
+    addBusinessGuideBanner();
+  }
+
   function init() {
     addStyle();
 
-    setTimeout(function () {
-      enhanceDashboardCards();
-      enhancePublicCards();
-      buildTodayRecommendSection();
-      addBusinessGuideBanner();
-    }, 700);
+    setTimeout(run, 800);
+    setTimeout(run, 1600);
 
     document.addEventListener("nakatsu:rendered", function () {
       enhancePublicCards();
     });
 
-    var obs = new MutationObserver(function () {
+    var observer = new MutationObserver(function () {
       enhanceDashboardCards();
     });
 
-    obs.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
   }
 
   if (document.readyState === "loading") {
