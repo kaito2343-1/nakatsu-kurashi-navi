@@ -65,7 +65,7 @@
     emailRedirectTo: "https://kaito2343-1.github.io/nakatsu-kurashi-navi/"
   }
 });
-
+}
   async function signIn(email, password) {
     var c = initClient();
     if (!c) return { data: null, error: { message: "Supabase未設定です" } };
