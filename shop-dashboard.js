@@ -396,7 +396,21 @@
     card.remove();
   }
 
-  document.addEventListener("nakatsu:app-ready", function () {
-    setTimeout(main, 200);
-  });
+    var started = false;
+
+  function startDashboard() {
+    if (started) return;
+    started = true;
+    setTimeout(main, 300);
+  }
+
+  document.addEventListener("nakatsu:app-ready", startDashboard);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(startDashboard, 800);
+    });
+  } else {
+    setTimeout(startDashboard, 800);
+  }
 })();
