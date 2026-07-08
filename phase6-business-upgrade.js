@@ -165,7 +165,8 @@
           card.insertBefore(img, card.firstChild);
         }
       }
-
+    });
+  }
           var customHours = entry.custom_hours || "";
       var customClosed = entry.custom_closed || "";
 
