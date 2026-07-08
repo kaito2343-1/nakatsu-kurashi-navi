@@ -140,7 +140,7 @@
     msg.textContent = "✅ 店舗情報を保存しました";
   }
 
-  async function enhancePublicCards() {
+   async function enhancePublicCards() {
     var cardList = document.getElementById("cardList");
     if (!cardList) return;
 
@@ -151,23 +151,24 @@
       var entry = map[String(id)];
       if (!entry) return;
 
-      if (entry.photo_url && !card.querySelector(".p6-shop-photo")) {
-        var img = document.createElement("img");
-        img.className = "p6-shop-photo";
-        img.src = entry.photo_url;
-        img.alt = "店舗写真";
-        img.loading = "lazy";
+      var photoEl = card.querySelector(".p6-shop-photo");
+
+      if (entry.photo_url && !photoEl) {
+        photoEl = document.createElement("img");
+        photoEl.className = "p6-shop-photo";
+        photoEl.src = entry.photo_url;
+        photoEl.alt = "店舗写真";
+        photoEl.loading = "lazy";
 
         var title = card.querySelector(".card-title") || card.querySelector("h3");
         if (title) {
-          title.insertAdjacentElement("afterend", img);
+          title.insertAdjacentElement("afterend", photoEl);
         } else {
-          card.insertBefore(img, card.firstChild);
+          card.insertBefore(photoEl, card.firstChild);
         }
       }
-    });
-  }
-          var customHours = entry.custom_hours || "";
+
+      var customHours = entry.custom_hours || "";
       var customClosed = entry.custom_closed || "";
 
       if ((customHours || customClosed) && !card.querySelector(".p6-shop-extra-info")) {
@@ -184,20 +185,25 @@
 
         info.innerHTML = html;
 
-        var photo = card.querySelector(".p6-shop-photo");
+        photoEl = card.querySelector(".p6-shop-photo");
         var todayNote = card.querySelector(".p5-today-note");
         var statusBadge = card.querySelector(".p4-status-badge");
+        var detailBox = card.querySelector(".card-info") || card.querySelector(".card-detail");
 
-        if (photo) {
-          photo.insertAdjacentElement("afterend", info);
+        if (photoEl) {
+          photoEl.insertAdjacentElement("afterend", info);
         } else if (todayNote) {
           todayNote.insertAdjacentElement("afterend", info);
         } else if (statusBadge) {
           statusBadge.insertAdjacentElement("afterend", info);
+        } else if (detailBox) {
+          detailBox.insertAdjacentElement("beforebegin", info);
         } else {
           card.appendChild(info);
         }
       }
+    });
+  }
 
   async function buildTodayRecommendSection() {
     if (window.NAKATSU_PAGE !== "home") return;
