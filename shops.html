@@ -1176,6 +1176,171 @@ body[data-page="shops"] .shops-popular-searches button {
   flex: 0 0 auto !important;
 }
 
+
+/* ===== 使いやすさ改善：詳細条件・結果ボタン・下部ナビ ===== */
+body[data-page="shops"] {
+  padding-bottom: calc(170px + env(safe-area-inset-bottom)) !important;
+}
+
+html {
+  scroll-padding-top: 84px;
+  scroll-padding-bottom: calc(110px + env(safe-area-inset-bottom));
+}
+
+body[data-page="shops"] #shopsMain {
+  scroll-margin-top: 84px;
+  scroll-margin-bottom: calc(110px + env(safe-area-inset-bottom));
+}
+
+/* 詳細条件の折りたたみ */
+body[data-page="shops"] .shops-advanced-filters {
+  margin-top: 18px;
+  border: 1px solid var(--shops-line);
+  border-radius: 17px;
+  background: #faf9f5;
+  overflow: hidden;
+}
+
+body[data-page="shops"] .shops-advanced-toggle {
+  width: 100%;
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 0;
+  color: var(--shops-navy-deep);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+body[data-page="shops"] .shops-advanced-toggle:hover {
+  background: #f2f6f8;
+}
+
+body[data-page="shops"] .shops-advanced-toggle-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: var(--shops-navy);
+  background: #eaf1f6;
+  font-size: 16px;
+}
+
+body[data-page="shops"] .shops-advanced-toggle-copy strong,
+body[data-page="shops"] .shops-advanced-toggle-copy small {
+  display: block;
+}
+
+body[data-page="shops"] .shops-advanced-toggle-copy strong {
+  font-size: 13px;
+  font-weight: 900;
+}
+
+body[data-page="shops"] .shops-advanced-toggle-copy small {
+  margin-top: 2px;
+  color: var(--shops-muted);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+body[data-page="shops"] .shops-advanced-toggle-arrow {
+  font-size: 18px;
+  transition: transform .18s ease;
+}
+
+body[data-page="shops"] .shops-advanced-toggle[aria-expanded="true"] .shops-advanced-toggle-arrow {
+  transform: rotate(180deg);
+}
+
+body[data-page="shops"] .shops-advanced-body {
+  padding: 2px 14px 16px;
+  border-top: 1px solid var(--shops-line);
+  background: #fff;
+}
+
+body[data-page="shops"] .shops-advanced-body[hidden] {
+  display: none !important;
+}
+
+body[data-page="shops"] .shops-advanced-body > .category-block-title:first-child,
+body[data-page="shops"] .shops-advanced-body > #p2FilterWrap:first-child .p1-block-title:first-child {
+  margin-top: 15px !important;
+}
+
+/* 検索結果を見るボタン */
+body[data-page="shops"] .shops-results-cta {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 16px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 16px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--shops-navy), var(--shops-navy-deep));
+  box-shadow: 0 12px 24px rgba(7, 31, 59, .20);
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+body[data-page="shops"] .shops-results-cta:active {
+  transform: scale(.99);
+}
+
+body[data-page="shops"] .shops-results-cta-count {
+  min-width: 0;
+}
+
+body[data-page="shops"] .shops-results-cta-arrow {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* 固定下部ナビ：Safariの安全領域を避け、少し小さくする */
+body[data-page="shops"] .bottom-nav {
+  bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+}
+
+@media (max-width: 640px) {
+  body[data-page="shops"] {
+    padding-bottom: calc(180px + env(safe-area-inset-bottom)) !important;
+  }
+
+  body[data-page="shops"] .bottom-nav {
+    width: calc(100% - 18px) !important;
+    gap: 4px !important;
+    padding: 6px !important;
+    border-radius: 21px !important;
+  }
+
+  body[data-page="shops"] .bottom-nav-btn {
+    min-height: 52px !important;
+    padding: 6px 3px !important;
+    border-radius: 15px !important;
+  }
+
+  body[data-page="shops"] .bottom-nav-icon {
+    font-size: 21px !important;
+  }
+
+  body[data-page="shops"] .bottom-nav-label {
+    font-size: 9px !important;
+  }
+
+  body[data-page="shops"] .shops-footer.site-footer {
+    padding-bottom: calc(150px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
 </style>
 
 <script>
@@ -1217,5 +1382,200 @@ body[data-page="shops"] .shops-popular-searches button {
   window.setTimeout(polishDynamicUi, 1800);
 })();
 </script>
+
+<script id="shopsUsabilityUpgrade">
+(function () {
+  "use strict";
+
+  var upgradeObserver = null;
+
+  function getResultsLabel() {
+    var resultCount = document.getElementById("resultCount");
+    var text = resultCount ? String(resultCount.textContent || "").trim() : "";
+    var match = text.match(/(\d+)\s*件/);
+    return match ? match[1] + "件の検索結果を見る" : "検索結果を見る";
+  }
+
+  function updateResultsButton() {
+    var button = document.getElementById("shopsResultsCta");
+    if (!button) return;
+    var count = button.querySelector(".shops-results-cta-count");
+    if (count) {
+      var nextLabel = getResultsLabel();
+      if (count.textContent !== nextLabel) count.textContent = nextLabel;
+    }
+  }
+
+  function buildResultsButton() {
+    var panel = document.querySelector(".shops-search-panel");
+    var filterRow = panel && panel.querySelector(".filter-row");
+    if (!panel || !filterRow) return false;
+
+    var button = document.getElementById("shopsResultsCta");
+    if (!button) {
+      button = document.createElement("button");
+      button.type = "button";
+      button.id = "shopsResultsCta";
+      button.className = "shops-results-cta";
+      button.innerHTML =
+        '<span class="shops-results-cta-count">検索結果を見る</span>' +
+        '<span class="shops-results-cta-arrow" aria-hidden="true">↓</span>';
+      button.addEventListener("click", function () {
+        var main = document.getElementById("shopsMain");
+        if (main) main.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      filterRow.insertAdjacentElement("afterend", button);
+    }
+
+    updateResultsButton();
+    return true;
+  }
+
+  function activeAdvancedCount(root) {
+    if (!root) return 0;
+    var count = root.querySelectorAll(".p2-filter-chip.is-active").length;
+    var activeCategory = root.querySelector('.cat-btn.active[data-category]:not([data-category="all"])');
+    if (activeCategory) count += 1;
+    return count;
+  }
+
+  function updateAdvancedToggle() {
+    var wrap = document.getElementById("shopsAdvancedFilters");
+    if (!wrap) return;
+    var body = wrap.querySelector(".shops-advanced-body");
+    var small = wrap.querySelector(".shops-advanced-toggle-copy small");
+    var selected = activeAdvancedCount(body);
+    if (small) {
+      var nextText = selected > 0
+        ? selected + "件の条件を選択中"
+        : "カテゴリ・支払い方法・ファミリー条件";
+      if (small.textContent !== nextText) small.textContent = nextText;
+    }
+  }
+
+  function buildAdvancedFilters() {
+    var panel = document.querySelector(".shops-search-panel");
+    var filterRow = panel && panel.querySelector(".filter-row");
+    var p2 = document.getElementById("p2FilterWrap");
+    var categoryTitle = panel && panel.querySelector(".category-block-title");
+    var categoryNav = document.getElementById("categoryScroll");
+
+    if (!panel || !filterRow || !p2 || !categoryTitle || !categoryNav) return false;
+    if (document.getElementById("shopsAdvancedFilters")) {
+      updateAdvancedToggle();
+      return true;
+    }
+
+    var wrap = document.createElement("section");
+    wrap.id = "shopsAdvancedFilters";
+    wrap.className = "shops-advanced-filters";
+    wrap.setAttribute("aria-label", "詳しい検索条件");
+
+    var toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "shops-advanced-toggle";
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-controls", "shopsAdvancedBody");
+    toggle.innerHTML =
+      '<span class="shops-advanced-toggle-icon" aria-hidden="true">⌄</span>' +
+      '<span class="shops-advanced-toggle-copy">' +
+        '<strong>詳しい条件を開く</strong>' +
+        '<small>カテゴリ・支払い方法・ファミリー条件</small>' +
+      '</span>' +
+      '<span class="shops-advanced-toggle-arrow" aria-hidden="true">⌄</span>';
+
+    var body = document.createElement("div");
+    body.id = "shopsAdvancedBody";
+    body.className = "shops-advanced-body";
+    body.hidden = true;
+
+    /* 要素を移動しても既存のイベントはそのまま維持されます */
+    body.appendChild(categoryTitle);
+    body.appendChild(categoryNav);
+    body.appendChild(p2);
+
+    wrap.appendChild(toggle);
+    wrap.appendChild(body);
+    panel.insertBefore(wrap, filterRow);
+
+    toggle.addEventListener("click", function () {
+      var willOpen = body.hidden;
+      body.hidden = !willOpen;
+      toggle.setAttribute("aria-expanded", String(willOpen));
+      var strong = toggle.querySelector("strong");
+      if (strong) strong.textContent = willOpen ? "詳しい条件を閉じる" : "詳しい条件を開く";
+    });
+
+    updateAdvancedToggle();
+    return true;
+  }
+
+  function observeResults() {
+    var resultCount = document.getElementById("resultCount");
+    if (!resultCount || resultCount.dataset.usabilityObserved === "1") return;
+    resultCount.dataset.usabilityObserved = "1";
+    new MutationObserver(updateResultsButton).observe(resultCount, {
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
+  }
+
+  function initializeUsabilityUpgrade() {
+    buildAdvancedFilters();
+    buildResultsButton();
+    observeResults();
+    updateResultsButton();
+    updateAdvancedToggle();
+  }
+
+  function startObserver() {
+    if (upgradeObserver) return;
+    var panel = document.querySelector(".shops-search-panel");
+    if (!panel) return;
+    upgradeObserver = new MutationObserver(function () {
+      initializeUsabilityUpgrade();
+    });
+    upgradeObserver.observe(panel, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class", "aria-pressed"]
+    });
+  }
+
+  document.addEventListener("click", function (event) {
+    if (event.target.closest(".cat-btn, .p2-filter-chip, #resetBtn")) {
+      window.setTimeout(updateAdvancedToggle, 50);
+      window.setTimeout(updateResultsButton, 50);
+    }
+  });
+
+  document.addEventListener("nakatsu:app-ready", function () {
+    window.setTimeout(function () {
+      initializeUsabilityUpgrade();
+      startObserver();
+    }, 120);
+  });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      window.setTimeout(function () {
+        initializeUsabilityUpgrade();
+        startObserver();
+      }, 500);
+    });
+  } else {
+    window.setTimeout(function () {
+      initializeUsabilityUpgrade();
+      startObserver();
+    }, 500);
+  }
+
+  window.setTimeout(initializeUsabilityUpgrade, 1400);
+  window.setTimeout(initializeUsabilityUpgrade, 2600);
+})();
+</script>
+
 </body>
 </html>
