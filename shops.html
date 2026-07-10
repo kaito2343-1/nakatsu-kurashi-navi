@@ -1074,74 +1074,108 @@ body[data-page="shops"] .toast { background: var(--shops-navy-deep) !important; 
     animation-duration: .01ms !important;
   }
 }
-  /* ===== iPhone 横はみ出し修正 ===== */
+
+/* ===== iPhone：ページ幅と横スクロール欄の修正 ===== */
 html,
 body {
+  width: 100%;
   max-width: 100%;
   overflow-x: hidden;
 }
 
-body[data-page="shops"] {
-  overflow-x: hidden !important;
-}
-
-body[data-page="shops"] .app.shops-app,
-body[data-page="shops"] .shops-header,
-body[data-page="shops"] .notice-banner,
-body[data-page="shops"] .shops-intro,
-body[data-page="shops"] .hero-search.shops-search-panel,
-body[data-page="shops"] .shops-main,
-body[data-page="shops"] .shops-footer {
+body[data-page="shops"],
+body[data-page="shops"] .app.shops-app {
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0 !important;
 }
 
+body[data-page="shops"] .app.shops-app {
+  display: block !important;
+  grid-template-columns: none !important;
+  overflow-x: clip !important;
+}
+
+body[data-page="shops"] .app.shops-app > *,
+body[data-page="shops"] .shops-header-inner,
 body[data-page="shops"] .shops-intro,
-body[data-page="shops"] .hero-search.shops-search-panel,
+body[data-page="shops"] .shops-intro-copy,
+body[data-page="shops"] .shops-search-panel,
+body[data-page="shops"] .shops-search-heading,
+body[data-page="shops"] .search-row,
+body[data-page="shops"] .p1-search-ext,
+body[data-page="shops"] #p2FilterWrap,
+body[data-page="shops"] .filter-row,
 body[data-page="shops"] .shops-main,
-body[data-page="shops"] .shops-footer {
-  overflow: hidden !important;
-}
-
-body[data-page="shops"] .shops-popular-searches,
-body[data-page="shops"] .category-scroll,
-body[data-page="shops"] .p1-bigcat-row,
-body[data-page="shops"] .p1-area-row,
-body[data-page="shops"] .p2-chip-row {
+body[data-page="shops"] .shops-results-head,
+body[data-page="shops"] .card-list {
+  min-width: 0 !important;
   max-width: 100% !important;
-  overflow-x: auto !important;
 }
 
+/* 外側で切らず、内側の横スクロール欄だけを動かす */
+body[data-page="shops"] .shops-search-panel.hero-search {
+  overflow: visible !important;
+}
+
+/* 目的ボタンはスマホでは2列。横に隠れない */
 @media (max-width: 640px) {
-  body[data-page="shops"] .shops-app {
+  body[data-page="shops"] .p1-search-ext,
+  body[data-page="shops"] #p2FilterWrap {
+    width: 100% !important;
+  }
+
+  body[data-page="shops"] .p1-bigcat-row {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-flow: row !important;
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    overflow: visible !important;
   }
 
-  body[data-page="shops"] .shops-header-inner {
-    padding: 0 12px !important;
-    gap: 12px !important;
-  }
-
-  body[data-page="shops"] .shops-intro {
-    margin: 14px 0 0 !important;
-    padding: 28px 16px 120px !important;
-  }
-
-  body[data-page="shops"] .hero-search.shops-search-panel,
-  body[data-page="shops"] .shops-main,
-  body[data-page="shops"] .shops-footer {
-    margin: 14px 0 0 !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  body[data-page="shops"] .shops-intro-art {
-    right: 0 !important;
-    width: 200px !important;
+  body[data-page="shops"] .p1-bigcat-btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
   }
 }
+
+/* 地域・支払い・カテゴリは指で左右に動かせる */
+body[data-page="shops"] .p1-area-row,
+body[data-page="shops"] .p2-chip-row,
+body[data-page="shops"] .category-scroll,
+body[data-page="shops"] .shops-popular-searches {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-inline: contain;
+  touch-action: pan-x pan-y;
+  scrollbar-width: none;
+}
+
+body[data-page="shops"] .p1-area-row::-webkit-scrollbar,
+body[data-page="shops"] .p2-chip-row::-webkit-scrollbar,
+body[data-page="shops"] .category-scroll::-webkit-scrollbar,
+body[data-page="shops"] .shops-popular-searches::-webkit-scrollbar {
+  display: none;
+}
+
+body[data-page="shops"] .p1-area-btn,
+body[data-page="shops"] .p2-filter-chip,
+body[data-page="shops"] .cat-btn,
+body[data-page="shops"] .shops-popular-searches button {
+  flex: 0 0 auto !important;
+}
+
 </style>
 
 <script>
