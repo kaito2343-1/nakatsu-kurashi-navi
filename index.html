@@ -4,110 +4,2330 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>中津くらしナビ｜中津市のお店・生活情報を探せる地域サイト</title>
-<meta name="description" content="大分県中津市周辺の飲食店、居酒屋、ラーメン、カフェ、病院、薬局、駐車場、観光・生活情報を探せる地域ナビ。店名を知らなくても目的別カテゴリから探せます。">
+<title>中津くらしナビ｜中津市のお店・観光・生活情報</title>
+<meta name="description" content="大分県中津市のお店、グルメ、観光、病院、薬局、駐車場、生活情報を、店名を知らなくても目的や地域から探せる地域ナビ。">
 <meta name="robots" content="index,follow">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="中津くらしナビ">
-<meta property="og:title" content="中津くらしナビ｜中津市のお店・生活情報を探せる地域サイト">
-<meta property="og:description" content="大分県中津市周辺の飲食店、居酒屋、ラーメン、カフェ、病院、薬局、駐車場、観光・生活情報を探せる地域ナビ。店名を知らなくても目的別カテゴリから探せます。">
+<meta property="og:title" content="中津くらしナビ｜中津市のお店・観光・生活情報">
+<meta property="og:description" content="中津の『いいね！』が見つかる。暮らしにも旅にも役立つ地域情報サイト。">
 <meta property="og:locale" content="ja_JP">
 
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#093a34">
+<meta name="theme-color" content="#0d2f55">
 
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AD%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%AF%3C/text%3E%3C/svg%3E">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="中津くらしナビ">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <script>window.NAKATSU_PAGE = "home";</script>
+<style>
+/* ============================================================
+   中津くらしナビ home-redesign.css
+   ホーム画面専用のプレミアムUI。ほかのページには影響させない。
+   ============================================================ */
+
+body[data-page="home"] {
+  --home-navy: #0d2f55;
+  --home-navy-deep: #071f3b;
+  --home-blue: #2f6fad;
+  --home-sky: #dbeaf4;
+  --home-orange: #f39a32;
+  --home-orange-deep: #d87913;
+  --home-cream: #f7f4ed;
+  --home-paper: #fffefa;
+  --home-white: #ffffff;
+  --home-ink: #10243d;
+  --home-muted: #667587;
+  --home-line: #e6e3dc;
+  --home-green: #47936f;
+  --home-shadow-sm: 0 8px 24px rgba(13, 47, 85, 0.08);
+  --home-shadow-md: 0 18px 48px rgba(13, 47, 85, 0.14);
+  background: var(--home-cream) !important;
+  color: var(--home-ink);
+  font-family: "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, sans-serif !important;
+  line-height: 1.65;
+}
+
+body[data-page="home"] .app.home-app {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  background: var(--home-cream);
+  box-shadow: none;
+}
+
+body[data-page="home"] a {
+  color: inherit;
+}
+
+body[data-page="home"] button,
+body[data-page="home"] input {
+  font: inherit;
+}
+
+.home-shell {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.home-skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  transform: translateY(-160%);
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #fff !important;
+  background: var(--home-navy-deep);
+}
+
+.home-skip-link:focus {
+  transform: translateY(0);
+}
+
+.home-top-note {
+  color: rgba(255, 255, 255, 0.88);
+  background: var(--home-navy-deep);
+  font-size: 12px;
+}
+
+.home-top-note-inner {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.home-top-note a {
+  color: #fff !important;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.home-top-note a:hover {
+  text-decoration: underline;
+}
+
+.nk-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(13, 47, 85, 0.08);
+  background: rgba(255, 254, 250, 0.93);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.nk-header-inner {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nk-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: max-content;
+  text-decoration: none;
+}
+
+.nk-brand-mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--home-navy);
+  border: 1px solid rgba(13, 47, 85, 0.13);
+  border-radius: 14px;
+  background: var(--home-white);
+  box-shadow: 0 8px 20px rgba(13, 47, 85, 0.08);
+}
+
+.nk-brand-mark svg {
+  width: 33px;
+  height: 33px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nk-brand strong,
+.nk-brand small {
+  display: block;
+}
+
+.nk-brand strong {
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 21px;
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+}
+
+.nk-brand small {
+  margin-top: 4px;
+  color: var(--home-muted);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+
+.nk-desktop-nav {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 28px;
+  margin-left: auto;
+}
+
+.nk-desktop-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 80px;
+  color: #2d3d50 !important;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nk-desktop-nav a::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 15px;
+  left: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--home-orange);
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+}
+
+.nk-desktop-nav a:hover::after,
+.nk-desktop-nav a.is-current::after {
+  transform: scaleX(1);
+}
+
+.nk-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nk-icon-link,
+.nk-menu-button {
+  width: 58px;
+  min-height: 56px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 0;
+  border-radius: 15px;
+  color: var(--home-navy) !important;
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nk-icon-link:hover,
+.nk-menu-button:hover {
+  background: #eef4f8;
+}
+
+.nk-icon-link > span,
+.nk-menu-button > span {
+  font-size: 23px;
+  line-height: 1;
+}
+
+.nk-icon-link small,
+.nk-menu-button small {
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.nk-menu-button {
+  display: none;
+}
+
+.nk-mobile-nav {
+  padding: 12px 20px 20px;
+  border-top: 1px solid var(--home-line);
+  background: var(--home-paper);
+}
+
+.nk-mobile-nav a {
+  display: block;
+  padding: 13px 4px;
+  border-bottom: 1px solid var(--home-line);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.nk-hero {
+  position: relative;
+  min-height: 510px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 75% 18%, rgba(255,255,255,0.96) 0 3%, rgba(255,255,255,0) 24%),
+    linear-gradient(118deg, #fefcf6 0%, #f5f8f9 42%, #d9eaf4 100%);
+}
+
+.nk-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(90deg, transparent, #000 55%);
+}
+
+.nk-hero-inner {
+  position: relative;
+  min-height: 510px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(420px, 0.98fr);
+  align-items: center;
+  gap: 35px;
+}
+
+.nk-hero-copy {
+  position: relative;
+  z-index: 5;
+  padding: 74px 0 66px;
+}
+
+.nk-eyebrow,
+.nk-section-kicker {
+  margin: 0 0 8px;
+  color: var(--home-orange-deep);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+}
+
+.nk-hero h1 {
+  margin: 0;
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: clamp(40px, 4.6vw, 66px);
+  line-height: 1.18;
+  letter-spacing: 0.035em;
+  color: var(--home-navy-deep);
+}
+
+.nk-hero-lead {
+  margin: 20px 0 0;
+  color: #485b70;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.nk-hero-search {
+  width: min(650px, 100%);
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 104px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  padding: 8px 8px 8px 18px;
+  border: 1px solid rgba(13, 47, 85, 0.08);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.96);
+  box-shadow: var(--home-shadow-md);
+}
+
+.nk-search-icon {
+  color: var(--home-navy);
+  font-size: 31px;
+  line-height: 1;
+  transform: rotate(-18deg);
+}
+
+.nk-hero-search input {
+  width: 100%;
+  min-width: 0;
+  height: 54px;
+  padding: 0 8px;
+  border: 0;
+  outline: 0;
+  color: var(--home-ink);
+  background: transparent;
+  font-size: 15px;
+}
+
+.nk-hero-search input::placeholder {
+  color: #8a95a2;
+}
+
+.nk-hero-search button {
+  height: 54px;
+  border: 0;
+  border-radius: 15px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--home-orange), var(--home-orange-deep));
+  font-weight: 800;
+  box-shadow: 0 9px 20px rgba(216, 121, 19, 0.22);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nk-hero-search button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(216, 121, 19, 0.29);
+}
+
+.nk-hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 14px;
+  margin-top: 16px;
+  color: var(--home-muted);
+  font-size: 12px;
+}
+
+.nk-hero-links a {
+  color: var(--home-navy) !important;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.nk-hero-links a:hover {
+  text-decoration: underline;
+}
+
+.nk-hero-art {
+  position: relative;
+  align-self: stretch;
+  min-height: 470px;
+}
+
+.nk-sun {
+  position: absolute;
+  top: 62px;
+  right: 58px;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: rgba(255, 191, 92, 0.38);
+  box-shadow: 0 0 0 24px rgba(255, 255, 255, 0.16);
+}
+
+.nk-castle-art {
+  position: absolute;
+  right: -45px;
+  bottom: 0;
+  width: min(620px, 115%);
+  height: auto;
+  filter: drop-shadow(0 15px 22px rgba(13, 47, 85, 0.12));
+}
+
+.nk-mountain-back {
+  fill: #b8cfdb;
+}
+
+.nk-mountain-front {
+  fill: #91b0bf;
+}
+
+.nk-river {
+  fill: #c9e2eb;
+}
+
+.nk-castle {
+  fill: #fffdfa;
+  stroke: var(--home-navy-deep);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+.nk-bridge {
+  fill: none;
+  stroke: #5f7d8f;
+  stroke-width: 4;
+}
+
+.nk-floating-card {
+  position: absolute;
+  z-index: 5;
+  min-width: 168px;
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 9px;
+  padding: 13px 15px;
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 17px;
+  background: rgba(255,255,255,0.88);
+  box-shadow: var(--home-shadow-sm);
+  backdrop-filter: blur(12px);
+}
+
+.nk-floating-card span {
+  grid-row: 1 / 3;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: #fff4e6;
+  font-size: 20px;
+}
+
+.nk-floating-card strong {
+  align-self: end;
+  font-size: 12px;
+}
+
+.nk-floating-card small {
+  color: var(--home-muted);
+  font-size: 9px;
+}
+
+.nk-floating-card-a {
+  top: 112px;
+  left: 4px;
+}
+
+.nk-floating-card-b {
+  right: -5px;
+  bottom: 67px;
+}
+
+.nk-category-section {
+  position: relative;
+  z-index: 10;
+  margin-top: -27px;
+}
+
+.nk-category-section .home-shell {
+  padding: 20px 22px 22px;
+  border: 1px solid rgba(13, 47, 85, 0.08);
+  border-radius: 24px;
+  background: rgba(255,255,255,0.96);
+  box-shadow: var(--home-shadow-md);
+}
+
+.nk-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.nk-section-heading.compact {
+  margin-bottom: 14px;
+}
+
+.nk-section-heading h2 {
+  margin: 0;
+  color: var(--home-ink);
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 24px;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+}
+
+.nk-section-heading a {
+  color: var(--home-navy) !important;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nk-section-heading a:hover {
+  text-decoration: underline;
+}
+
+.nk-category-rail {
+  display: grid;
+  grid-template-columns: repeat(11, minmax(86px, 1fr));
+  gap: 9px;
+}
+
+.nk-category-card {
+  min-height: 91px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 6px;
+  border: 1px solid var(--home-line);
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+  text-decoration: none;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.nk-category-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(13,47,85,0.3);
+  box-shadow: 0 11px 22px rgba(13,47,85,0.1);
+}
+
+.nk-category-card.is-active {
+  color: #fff !important;
+  border-color: var(--home-navy);
+  background: linear-gradient(145deg, #174d82, var(--home-navy-deep));
+}
+
+.nk-category-card.is-active small {
+  color: rgba(255,255,255,0.74);
+}
+
+.nk-category-icon {
+  min-height: 28px;
+  display: grid;
+  place-items: center;
+  color: var(--home-orange-deep);
+  font-size: 23px;
+  line-height: 1;
+}
+
+.nk-category-card.is-active .nk-category-icon {
+  color: #fff;
+}
+
+.nk-category-card strong {
+  font-size: 12px;
+}
+
+.nk-category-card small {
+  color: var(--home-muted);
+  font-size: 9px;
+}
+
+.nk-content-section,
+.nk-purpose-section,
+.nk-bottom-section {
+  padding: 62px 0 0;
+}
+
+.nk-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.62fr) minmax(300px, 0.78fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.nk-featured-panel,
+.nk-area-panel,
+.nk-news-panel,
+.nk-owner-panel {
+  border: 1px solid var(--home-line);
+  border-radius: 24px;
+  background: var(--home-paper);
+  box-shadow: var(--home-shadow-sm);
+}
+
+.nk-featured-panel,
+.nk-area-panel,
+.nk-news-panel {
+  padding: 24px;
+}
+
+.nk-featured-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.nk-loading {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 36px;
+  color: var(--home-muted);
+  text-align: center;
+}
+
+.nk-place-card {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid var(--home-line);
+  border-radius: 19px;
+  background: #fff;
+  box-shadow: 0 9px 20px rgba(13,47,85,0.06);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.nk-place-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(13,47,85,0.12);
+}
+
+.nk-place-visual {
+  position: relative;
+  height: 150px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(255,255,255,0.45), transparent 26%),
+    linear-gradient(135deg, #dceaf4, #b8d0dc);
+}
+
+.nk-place-card[data-tone="food"] .nk-place-visual {
+  background: linear-gradient(135deg, #f9dfc4, #eeb476);
+}
+
+.nk-place-card[data-tone="cafe"] .nk-place-visual {
+  background: linear-gradient(135deg, #eadaca, #c4a78f);
+}
+
+.nk-place-card[data-tone="nature"] .nk-place-visual {
+  background: linear-gradient(135deg, #dcebdc, #9fc6ad);
+}
+
+.nk-place-card[data-tone="medical"] .nk-place-visual {
+  background: linear-gradient(135deg, #dce9f6, #aac7df);
+}
+
+.nk-place-card[data-tone="shopping"] .nk-place-visual {
+  background: linear-gradient(135deg, #f2e0e8, #d6adc1);
+}
+
+.nk-place-visual img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.nk-place-emoji {
+  font-size: 54px;
+  filter: drop-shadow(0 8px 12px rgba(13,47,85,0.14));
+}
+
+.nk-place-visual::after {
+  content: "";
+  position: absolute;
+  right: -35px;
+  bottom: -52px;
+  width: 150px;
+  height: 150px;
+  border: 25px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+}
+
+.nk-place-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(7,31,59,0.83);
+  font-size: 10px;
+  font-weight: 800;
+  backdrop-filter: blur(7px);
+}
+
+.nk-place-favorite {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(7,31,59,0.52);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(7px);
+}
+
+.nk-place-favorite[aria-pressed="true"] {
+  color: #fff2c7;
+  background: rgba(216,121,19,0.9);
+}
+
+.nk-place-body {
+  padding: 15px 16px 16px;
+}
+
+.nk-place-title {
+  margin: 0;
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.nk-place-description {
+  display: -webkit-box;
+  min-height: 3.2em;
+  margin: 7px 0 0;
+  overflow: hidden;
+  color: var(--home-muted);
+  font-size: 11px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.nk-place-meta {
+  display: grid;
+  gap: 4px;
+  margin-top: 11px;
+  color: #526376;
+  font-size: 10px;
+}
+
+.nk-place-meta span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nk-place-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid var(--home-line);
+}
+
+.nk-place-status {
+  padding: 4px 7px;
+  border-radius: 999px;
+  color: #287453;
+  background: #e9f5ef;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.nk-place-status.is-unverified {
+  color: #9c650e;
+  background: #fff2d9;
+}
+
+.nk-place-link {
+  color: var(--home-navy) !important;
+  font-size: 10px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.nk-map-visual {
+  position: relative;
+  height: 285px;
+  overflow: hidden;
+  border-radius: 18px;
+  background:
+    linear-gradient(28deg, transparent 0 46%, rgba(255,255,255,0.85) 47% 49%, transparent 50%),
+    linear-gradient(118deg, #e3ecd9 0 33%, #f6e3cf 34% 67%, #dbe8f4 68%);
+}
+
+.nk-map-visual::before,
+.nk-map-visual::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(13,47,85,0.11);
+  border-radius: 45% 55% 61% 39% / 44% 42% 58% 56%;
+}
+
+.nk-map-visual::before {
+  inset: 33px 38px 62px 48px;
+  transform: rotate(-8deg);
+}
+
+.nk-map-visual::after {
+  inset: 80px 75px 32px 20px;
+  transform: rotate(21deg);
+}
+
+.nk-map-river {
+  position: absolute;
+  z-index: 1;
+  width: 370px;
+  height: 16px;
+  border-radius: 999px;
+  background: rgba(96,170,207,0.58);
+  transform-origin: center;
+}
+
+.river-a {
+  top: 122px;
+  left: -50px;
+  transform: rotate(28deg);
+}
+
+.river-b {
+  right: -125px;
+  bottom: 60px;
+  transform: rotate(-20deg);
+}
+
+.nk-map-chip {
+  position: absolute;
+  z-index: 3;
+  padding: 7px 10px;
+  border: 3px solid rgba(255,255,255,0.88);
+  border-radius: 999px;
+  color: #fff !important;
+  font-size: 10px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 8px 18px rgba(13,47,85,0.15);
+}
+
+.nk-map-chip:hover {
+  transform: translateY(-2px);
+}
+
+.chip-nakatsu {
+  top: 86px;
+  right: 21px;
+  background: var(--home-orange);
+}
+
+.chip-sankou {
+  top: 38px;
+  left: 45px;
+  background: #70a870;
+}
+
+.chip-honyabakei {
+  top: 145px;
+  left: 17px;
+  background: #56a6ae;
+}
+
+.chip-yabakei {
+  right: 21px;
+  bottom: 44px;
+  background: #668cca;
+}
+
+.nk-nearby-button {
+  min-height: 53px;
+  display: grid;
+  grid-template-columns: 27px 1fr 20px;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 0 15px;
+  border: 1px solid var(--home-line);
+  border-radius: 15px;
+  color: var(--home-navy) !important;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.nk-nearby-button:hover {
+  border-color: rgba(13,47,85,0.28);
+  box-shadow: var(--home-shadow-sm);
+}
+
+.nk-area-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.nk-area-links a {
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: var(--home-muted) !important;
+  background: #f2f3f1;
+  font-size: 9px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.nk-purpose-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.nk-purpose-card {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--home-line);
+  border-radius: 19px;
+  background: var(--home-paper);
+  box-shadow: 0 8px 22px rgba(13,47,85,0.06);
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.nk-purpose-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(13,47,85,0.11);
+}
+
+.nk-purpose-card > span {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  color: var(--home-navy);
+  background: #eaf1f6;
+  font-size: 23px;
+}
+
+.nk-purpose-card strong,
+.nk-purpose-card small {
+  display: block;
+}
+
+.nk-purpose-card strong {
+  font-size: 13px;
+}
+
+.nk-purpose-card small {
+  margin-top: 3px;
+  color: var(--home-muted);
+  font-size: 9px;
+}
+
+.nk-purpose-card b {
+  color: var(--home-orange-deep);
+}
+
+.nk-bottom-section {
+  padding-bottom: 62px;
+}
+
+.nk-bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.7fr);
+  gap: 22px;
+}
+
+.nk-news-list {
+  display: grid;
+  gap: 5px;
+}
+
+.nk-news-list a {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 2px 12px;
+  padding: 13px 4px;
+  border-top: 1px solid var(--home-line);
+  text-decoration: none;
+}
+
+.nk-news-list a:first-child {
+  border-top: 0;
+}
+
+.nk-news-label {
+  grid-row: 1 / 3;
+  align-self: start;
+  justify-self: start;
+  min-width: 45px;
+  padding: 4px 7px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--home-orange);
+  font-size: 9px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.nk-news-label.feature {
+  background: var(--home-green);
+}
+
+.nk-news-label.info {
+  background: var(--home-blue);
+}
+
+.nk-news-list strong {
+  font-size: 12px;
+}
+
+.nk-news-list small {
+  color: var(--home-muted);
+  font-size: 10px;
+}
+
+.nk-owner-panel {
+  position: relative;
+  min-height: 310px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 130px;
+  gap: 14px;
+  align-items: center;
+  overflow: hidden;
+  padding: 27px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(255,255,255,0.8), transparent 38%),
+    linear-gradient(145deg, #fff7e9, #f2e2cc);
+}
+
+.nk-owner-panel::before {
+  content: "";
+  position: absolute;
+  right: -45px;
+  bottom: -70px;
+  width: 220px;
+  height: 220px;
+  border: 34px solid rgba(255,255,255,0.38);
+  border-radius: 50%;
+}
+
+.nk-owner-panel > div:first-child {
+  position: relative;
+  z-index: 2;
+}
+
+.nk-owner-badge {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--home-orange);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.nk-owner-panel h2 {
+  margin: 0;
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 25px;
+  line-height: 1.35;
+}
+
+.nk-owner-panel p:not(.nk-section-kicker) {
+  margin: 12px 0 17px;
+  color: #6b6259;
+  font-size: 11px;
+}
+
+.nk-owner-panel a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 15px;
+  border-radius: 13px;
+  color: #fff !important;
+  background: var(--home-navy);
+  font-size: 11px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.nk-shop-illustration {
+  position: relative;
+  z-index: 2;
+  width: 122px;
+  height: 126px;
+  align-self: end;
+  margin-bottom: 20px;
+  border: 4px solid var(--home-navy);
+  border-radius: 7px 7px 2px 2px;
+  background: #fffdf8;
+}
+
+.nk-shop-illustration .roof {
+  position: absolute;
+  top: -26px;
+  left: -10px;
+  width: 134px;
+  height: 28px;
+  border: 4px solid var(--home-navy);
+  background: #f3c879;
+  transform: skewX(-12deg);
+}
+
+.nk-shop-illustration .awning {
+  position: absolute;
+  top: 22px;
+  left: -4px;
+  width: 122px;
+  height: 27px;
+  border-bottom: 4px solid var(--home-navy);
+  background: repeating-linear-gradient(90deg, #f18d63 0 18px, #fff4dc 18px 36px);
+}
+
+.nk-shop-illustration .door {
+  position: absolute;
+  right: 13px;
+  bottom: 0;
+  width: 36px;
+  height: 54px;
+  border: 4px solid var(--home-navy);
+  border-bottom: 0;
+}
+
+.nk-shop-illustration .window {
+  position: absolute;
+  bottom: 19px;
+  left: 12px;
+  width: 43px;
+  height: 31px;
+  border: 4px solid var(--home-navy);
+  background: #d8edf5;
+}
+
+.nk-trust-section {
+  border-top: 1px solid var(--home-line);
+  background: #fffefa;
+}
+
+.nk-trust-inner {
+  min-height: 83px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  color: var(--home-muted);
+  text-align: center;
+}
+
+.nk-trust-inner > span {
+  width: 31px;
+  height: 31px;
+  display: grid;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--home-green);
+  font-weight: 900;
+}
+
+.nk-trust-inner p {
+  margin: 0;
+  font-size: 11px;
+}
+
+.nk-trust-inner strong {
+  color: var(--home-ink);
+}
+
+.nk-footer {
+  color: rgba(255,255,255,0.75);
+  background: var(--home-navy-deep);
+}
+
+.nk-footer-grid {
+  min-height: 190px;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr auto;
+  align-items: center;
+  gap: 40px;
+}
+
+.nk-footer-brand strong {
+  color: #fff;
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.05em;
+}
+
+.nk-footer-brand p {
+  margin: 7px 0 0;
+  font-size: 10px;
+}
+
+.nk-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+}
+
+.nk-footer nav a,
+.nk-footer-meta a {
+  color: rgba(255,255,255,0.78) !important;
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.nk-footer nav a:hover,
+.nk-footer-meta a:hover {
+  color: #fff !important;
+}
+
+.nk-footer-meta {
+  display: grid;
+  justify-items: end;
+  gap: 15px;
+}
+
+.nk-footer-meta small {
+  font-size: 9px;
+}
+
+body[data-page="home"] .toast {
+  z-index: 1000;
+}
+
+@media (max-width: 1120px) {
+  .nk-desktop-nav {
+    gap: 18px;
+  }
+
+  .nk-desktop-nav a {
+    font-size: 12px;
+  }
+
+  .nk-category-rail {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    scrollbar-width: thin;
+  }
+
+  .nk-category-card {
+    flex: 0 0 90px;
+  }
+
+  .nk-purpose-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 880px) {
+  .home-shell {
+    width: min(100% - 28px, 720px);
+  }
+
+  .home-top-note {
+    display: none;
+  }
+
+  .nk-header-inner {
+    min-height: 68px;
+  }
+
+  .nk-brand strong {
+    font-size: 18px;
+  }
+
+  .nk-brand small,
+  .nk-desktop-nav,
+  .nk-icon-link small {
+    display: none;
+  }
+
+  .nk-header-actions {
+    margin-left: auto;
+  }
+
+  .nk-menu-button {
+    display: inline-flex;
+  }
+
+  .nk-icon-link,
+  .nk-menu-button {
+    width: 47px;
+    min-height: 47px;
+  }
+
+  .nk-hero {
+    min-height: auto;
+  }
+
+  .nk-hero-inner {
+    min-height: 590px;
+    display: block;
+  }
+
+  .nk-hero-copy {
+    padding: 57px 0 280px;
+  }
+
+  .nk-hero h1 {
+    font-size: clamp(38px, 9vw, 54px);
+  }
+
+  .nk-hero-art {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    min-height: 285px;
+  }
+
+  .nk-castle-art {
+    right: -40px;
+    width: 590px;
+    max-width: none;
+  }
+
+  .nk-floating-card-a {
+    top: 35px;
+    left: 5px;
+  }
+
+  .nk-floating-card-b {
+    right: 5px;
+    bottom: 35px;
+  }
+
+  .nk-sun {
+    top: 20px;
+  }
+
+  .nk-main-grid,
+  .nk-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nk-area-panel {
+    order: -1;
+  }
+
+  .nk-map-visual {
+    height: 250px;
+  }
+}
+
+@media (max-width: 620px) {
+  .home-shell {
+    width: min(100% - 20px, 560px);
+  }
+
+  .nk-header-inner {
+    gap: 12px;
+  }
+
+  .nk-brand {
+    gap: 8px;
+  }
+
+  .nk-brand-mark {
+    width: 39px;
+    height: 39px;
+    border-radius: 12px;
+  }
+
+  .nk-brand-mark svg {
+    width: 29px;
+    height: 29px;
+  }
+
+  .nk-brand strong {
+    font-size: 16px;
+  }
+
+  .nk-icon-link,
+  .nk-menu-button {
+    width: 42px;
+  }
+
+  .nk-hero-inner {
+    min-height: 575px;
+  }
+
+  .nk-hero-copy {
+    padding: 46px 0 267px;
+  }
+
+  .nk-eyebrow {
+    font-size: 9px;
+  }
+
+  .nk-hero h1 {
+    font-size: 37px;
+    line-height: 1.24;
+  }
+
+  .nk-hero-lead {
+    margin-top: 14px;
+    font-size: 13px;
+  }
+
+  .nk-hero-search {
+    min-height: 61px;
+    grid-template-columns: 26px minmax(0, 1fr) 76px;
+    margin-top: 20px;
+    padding: 6px 6px 6px 12px;
+    border-radius: 16px;
+  }
+
+  .nk-search-icon {
+    font-size: 25px;
+  }
+
+  .nk-hero-search input {
+    height: 47px;
+    padding: 0 3px;
+    font-size: 13px;
+  }
+
+  .nk-hero-search button {
+    height: 47px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+
+  .nk-hero-links {
+    gap: 6px 10px;
+    font-size: 10px;
+  }
+
+  .nk-floating-card {
+    min-width: 142px;
+    grid-template-columns: 32px 1fr;
+    padding: 10px 11px;
+  }
+
+  .nk-floating-card span {
+    width: 32px;
+    height: 32px;
+    font-size: 17px;
+  }
+
+  .nk-floating-card strong {
+    font-size: 10px;
+  }
+
+  .nk-floating-card small {
+    font-size: 8px;
+  }
+
+  .nk-castle-art {
+    right: -90px;
+    width: 540px;
+  }
+
+  .nk-category-section {
+    margin-top: -18px;
+  }
+
+  .nk-category-section .home-shell {
+    width: calc(100% - 16px);
+    padding: 16px 14px 15px;
+    border-radius: 20px;
+  }
+
+  .nk-section-heading h2 {
+    font-size: 20px;
+  }
+
+  .nk-section-heading a {
+    font-size: 10px;
+  }
+
+  .nk-category-card {
+    flex-basis: 82px;
+    min-height: 82px;
+    border-radius: 14px;
+  }
+
+  .nk-category-card strong {
+    font-size: 11px;
+  }
+
+  .nk-content-section,
+  .nk-purpose-section,
+  .nk-bottom-section {
+    padding-top: 40px;
+  }
+
+  .nk-featured-panel,
+  .nk-area-panel,
+  .nk-news-panel {
+    padding: 17px;
+    border-radius: 20px;
+  }
+
+  .nk-featured-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 7px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .nk-place-card {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+  }
+
+  .nk-place-visual {
+    height: 145px;
+  }
+
+  .nk-purpose-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .nk-purpose-card {
+    padding: 14px;
+  }
+
+  .nk-owner-panel {
+    min-height: 315px;
+    grid-template-columns: 1fr 105px;
+    padding: 21px;
+    border-radius: 20px;
+  }
+
+  .nk-owner-panel h2 {
+    font-size: 21px;
+  }
+
+  .nk-shop-illustration {
+    width: 100px;
+    height: 112px;
+    transform: scale(0.86);
+    transform-origin: right bottom;
+  }
+
+  .nk-trust-inner {
+    align-items: flex-start;
+    padding: 18px 0;
+    text-align: left;
+  }
+
+  .nk-footer-grid {
+    min-height: 260px;
+    grid-template-columns: 1fr;
+    align-content: center;
+    gap: 24px;
+  }
+
+  .nk-footer-meta {
+    justify-items: start;
+  }
+}
+
+@media (max-width: 390px) {
+  .nk-brand strong {
+    font-size: 14px;
+  }
+
+  .nk-brand-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .nk-header-actions {
+    gap: 0;
+  }
+
+  .nk-icon-link,
+  .nk-menu-button {
+    width: 38px;
+  }
+
+  .nk-hero h1 {
+    font-size: 33px;
+  }
+
+  .nk-hero-search {
+    grid-template-columns: 24px minmax(0, 1fr) 66px;
+  }
+
+  .nk-hero-search input {
+    font-size: 12px;
+  }
+
+  .nk-floating-card-b {
+    display: none;
+  }
+
+  .nk-section-heading {
+    align-items: flex-start;
+  }
+
+  .nk-place-card {
+    flex-basis: 86%;
+  }
+
+  .nk-owner-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .nk-shop-illustration {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-page="home"] *,
+  body[data-page="home"] *::before,
+  body[data-page="home"] *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+</style>
 </head>
 <body data-page="home">
-  <div id="homeUiPanel" hidden></div>
-  <div id="izakayaRanking" hidden></div>
-  <div class="home-hero-extra" hidden></div>
-<div class="app">
+<div class="app home-app">
+  <a class="home-skip-link" href="#homeMain">本文へ移動</a>
 
-  <header class="site-header">
-    <h1 class="site-title">🧭 中津くらしナビ</h1>
-    <p class="site-tagline">
-      中津のお店・暮らし情報を、店名を知らなくても目的別に探せる地域ナビ。
-    </p>
-  </header>
-
-  <div class="notice-banner" role="note">
-    ℹ️ <strong>実在施設を掲載していますが、情報は変更される場合があります。</strong>お出かけ前に各施設の公式情報または電話でご確認ください。
+  <div class="home-top-note">
+    <div class="home-shell home-top-note-inner">
+      <span>中津市のお店・観光・暮らしを、ひとつのサイトで。</span>
+      <a href="business.html">店舗・施設の掲載について</a>
+    </div>
   </div>
 
-  <section class="home-hero" aria-label="検索">
-    <h2 class="hero-search-title">何を探しますか？</h2>
-    <form action="shops.html" method="get" class="home-search-row">
-      <label for="homeKeyword" class="visually-hidden">キーワード検索</label>
-      <input type="text" id="homeKeyword" name="q" placeholder="例：居酒屋、ラーメン、薬局、駐車場" autocomplete="off">
-      <button type="submit">検索</button>
-    </form>
-    <p class="search-help">店名が分からない人は、下のカテゴリボタンから探せます。</p>
-    <div class="home-category-pills">
-      <a href="shops.html?q=%E5%B1%85%E9%85%92%E5%B1%8B">🍺 居酒屋</a>
-      <a href="shops.html?q=%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3">🍜 ラーメン</a>
-      <a href="shops.html?q=%E8%96%AC%E5%B1%80">💊 薬局</a>
-      <a href="shops.html?q=%E9%A7%90%E8%BB%8A%E5%A0%B4">🅿️ 駐車場</a>
+  <header class="nk-header" id="top">
+    <div class="home-shell nk-header-inner">
+      <a class="nk-brand" href="index.html" aria-label="中津くらしナビ ホーム">
+        <span class="nk-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img">
+            <path d="M12 48h40M16 48V33h32v15M21 33l3-9h16l3 9M27 24l2-8h6l2 8M20 38h5m7 0h5m7 0h1M24 48V38m16 10V38M9 53c7-3 14-3 21 0s14 3 25 0"/>
+          </svg>
+        </span>
+        <span>
+          <strong>中津くらしナビ</strong>
+          <small>暮らし・お店・観光をもっと便利に</small>
+        </span>
+      </a>
+
+      <nav class="nk-desktop-nav" aria-label="メインナビゲーション">
+        <a class="is-current" href="index.html">ホーム</a>
+        <a href="shops.html">お店を探す</a>
+        <a href="#homeAreas">エリアから探す</a>
+        <a href="tourism.html">観光・モデルコース</a>
+        <a href="rankings.html">ランキング</a>
+      </nav>
+
+      <div class="nk-header-actions">
+        <a class="nk-icon-link" href="favorites.html" aria-label="お気に入りを見る">
+          <span aria-hidden="true">♡</span>
+          <small>お気に入り</small>
+        </a>
+        <button class="nk-menu-button" id="homeMenuButton" type="button" aria-expanded="false" aria-controls="homeMobileNav">
+          <span aria-hidden="true">☰</span>
+          <small>メニュー</small>
+        </button>
+      </div>
     </div>
-  </section>
 
-  <nav class="home-nav-grid" aria-label="メインメニュー">
-    <a class="home-nav-card" href="shops.html">
-      <span class="home-nav-icon">🏪</span>
-      <span class="home-nav-title">店舗一覧</span>
-      <span class="home-nav-desc">検索・カテゴリ・地名・支払い方法などで絞り込み</span>
-    </a>
-    <a class="home-nav-card" href="tourism.html">
-      <span class="home-nav-icon">🏯</span>
-      <span class="home-nav-title">観光・名物・モデルコース</span>
-      <span class="home-nav-desc">からあげ・中津城・耶馬渓と、目的別の観光ルート</span>
-    </a>
-    <a class="home-nav-card" href="rankings.html">
-      <span class="home-nav-icon">📋</span>
-      <span class="home-nav-title">ランキング・ピックアップ</span>
-      <span class="home-nav-desc">新着・営業中・夜に使える店などを条件別に紹介</span>
-    </a>
-    <a class="home-nav-card" href="favorites.html">
-      <span class="home-nav-icon">⭐</span>
-      <span class="home-nav-title">お気に入り</span>
-      <span class="home-nav-desc">この端末に保存したお店をまとめて確認</span>
-    </a>
-    <a class="home-nav-card" href="business.html">
-      <span class="home-nav-icon">📣</span>
-      <span class="home-nav-title">店舗向け掲載案内</span>
-      <span class="home-nav-desc">掲載・情報修正のご依頼はこちら（無料）</span>
-    </a>
-  </nav>
+    <nav class="nk-mobile-nav" id="homeMobileNav" aria-label="スマートフォン用メニュー" hidden>
+      <a href="shops.html">お店を探す</a>
+      <a href="#homeAreas">エリアから探す</a>
+      <a href="tourism.html">観光・モデルコース</a>
+      <a href="rankings.html">ランキング</a>
+      <a href="favorites.html">お気に入り</a>
+      <a href="business.html">店舗向け掲載案内</a>
+    </nav>
+  </header>
 
-  <main></main>
+  <main id="homeMain">
+    <section class="nk-hero" aria-labelledby="homeHeroTitle">
+      <div class="home-shell nk-hero-inner">
+        <div class="nk-hero-copy">
+          <p class="nk-eyebrow">NAKATSU LOCAL GUIDE</p>
+          <h1 id="homeHeroTitle">中津の「いいね！」が<br>きっと見つかる。</h1>
+          <p class="nk-hero-lead">グルメ、買い物、医療、観光。<br>店名が分からなくても、目的や地域から探せます。</p>
 
-  <footer class="site-footer">
-    <p class="footer-warning">
-      掲載情報は変更されている場合があります。営業時間・定休日・料金などは、来店前に公式情報または店舗へご確認ください。
-    </p>
-    <p class="footer-notice">
-      「✅確認済み」は公式情報などで確認できた情報、「⚠️要確認」は営業時間・電話番号などが未確認または変更の可能性がある情報です。本サイトの情報によって生じた損害について、当サイトは責任を負いかねます。
-    </p>
-    <p class="footer-copy">&copy; 2026 中津くらしナビ</p>
+          <form class="nk-hero-search" action="shops.html" method="get" role="search">
+            <label class="visually-hidden" for="homeKeyword">お店・カテゴリ・地域名で検索</label>
+            <span class="nk-search-icon" aria-hidden="true">⌕</span>
+            <input id="homeKeyword" name="q" type="search" placeholder="お店・カテゴリ・地域名で探す" autocomplete="off">
+            <button type="submit">検索</button>
+          </form>
+
+          <div class="nk-hero-links" aria-label="人気の検索">
+            <span>人気：</span>
+            <a href="shops.html?q=%E5%B1%85%E9%85%92%E5%B1%8B">駅周辺の居酒屋</a>
+            <a href="shops.html?q=%E3%81%8B%E3%82%89%E3%81%82%E3%81%92">中津からあげ</a>
+            <a href="shops.html?q=%E7%97%85%E9%99%A2">病院</a>
+          </div>
+        </div>
+
+        <div class="nk-hero-art" aria-hidden="true">
+          <div class="nk-sun"></div>
+          <svg class="nk-castle-art" viewBox="0 0 520 360" role="img">
+            <path class="nk-mountain-back" d="M0 220 75 150l54 38 58-86 74 91 56-50 88 77 57-45 58 45v140H0z"/>
+            <path class="nk-mountain-front" d="M0 255 92 196l77 48 90-61 71 58 76-37 114 51v105H0z"/>
+            <path class="nk-river" d="M0 285c95-25 154 27 245 2 94-26 171-12 275 20v53H0z"/>
+            <g class="nk-castle">
+              <path d="M286 278h170v40H286z"/>
+              <path d="M305 240h132v40H305z"/>
+              <path d="m290 244 80-34 84 34z"/>
+              <path d="M325 205h92v38h-92z"/>
+              <path d="m312 210 58-32 60 32z"/>
+              <path d="M344 171h53v30h-53z"/>
+              <path d="m335 178 35-25 39 25z"/>
+              <path d="M320 255h20v25h-20zm42 0h20v25h-20zm42 0h20v25h-20zM340 218h18v22h-18zm34 0h18v22h-18z"/>
+            </g>
+            <path class="nk-bridge" d="M14 270h238v12H14zM36 282v38m50-38v38m50-38v38m50-38v38m50-38v38"/>
+          </svg>
+
+          <div class="nk-floating-card nk-floating-card-a">
+            <span>🍜</span>
+            <strong>今日のごはん</strong>
+            <small>目的からすぐ検索</small>
+          </div>
+          <div class="nk-floating-card nk-floating-card-b">
+            <span>📍</span>
+            <strong>現在地周辺</strong>
+            <small>近いお店を見つける</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="nk-category-section" aria-labelledby="homeCategoryTitle">
+      <div class="home-shell">
+        <div class="nk-section-heading compact">
+          <div>
+            <p class="nk-section-kicker">CATEGORY</p>
+            <h2 id="homeCategoryTitle">目的から探す</h2>
+          </div>
+          <a href="shops.html">すべてのお店・施設を見る <span aria-hidden="true">→</span></a>
+        </div>
+        <nav class="nk-category-rail" id="homeCategoryRail" aria-label="目的別カテゴリ">
+          <a class="nk-category-card is-active" href="shops.html">
+            <span class="nk-category-icon">▦</span>
+            <strong>すべて</strong>
+            <small>読み込み中</small>
+          </a>
+        </nav>
+      </div>
+    </section>
+
+    <section class="nk-content-section">
+      <div class="home-shell nk-main-grid">
+        <div class="nk-featured-panel">
+          <div class="nk-section-heading">
+            <div>
+              <p class="nk-section-kicker">PICK UP</p>
+              <h2>おすすめのお店・スポット</h2>
+            </div>
+            <a href="rankings.html">もっと見る <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="nk-featured-grid" id="homeFeaturedGrid" aria-live="polite">
+            <p class="nk-loading">おすすめ情報を読み込んでいます。</p>
+          </div>
+        </div>
+
+        <aside class="nk-area-panel" id="homeAreas" aria-labelledby="homeAreaTitle">
+          <div class="nk-section-heading">
+            <div>
+              <p class="nk-section-kicker">AREA</p>
+              <h2 id="homeAreaTitle">エリアから探す</h2>
+            </div>
+          </div>
+
+          <div class="nk-map-visual" aria-hidden="true">
+            <span class="nk-map-river river-a"></span>
+            <span class="nk-map-river river-b"></span>
+            <a class="nk-map-chip chip-nakatsu" href="shops.html?q=%E4%B8%AD%E6%B4%A5%E9%A7%85">中津駅周辺</a>
+            <a class="nk-map-chip chip-sankou" href="shops.html?q=%E4%B8%89%E5%85%89">三光</a>
+            <a class="nk-map-chip chip-honyabakei" href="shops.html?q=%E6%9C%AC%E8%80%B6%E9%A6%AC%E6%B8%93">本耶馬渓</a>
+            <a class="nk-map-chip chip-yabakei" href="shops.html?q=%E8%80%B6%E9%A6%AC%E6%B8%93">耶馬溪</a>
+          </div>
+
+          <a class="nk-nearby-button" href="shops.html?nearby=1">
+            <span aria-hidden="true">⌖</span>
+            現在地から近いお店を探す
+            <span aria-hidden="true">→</span>
+          </a>
+
+          <div class="nk-area-links">
+            <a href="shops.html?q=%E4%B8%AD%E6%B4%A5%E9%A7%85">中津駅周辺</a>
+            <a href="shops.html?q=%E4%B8%89%E5%85%89">三光エリア</a>
+            <a href="shops.html?q=%E8%80%B6%E9%A6%AC%E6%B8%93">耶馬溪エリア</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="nk-purpose-section" aria-labelledby="homePurposeTitle">
+      <div class="home-shell">
+        <div class="nk-section-heading">
+          <div>
+            <p class="nk-section-kicker">DISCOVER</p>
+            <h2 id="homePurposeTitle">こんな時に便利です</h2>
+          </div>
+        </div>
+
+        <div class="nk-purpose-grid">
+          <a class="nk-purpose-card" href="shops.html?q=%E5%AD%90%E9%80%A3%E3%82%8C">
+            <span aria-hidden="true">👨‍👩‍👧</span>
+            <div><strong>家族で出かける</strong><small>子連れ・駐車場ありから探す</small></div>
+            <b aria-hidden="true">→</b>
+          </a>
+          <a class="nk-purpose-card" href="shops.html?q=%E5%96%B6%E6%A5%AD%E4%B8%AD">
+            <span aria-hidden="true">◷</span>
+            <div><strong>今から行ける場所</strong><small>営業時間を確認して探す</small></div>
+            <b aria-hidden="true">→</b>
+          </a>
+          <a class="nk-purpose-card" href="tourism.html">
+            <span aria-hidden="true">🏯</span>
+            <div><strong>中津を観光する</strong><small>名物・歴史・モデルコース</small></div>
+            <b aria-hidden="true">→</b>
+          </a>
+          <a class="nk-purpose-card" href="shops.html?q=%E9%9B%A8%E3%81%AE%E6%97%A5">
+            <span aria-hidden="true">☂</span>
+            <div><strong>雨の日に過ごす</strong><small>屋内施設や買い物スポット</small></div>
+            <b aria-hidden="true">→</b>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="nk-bottom-section">
+      <div class="home-shell nk-bottom-grid">
+        <div class="nk-news-panel">
+          <div class="nk-section-heading">
+            <div>
+              <p class="nk-section-kicker">UPDATE</p>
+              <h2>新着情報・サイト更新</h2>
+            </div>
+          </div>
+          <div class="nk-news-list">
+            <a href="shops.html">
+              <span class="nk-news-label new">新着</span>
+              <strong>店舗・施設情報を随時追加しています</strong>
+              <small>最新の掲載情報を店舗一覧から確認できます。</small>
+            </a>
+            <a href="rankings.html">
+              <span class="nk-news-label feature">特集</span>
+              <strong>目的別ランキングを公開中</strong>
+              <small>居酒屋、ランチ、夜に使えるお店などから探せます。</small>
+            </a>
+            <a href="business.html">
+              <span class="nk-news-label info">案内</span>
+              <strong>店舗・施設の掲載と情報修正を受付中</strong>
+              <small>掲載依頼は無料です。公式情報を添えてお申し込みください。</small>
+            </a>
+          </div>
+        </div>
+
+        <aside class="nk-owner-panel">
+          <div>
+            <p class="nk-section-kicker">FOR BUSINESS</p>
+            <span class="nk-owner-badge">掲載無料</span>
+            <h2>お店の魅力を、<br>中津の人と旅する人へ。</h2>
+            <p>中津くらしナビへの店舗・施設掲載、情報修正を無料で受け付けています。</p>
+            <a href="business.html">掲載について詳しく見る <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="nk-shop-illustration" aria-hidden="true">
+            <span class="roof"></span>
+            <span class="awning"></span>
+            <span class="door"></span>
+            <span class="window"></span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="nk-trust-section">
+      <div class="home-shell nk-trust-inner">
+        <span aria-hidden="true">✓</span>
+        <p><strong>実在する施設を掲載しています。</strong>営業時間・定休日・料金などは変更される場合があるため、お出かけ前に公式情報をご確認ください。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="nk-footer">
+    <div class="home-shell nk-footer-grid">
+      <div class="nk-footer-brand">
+        <strong>中津くらしナビ</strong>
+        <p>中津の暮らし・お店・観光をもっと便利に。</p>
+      </div>
+      <nav aria-label="フッターメニュー">
+        <a href="shops.html">店舗・施設一覧</a>
+        <a href="tourism.html">観光・モデルコース</a>
+        <a href="rankings.html">ランキング</a>
+        <a href="business.html">店舗向け掲載案内</a>
+      </nav>
+      <div class="nk-footer-meta">
+        <a href="#top">ページ上部へ ↑</a>
+        <small>&copy; 2026 中津くらしナビ</small>
+      </div>
+    </div>
   </footer>
 </div>
 
-
+<div id="homeUiPanel" hidden></div>
+<div id="izakayaRanking" hidden></div>
+<div class="home-hero-extra" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="app-shell.js?v=2"></script>
+<script>
+/* ============================================================
+   中津くらしナビ home-redesign.js
+   ホーム画面のカテゴリ件数・おすすめカード・メニューを制御
+   ============================================================ */
+
+(function () {
+  "use strict";
+
+  if ((window.NAKATSU_PAGE || document.body.dataset.page) !== "home") return;
+
+  var FAVORITES_KEY_HOME = "nakatsu_kurashi_navi_favorites";
+
+  var CATEGORY_CONFIG = [
+    { key: "all", label: "すべて", icon: "▦", query: "" },
+    { key: "food", label: "飲食店", icon: "🍽", query: "飲食店" },
+    { key: "izakaya", label: "居酒屋", icon: "🍺", query: "居酒屋" },
+    { key: "ramen", label: "ラーメン", icon: "🍜", query: "ラーメン" },
+    { key: "cafe", label: "カフェ", icon: "☕", query: "カフェ" },
+    { key: "hospital", label: "病院", icon: "✚", query: "病院" },
+    { key: "pharmacy", label: "薬局", icon: "💊", query: "薬局" },
+    { key: "parking", label: "駐車場", icon: "P", query: "駐車場" },
+    { key: "supermarket", label: "スーパー", icon: "🛒", query: "スーパー" },
+    { key: "tourism", label: "観光", icon: "🏯", query: "観光" },
+    { key: "life", label: "生活", icon: "⌂", query: "生活" }
+  ];
+
+  var MATCHERS = {
+    food: /飲食|ご飯|ランチ|弁当|惣菜|からあげ|焼肉|寿司|うどん|そば|レストラン|ファミレス|定食|グルメ|居酒屋|ラーメン|カフェ|喫茶|パン|ベーカリー/i,
+    izakaya: /居酒屋|焼鳥|焼き鳥|酒場|バー|bar|夜ごはん|地酒/i,
+    ramen: /ラーメン|らーめん|中華そば|宝来軒/i,
+    cafe: /カフェ|cafe|喫茶|珈琲|コーヒー|スイーツ|ベーカリー|パン/i,
+    hospital: /病院|歯医者|歯科|クリニック|医院|医療|診療/i,
+    pharmacy: /薬局|ドラッグストア|処方箋|市販薬/i,
+    parking: /駐車場|パーキング|コインパーキング/i,
+    supermarket: /スーパー|ショッピング|買い物|イオン|ゆめタウン|マルショク|トライアル/i,
+    tourism: /観光|中津城|福澤|耶馬渓|歴史|記念館|公園|名所|釣り場|モデルコース/i,
+    life: /生活|市役所|手続き|銀行|atm|郵便局|コインランドリー|相談|公共|図書館|住宅|暮らし/i
+  };
+
+  function getFacilities() {
+    try {
+      if (typeof facilities !== "undefined" && Array.isArray(facilities)) {
+        return facilities.filter(function (item) {
+          return item && item.name;
+        });
+      }
+    } catch (error) {
+      console.warn("[home-redesign] 施設データを取得できませんでした", error);
+    }
+    return [];
+  }
+
+  function escapeHtml(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function facilityText(item) {
+    return [
+      item.name,
+      item.category,
+      item.description,
+      item.address,
+      Array.isArray(item.tags) ? item.tags.join(" ") : ""
+    ].join(" ");
+  }
+
+  function matchesCategory(item, key) {
+    if (key === "all") return true;
+    var matcher = MATCHERS[key];
+    return matcher ? matcher.test(facilityText(item)) : false;
+  }
+
+  function shopsUrl(query) {
+    return query ? "shops.html?q=" + encodeURIComponent(query) : "shops.html";
+  }
+
+  function renderCategories(list) {
+    var rail = document.getElementById("homeCategoryRail");
+    if (!rail) return;
+
+    rail.innerHTML = CATEGORY_CONFIG.map(function (category) {
+      var count = category.key === "all"
+        ? list.length
+        : list.filter(function (item) { return matchesCategory(item, category.key); }).length;
+
+      return (
+        '<a class="nk-category-card' + (category.key === "all" ? " is-active" : "") + '" href="' + shopsUrl(category.query) + '">' +
+          '<span class="nk-category-icon" aria-hidden="true">' + escapeHtml(category.icon) + "</span>" +
+          "<strong>" + escapeHtml(category.label) + "</strong>" +
+          "<small>" + count.toLocaleString("ja-JP") + "件</small>" +
+        "</a>"
+      );
+    }).join("");
+  }
+
+  function getImageUrl(item) {
+    var raw = item.imageUrl || item.image_url || item.photoUrl || item.photo_url || "";
+    var value = String(raw || "").trim();
+    return /^https?:\/\//i.test(value) ? value : "";
+  }
+
+  function getTone(item) {
+    var text = facilityText(item);
+    if (MATCHERS.food.test(text) || MATCHERS.ramen.test(text) || MATCHERS.izakaya.test(text)) return "food";
+    if (MATCHERS.cafe.test(text)) return "cafe";
+    if (MATCHERS.hospital.test(text) || MATCHERS.pharmacy.test(text)) return "medical";
+    if (MATCHERS.supermarket.test(text)) return "shopping";
+    if (MATCHERS.tourism.test(text)) return "nature";
+    return "default";
+  }
+
+  function getIcon(item) {
+    var text = facilityText(item);
+    if (/中津城|城|歴史|記念館/i.test(text)) return "🏯";
+    if (/からあげ|弁当|惣菜/i.test(text)) return "🍗";
+    if (MATCHERS.ramen.test(text)) return "🍜";
+    if (MATCHERS.cafe.test(text)) return "☕";
+    if (MATCHERS.izakaya.test(text)) return "🍺";
+    if (MATCHERS.hospital.test(text)) return "🏥";
+    if (MATCHERS.pharmacy.test(text)) return "💊";
+    if (MATCHERS.supermarket.test(text)) return "🛍";
+    if (/図書館/i.test(text)) return "📚";
+    if (/公園|耶馬渓|釣り場|自然/i.test(text)) return "🌿";
+    return "📍";
+  }
+
+  function getFavoriteIds() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(FAVORITES_KEY_HOME) || "[]");
+      return Array.isArray(saved) ? saved.map(Number).filter(Number.isFinite) : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveFavoriteIds(ids) {
+    try {
+      localStorage.setItem(FAVORITES_KEY_HOME, JSON.stringify(ids));
+      if (typeof state !== "undefined" && state && Array.isArray(state.favorites)) {
+        state.favorites = ids.slice();
+      }
+      return true;
+    } catch (error) {
+      console.warn("[home-redesign] お気に入りを保存できませんでした", error);
+      return false;
+    }
+  }
+
+  function showHomeToast(message) {
+    var toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add("show");
+    window.clearTimeout(showHomeToast.timer);
+    showHomeToast.timer = window.setTimeout(function () {
+      toast.classList.remove("show");
+    }, 2200);
+  }
+
+  function toggleHomeFavorite(id, name, button) {
+    var ids = getFavoriteIds();
+    var index = ids.indexOf(id);
+    var added = index === -1;
+
+    if (added) ids.push(id);
+    else ids.splice(index, 1);
+
+    if (!saveFavoriteIds(ids)) return;
+
+    button.setAttribute("aria-pressed", String(added));
+    button.textContent = added ? "♥" : "♡";
+    showHomeToast(added ? "「" + name + "」をお気に入りに追加しました" : "「" + name + "」をお気に入りから外しました");
+  }
+
+  function pickFeatured(list) {
+    var selected = [];
+    var used = Object.create(null);
+
+    var preferences = [
+      /中津城/,
+      /からあげ.*(もり山|ぶんごや|鳥しん)|もり山|ぶんごや|鳥しん/i,
+      /宝来軒|ラーメン|中華そば/i,
+      /カフェ|喫茶|珈琲|ベーカリー/i
+    ];
+
+    preferences.forEach(function (pattern) {
+      var found = list.find(function (item) {
+        return !used[item.id] && pattern.test(facilityText(item));
+      });
+      if (found) {
+        used[found.id] = true;
+        selected.push(found);
+      }
+    });
+
+    list
+      .filter(function (item) { return item.verified && !used[item.id]; })
+      .concat(list.filter(function (item) { return !used[item.id]; }))
+      .some(function (item) {
+        if (selected.length >= 4) return true;
+        if (!used[item.id]) {
+          used[item.id] = true;
+          selected.push(item);
+        }
+        return selected.length >= 4;
+      });
+
+    return selected.slice(0, 4);
+  }
+
+  function visualHtml(item) {
+    var imageUrl = getImageUrl(item);
+    if (imageUrl) {
+      return '<img src="' + escapeHtml(imageUrl) + '" alt="' + escapeHtml(item.name) + 'の写真" loading="lazy">';
+    }
+    return '<span class="nk-place-emoji" aria-hidden="true">' + getIcon(item) + "</span>";
+  }
+
+  function cardHtml(item, favoriteIds) {
+    var id = Number(item.id);
+    var isFavorite = favoriteIds.indexOf(id) !== -1;
+    var description = item.description || "詳しい情報は店舗・施設一覧から確認できます。";
+    var address = item.address || "住所は詳細ページで確認";
+    var hours = item.hours || "営業時間は要確認";
+    var category = item.category || "スポット";
+
+    return (
+      '<article class="nk-place-card" data-tone="' + getTone(item) + '">' +
+        '<div class="nk-place-visual">' +
+          visualHtml(item) +
+          '<span class="nk-place-tag">' + escapeHtml(category) + "</span>" +
+          '<button class="nk-place-favorite" type="button" data-favorite-id="' + id + '" data-favorite-name="' + escapeHtml(item.name) + '" aria-label="' + escapeHtml(item.name) + 'をお気に入りに追加・解除" aria-pressed="' + isFavorite + '">' +
+            (isFavorite ? "♥" : "♡") +
+          "</button>" +
+        "</div>" +
+        '<div class="nk-place-body">' +
+          '<h3 class="nk-place-title">' + escapeHtml(item.name) + "</h3>" +
+          '<p class="nk-place-description">' + escapeHtml(description) + "</p>" +
+          '<div class="nk-place-meta">' +
+            '<span>⌖ ' + escapeHtml(address) + "</span>" +
+            '<span>◷ ' + escapeHtml(hours) + "</span>" +
+          "</div>" +
+          '<div class="nk-place-footer">' +
+            '<span class="nk-place-status' + (item.verified ? "" : " is-unverified") + '">' + (item.verified ? "確認済み" : "要確認") + "</span>" +
+            '<a class="nk-place-link" href="' + shopsUrl(item.name) + '">詳しく見る →</a>' +
+          "</div>" +
+        "</div>" +
+      "</article>"
+    );
+  }
+
+  function renderFeatured(list) {
+    var grid = document.getElementById("homeFeaturedGrid");
+    if (!grid) return;
+
+    var featured = pickFeatured(list);
+    if (!featured.length) {
+      grid.innerHTML = '<p class="nk-loading">掲載情報を準備しています。店舗一覧をご利用ください。</p>';
+      return;
+    }
+
+    var favorites = getFavoriteIds();
+    grid.innerHTML = featured.map(function (item) {
+      return cardHtml(item, favorites);
+    }).join("");
+
+    grid.querySelectorAll("[data-favorite-id]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        toggleHomeFavorite(
+          Number(button.getAttribute("data-favorite-id")),
+          button.getAttribute("data-favorite-name") || "施設",
+          button
+        );
+      });
+    });
+  }
+
+  function setupMenu() {
+    var button = document.getElementById("homeMenuButton");
+    var menu = document.getElementById("homeMobileNav");
+    if (!button || !menu) return;
+
+    button.addEventListener("click", function () {
+      var open = button.getAttribute("aria-expanded") === "true";
+      button.setAttribute("aria-expanded", String(!open));
+      menu.hidden = open;
+    });
+
+    menu.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        button.setAttribute("aria-expanded", "false");
+        menu.hidden = true;
+      });
+    });
+  }
+
+  function setupSearchEnhancement() {
+    var search = document.getElementById("homeKeyword");
+    if (!search) return;
+
+    search.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        search.value = "";
+        search.blur();
+      }
+    });
+  }
+
+  function initHomeRedesign() {
+    if (initHomeRedesign.done) return;
+    initHomeRedesign.done = true;
+
+    var list = getFacilities();
+    renderCategories(list);
+    renderFeatured(list);
+    setupMenu();
+    setupSearchEnhancement();
+  }
+
+  document.addEventListener("nakatsu:app-ready", initHomeRedesign, { once: true });
+
+  if (document.readyState === "complete") {
+    window.setTimeout(initHomeRedesign, 0);
+  } else {
+    window.addEventListener("load", function () {
+      window.setTimeout(initHomeRedesign, 300);
+    }, { once: true });
+  }
+})();
+
+</script>
 </body>
 </html>
