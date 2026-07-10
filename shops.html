@@ -1305,39 +1305,43 @@ body[data-page="shops"] .shops-results-cta-arrow {
   line-height: 1;
 }
 
-/* 固定下部ナビ：Safariの安全領域を避け、少し小さくする */
+/* 固定下部ナビ：見やすい大きさを維持しながら安全領域を避ける */
 body[data-page="shops"] .bottom-nav {
-  bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+  bottom: calc(12px + env(safe-area-inset-bottom)) !important;
 }
 
 @media (max-width: 640px) {
   body[data-page="shops"] {
-    padding-bottom: calc(180px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(205px + env(safe-area-inset-bottom)) !important;
   }
 
   body[data-page="shops"] .bottom-nav {
-    width: calc(100% - 18px) !important;
-    gap: 4px !important;
-    padding: 6px !important;
-    border-radius: 21px !important;
+    width: calc(100% - 22px) !important;
+    gap: 6px !important;
+    padding: 8px !important;
+    border-radius: 24px !important;
   }
 
   body[data-page="shops"] .bottom-nav-btn {
-    min-height: 52px !important;
-    padding: 6px 3px !important;
-    border-radius: 15px !important;
+    min-height: 64px !important;
+    padding: 8px 4px 7px !important;
+    border-radius: 18px !important;
+    gap: 4px !important;
   }
 
   body[data-page="shops"] .bottom-nav-icon {
-    font-size: 21px !important;
+    font-size: 25px !important;
+    line-height: 1 !important;
   }
 
   body[data-page="shops"] .bottom-nav-label {
-    font-size: 9px !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
   }
 
   body[data-page="shops"] .shops-footer.site-footer {
-    padding-bottom: calc(150px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(175px + env(safe-area-inset-bottom)) !important;
   }
 }
 
