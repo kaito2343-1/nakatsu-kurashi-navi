@@ -2,180 +2,86 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>店舗管理画面｜中津くらしナビ</title>
-<meta name="description" content="店舗の空き状況・混雑状況を更新するための管理画面。">
-<meta name="robots" content="noindex,nofollow">
-
-<meta name="theme-color" content="#093a34">
-
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AD%3C/text%3E%3C/svg%3E">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="中津くらしナビ">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>店舗管理ポータル｜中津くらしナビ</title>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#073d37">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-
-<script>window.NAKATSU_PAGE = "business";</script>
-
-<style>
-  .dash-wrap { padding: 4px 16px 24px; }
-  .dash-loading, .dash-empty, .dash-error {
-    font-size: 13px; color: var(--ink-sub, #5c6a66); padding: 10px 0;
-  }
-  .dash-error { color: #b3261e; }
-
-  .dash-logged-out {
-    margin: 16px; padding: 20px; text-align: center;
-    background: var(--surface, #fff); border: 1px solid var(--hairline, #e3e2da);
-    border-radius: var(--r-l, 20px);
-  }
-  .dash-logged-out p { font-size: 13.5px; color: var(--ink-sub, #5c6a66); margin: 0 0 14px; }
-  .dash-login-btn {
-    display: inline-block; background: var(--pine, #0e5148); color: #fff;
-    border-radius: 12px; padding: 12px 20px; font-weight: 800; font-size: 14px;
-    text-decoration: none; border: none; cursor: pointer; font-family: inherit;
-  }
-
-  .dash-user-bar {
-    margin: 16px 16px 0; font-size: 12.5px; color: var(--ink-sub, #5c6a66);
-  }
-
-  .dash-section {
-    margin: 12px 16px 0; padding: 16px;
-    background: var(--surface, #fff); border: 1px solid var(--hairline, #e3e2da);
-    border-radius: var(--r-l, 20px);
-    box-shadow: 0 1px 2px rgba(27,36,34,.05), 0 4px 12px rgba(27,36,34,.06);
-  }
-  .dash-section h2 { margin: 0 0 4px; font-size: 16px; font-weight: 900; color: var(--ink, #1b2422); }
-  .dash-section-lead { margin: 0 0 12px; font-size: 12px; color: var(--ink-sub, #5c6a66); }
-
-  .dash-shop-card {
-    border: 1px solid var(--hairline, #e3e2da); border-radius: 14px;
-    padding: 12px; margin-bottom: 10px; background: var(--paper, #f2f1ec);
-  }
-  .dash-shop-card:last-child { margin-bottom: 0; }
-  .dash-shop-name { margin: 0 0 4px; font-size: 14.5px; font-weight: 800; color: var(--ink, #1b2422); }
-  .dash-current-status { margin: 0 0 10px; font-size: 12.5px; color: var(--ink-sub, #5c6a66); }
-  .dash-pending-note { margin: 0; font-size: 12px; color: #a3641a; }
-  .dash-status-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-  .dash-status-btn {
-    flex: 1; min-width: 90px; border: 1px solid var(--hairline, #e3e2da);
-    background: var(--surface, #fff); color: var(--ink, #1b2422);
-    border-radius: 10px; padding: 10px 6px; font-size: 12.5px; font-weight: 700;
-    font-family: inherit; cursor: pointer;
-  }
-  .dash-status-btn:active { background: var(--pine-soft, #e3efec); }
-  .dash-update-msg { min-height: 16px; font-size: 11.5px; color: var(--pine, #0e5148); font-weight: 700; margin: 6px 0 0; }
-
-  .dash-search-input {
-    width: 100%; box-sizing: border-box; border: 1.5px solid var(--hairline, #e3e2da);
-    border-radius: 12px; padding: 11px 12px; font-size: 14px; font-family: inherit;
-    background: var(--paper, #f2f1ec); margin-bottom: 10px;
-  }
-  .dash-search-result {
-    display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    padding: 9px 0; border-bottom: 1px solid var(--hairline, #e3e2da);
-    font-size: 13px;
-  }
-  .dash-search-result:last-child { border-bottom: none; }
-  .dash-request-btn {
-    flex: none; border: none; background: var(--kaki, #e05a2b); color: #fff;
-    border-radius: 999px; padding: 7px 12px; font-size: 11.5px; font-weight: 700;
-    font-family: inherit; cursor: pointer;
-  }
-
-  .dash-photo-block { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--hairline, #e3e2da); }
-  .dash-photo-label { margin: 0 0 6px; font-size: 11.5px; font-weight: 800; color: var(--ink-sub, #5c6a66); }
-  .dash-photo-preview {
-    width: 100%; height: 120px; border-radius: 10px; overflow: hidden;
-    background: var(--surface, #fff); border: 1px solid var(--hairline, #e3e2da);
-    display: flex; align-items: center; justify-content: center; margin-bottom: 8px;
-  }
-  .dash-photo-preview img { width: 100%; height: 100%; object-fit: cover; }
-  .dash-photo-empty { font-size: 12px; color: var(--ink-sub, #5c6a66); }
-  .dash-photo-upload-btn {
-    display: inline-block; background: var(--pine, #0e5148); color: #fff;
-    border-radius: 10px; padding: 9px 14px; font-size: 12.5px; font-weight: 700;
-    cursor: pointer; margin-right: 6px;
-  }
-  .dash-photo-remove-btn {
-    border: 1px solid var(--hairline, #e3e2da); background: var(--surface, #fff);
-    color: #b3261e; border-radius: 10px; padding: 9px 12px; font-size: 12.5px;
-    font-weight: 700; font-family: inherit; cursor: pointer;
-  }
-  .dash-photo-msg { min-height: 16px; font-size: 11px; color: var(--pine, #0e5148); font-weight: 700; margin: 6px 0 0; }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shop-dashboard.css?v=2">
 </head>
-<body data-page="business">
-  <div id="homeUiPanel" hidden></div>
-  <div id="izakayaRanking" hidden></div>
-  <div class="home-hero-extra" hidden></div>
-<div class="app">
-
-  <header class="site-header">
-    <h1 class="site-title">🧭 中津くらしナビ</h1>
-    <p class="site-tagline">店舗管理画面</p>
+<body>
+<div class="portal-shell">
+  <header class="portal-header">
+    <a class="portal-brand" href="index.html" aria-label="中津くらしナビ">
+      <span class="portal-logo">🏯</span>
+      <span><strong>中津くらしナビ</strong><small>店舗管理ポータル</small></span>
+    </a>
+    <button id="logoutBtn" class="logout-btn" type="button" hidden>ログアウト</button>
   </header>
 
   <main>
-    <div class="dash-wrap">
-
-      <div class="dash-logged-out" id="dashLoggedOut" hidden>
-        <p>店舗管理画面を利用するには、ログインが必要です。右上メニューの「ログイン」からログイン・新規登録してください。</p>
-        <button type="button" class="dash-login-btn" id="dashOpenLoginBtn">ログイン画面を開く</button>
+    <section id="loginView" class="login-view" hidden>
+      <div class="login-visual">
+        <p class="eyebrow">SHOP OWNER PORTAL</p>
+        <h1>お店の「今」を、<br>すぐに届ける。</h1>
+        <p>空き状況・おすすめ・写真・営業時間を、スマホから簡単に更新できます。</p>
+        <div class="login-points">
+          <span>✓ 購入店舗専用</span>
+          <span>✓ スマホ対応</span>
+          <span>✓ 更新内容を即反映</span>
+        </div>
       </div>
 
-      <div id="dashLoggedIn" hidden>
-        <p class="dash-user-bar">ログイン中：<span id="dashUserEmail"></span></p>
+      <div class="login-card">
+        <div class="lock-icon">🔐</div>
+        <h2>店舗アカウントでログイン</h2>
+        <p>ご契約時に登録したメールアドレスとパスワードを入力してください。</p>
+        <form id="loginForm">
+          <label>メールアドレス
+            <input id="loginEmail" type="email" autocomplete="email" required placeholder="shop@example.com">
+          </label>
+          <label>パスワード
+            <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="8文字以上">
+          </label>
+          <button id="loginSubmit" class="primary-btn" type="submit">ログインする</button>
+          <p id="loginMessage" class="form-message" aria-live="polite"></p>
+        </form>
+        <p class="login-note">このページは契約店舗専用です。新規登録は運営側で行います。</p>
+      </div>
+    </section>
 
-        <section class="dash-section">
-          <h2>あなたが管理する店舗</h2>
-          <p class="dash-section-lead">承認済みの店舗は、ボタン1つで今の空き状況を更新できます。</p>
-          <div id="dashMyShops"></div>
-        </section>
-
-        <section class="dash-section">
-          <h2>新しい店舗を管理したい</h2>
-          <p class="dash-section-lead">店名で検索して申請してください。サイト運営側の確認後、更新できるようになります。</p>
-          <input type="text" id="dashSearchInput" class="dash-search-input" placeholder="例：マルイチ">
-          <div id="dashSearchResults"></div>
-        </section>
+    <section id="portalView" hidden>
+      <div class="portal-hero">
+        <div>
+          <p class="eyebrow">SHOP MANAGEMENT</p>
+          <h1>店舗管理ポータル</h1>
+          <p id="userEmail" class="user-email"></p>
+        </div>
+        <div class="connection-pill"><span></span>オンライン</div>
       </div>
 
-    </div>
+      <div id="portalLoading" class="state-card">管理店舗を読み込んでいます…</div>
+      <div id="portalEmpty" class="state-card" hidden>
+        <strong>管理店舗がまだ登録されていません</strong>
+        <p>運営側の承認が完了すると、ここに店舗が表示されます。</p>
+      </div>
+      <div id="shopList" class="shop-list"></div>
+    </section>
   </main>
 
-  <footer class="site-footer">
-    <p class="footer-warning">
-      この画面は店舗の方向けです。一般のお客様は各施設カードで空き状況をご確認いただけます。
-    </p>
-    <p class="footer-copy">&copy; 2026 中津くらしナビ</p>
+  <footer>
+    <p>このページのURLは契約店舗以外に共有しないでください。</p>
+    <small>© 2026 中津くらしナビ</small>
   </footer>
 </div>
 
+<div id="toast" class="toast"></div>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script src="app-shell.js"></script>
-<script src="shop-dashboard.js?v=1"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(function () {
-      var btn = document.getElementById("dashOpenLoginBtn");
-      if (btn) {
-        btn.addEventListener("click", function () {
-          var menuBtn = document.getElementById("p1MenuBtn");
-          if (menuBtn) menuBtn.click();
-        });
-      }
-    }, 400);
-  });
-</script>
+<script src="supabase-config.js?v=3"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-auth.js?v=2"></script>
+<script src="shop-dashboard.js?v=2"></script>
 </body>
 </html>
