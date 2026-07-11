@@ -72,7 +72,7 @@
     "phase4-shop-status.js?v=1",
     "status-note-extra.js?v=2",
     "phase6-business-upgrade.js?v=7",
-      "phase6-position-fix.js?v=1"
+      "phase6-position-fix.js?v=1",
      "shop-profile-public.js?v=2"
   ];
 
