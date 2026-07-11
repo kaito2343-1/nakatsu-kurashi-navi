@@ -3,210 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>中津くらしナビ 管理画面</title>
+<title>中津くらしナビ 店舗管理</title>
 <meta name="robots" content="noindex,nofollow">
-<link rel="stylesheet" href="admin.css?v=1">
+<meta name="theme-color" content="#0b4f47">
+<link rel="stylesheet" href="admin.css?v=2">
 </head>
 <body>
-
 <main class="admin-app">
   <header class="admin-header">
-    <p class="admin-kicker">NAKATSU KURASHI NAVI</p>
-    <h1>管理画面</h1>
-    <p>
-      Supabaseの施設データを追加・編集する簡易管理ページです。
-      最初はログインなしの試験運用向けです。
-    </p>
+    <div>
+      <p class="admin-kicker">NAKATSU KURASHI NAVI</p>
+      <h1>店舗管理</h1>
+      <p>店舗の登録・編集・写真アップロードをスマホから行えます。</p>
+    </div>
+    <a href="index.html" class="site-link">公開サイトを見る</a>
   </header>
 
-  <section class="admin-warning">
-    <strong>重要</strong>
-    <p>
-      この管理画面を使うには、Supabase側のRLS設定が必要です。
-      公開サイトに強い管理用キーを入れないでください。
-    </p>
+  <section class="summary-grid" aria-label="登録状況">
+    <article><strong id="totalCount">--</strong><span>登録店舗</span></article>
+    <article><strong id="publishedCount">--</strong><span>公開中</span></article>
+    <article><strong id="hiddenCount">--</strong><span>非公開</span></article>
+    <article><strong id="unverifiedCount">--</strong><span>未確認</span></article>
   </section>
 
-  <section class="admin-card">
-    <h2>接続状態</h2>
-    <p id="connectionStatus" class="status">確認中...</p>
-    <div class="admin-actions">
+  <section class="admin-card connection-card">
+    <div>
+      <span class="section-label">CONNECTION</span>
+      <h2>Supabase接続</h2>
+      <p id="connectionStatus" class="status">確認中...</p>
+    </div>
+    <div class="admin-actions compact">
       <button type="button" id="testConnectionBtn">接続テスト</button>
-      <button type="button" id="reloadBtn">一覧を再読み込み</button>
-      <a href="index.html" class="link-btn">サイトへ戻る</a>
+      <button type="button" id="reloadBtn">再読み込み</button>
     </div>
   </section>
 
-  <section class="admin-card">
-    <h2>店舗・施設を追加 / 編集</h2>
+  <section class="admin-card form-card" id="editSection">
+    <div class="card-heading">
+      <div>
+        <span class="section-label">EDITOR</span>
+        <h2 id="formTitle">新しい店舗を登録</h2>
+        <p id="editModeText">必要な情報を入力して保存してください。</p>
+      </div>
+      <button type="button" id="newBtn" class="outline-btn">＋ 新規登録</button>
+    </div>
 
     <form id="facilityForm" class="facility-form">
       <input type="hidden" id="dbId">
+      <input type="hidden" id="imageUrl">
 
-      <label>
-        店舗・施設名 <span>必須</span>
-        <input type="text" id="name" required placeholder="例：〇〇カフェ">
-      </label>
+      <fieldset>
+        <legend><span>1</span>基本情報</legend>
+        <div class="form-grid">
+          <label class="full">
+            店舗・施設名 <em>必須</em>
+            <input type="text" id="name" required placeholder="例：〇〇カフェ">
+          </label>
 
-      <label>
-        カテゴリ <span>必須</span>
-        <input type="text" id="category" required list="categoryList" placeholder="例：安いご飯">
-      </label>
+          <label>
+            カテゴリ <em>必須</em>
+            <input type="text" id="category" required list="categoryList" placeholder="例：カフェ">
+          </label>
+
+          <label>
+            表示順
+            <input type="number" id="sortOrder" inputmode="numeric" placeholder="9999">
+          </label>
+
+          <label class="full">
+            説明
+            <textarea id="description" rows="4" placeholder="店舗の特徴、人気商品、利用シーンなど"></textarea>
+          </label>
+        </div>
+      </fieldset>
 
       <datalist id="categoryList">
-        <option value="市役所・手続き">
-        <option value="病院・歯医者">
-        <option value="薬局">
-        <option value="ATM・銀行">
-        <option value="コインランドリー">
-        <option value="安いご飯">
-        <option value="弁当・惣菜">
-        <option value="雨の日に行ける場所">
-        <option value="釣り場">
-        <option value="困った時の相談先">
-        <option value="居酒屋">
-        <option value="カフェ">
-        <option value="ラーメン">
-        <option value="焼肉・寿司">
-        <option value="ホテル">
-        <option value="美容">
-        <option value="車・整備">
+        <option value="市役所・手続き"><option value="病院・歯医者">
+        <option value="薬局"><option value="ATM・銀行">
+        <option value="コインランドリー"><option value="安いご飯">
+        <option value="弁当・惣菜"><option value="雨の日に行ける場所">
+        <option value="釣り場"><option value="困った時の相談先">
+        <option value="居酒屋"><option value="カフェ"><option value="ラーメン">
+        <option value="焼肉・寿司"><option value="ホテル"><option value="美容">
+        <option value="車・整備"><option value="観光"><option value="スーパー">
       </datalist>
 
-      <label>
-        説明
-        <textarea id="description" rows="3" placeholder="お店の説明"></textarea>
-      </label>
+      <fieldset>
+        <legend><span>2</span>写真</legend>
+        <div class="photo-uploader">
+          <div class="photo-preview" id="photoPreview">
+            <span>📷</span>
+            <p>写真を選ぶとここに表示されます</p>
+          </div>
+          <div class="photo-controls">
+            <label class="file-button">
+              写真を選択
+              <input type="file" id="photoFile" accept="image/jpeg,image/png,image/webp" hidden>
+            </label>
+            <button type="button" id="removePhotoBtn" class="outline-btn">写真を外す</button>
+            <small>JPG・PNG・WebP、5MB以下。保存時に自動アップロードします。</small>
+          </div>
+        </div>
+        <p id="uploadStatus" class="status muted">写真は未選択です。</p>
+      </fieldset>
 
-      <label>
-        住所
-        <input type="text" id="address" placeholder="大分県中津市...">
-      </label>
+      <fieldset>
+        <legend><span>3</span>営業・連絡先</legend>
+        <div class="form-grid">
+          <label class="full">
+            住所
+            <input type="text" id="address" placeholder="大分県中津市...">
+          </label>
+          <label>
+            電話番号
+            <input type="tel" id="phone" inputmode="tel" placeholder="0979-xx-xxxx">
+          </label>
+          <label>
+            定休日
+            <input type="text" id="closed" placeholder="例：火曜日">
+          </label>
+          <label class="full">
+            営業時間
+            <input type="text" id="hours" placeholder="例：11:00〜21:00">
+          </label>
+        </div>
+      </fieldset>
 
-      <label>
-        電話番号
-        <input type="text" id="phone" placeholder="0979-xx-xxxx">
-      </label>
+      <fieldset>
+        <legend><span>4</span>地図・SNS</legend>
+        <div class="form-grid">
+          <label class="full">
+            GoogleマップURL
+            <input type="url" id="mapUrl" placeholder="https://www.google.com/maps/...">
+          </label>
+          <label class="full">
+            公式サイトURL
+            <input type="url" id="officialUrl" placeholder="https://...">
+          </label>
+          <label class="full">
+            Instagram URL
+            <input type="url" id="instagram" placeholder="https://www.instagram.com/...">
+          </label>
+        </div>
+      </fieldset>
 
-      <label>
-        営業時間
-        <input type="text" id="hours" placeholder="例：11:00〜21:00">
-      </label>
+      <fieldset>
+        <legend><span>5</span>補足・公開設定</legend>
+        <div class="form-grid">
+          <label class="full">
+            タグ（カンマ区切り）
+            <input type="text" id="tags" placeholder="ランチ, 駐車場, 子連れ">
+          </label>
+          <label class="full">
+            利用者向けメモ
+            <textarea id="memo" rows="3" placeholder="予約推奨、現金のみなど"></textarea>
+          </label>
+          <label class="full">
+            情報元メモ
+            <input type="text" id="sourceMemo" placeholder="例：2026年7月 公式Instagramで確認">
+          </label>
+        </div>
 
-      <label>
-        定休日
-        <input type="text" id="closed" placeholder="例：火曜">
-      </label>
+        <div class="check-row">
+          <label><input type="checkbox" id="verified"><span><strong>確認済み</strong><small>公式情報を確認した店舗</small></span></label>
+          <label><input type="checkbox" id="isPublished" checked><span><strong>サイトに公開</strong><small>OFFで下書き保存</small></span></label>
+        </div>
+      </fieldset>
 
-      <label>
-        GoogleマップURL
-        <input type="url" id="mapUrl" placeholder="https://www.google.com/maps/...">
-      </label>
-
-      <label>
-        公式サイトURL
-        <input type="url" id="officialUrl" placeholder="https://...">
-      </label>
-
-            <label>
-        Instagram URL
-        <input type="url" id="instagram" placeholder="https://www.instagram.com/...">
-      </label>
-
-      <label>
-        店舗写真URL
-        <input type="url" id="imageUrl" placeholder="https://...jpg / https://...png">
-      </label>
-
-      <label>
-        タグ（カンマ区切り）
-        <input type="text" id="tags" placeholder="ランチ, カフェ, 駐車場">
-      </label>
-
-      <label>
-        メモ
-        <textarea id="memo" rows="2" placeholder="利用者向けのメモ"></textarea>
-      </label>
-
-      <label>
-        情報元メモ
-        <input type="text" id="sourceMemo" placeholder="例：2026年7月 公式Instagramで確認">
-      </label>
-
-      <label>
-        表示順
-        <input type="number" id="sortOrder" placeholder="9999">
-      </label>
-
-      <div class="check-row">
-        <label>
-          <input type="checkbox" id="verified">
-          確認済みにする
-        </label>
-
-        <label>
-          <input type="checkbox" id="isPublished" checked>
-          サイトに公開する
-        </label>
+      <div class="sticky-save">
+        <button type="button" id="clearBtn" class="outline-btn">入力をクリア</button>
+        <button type="submit" id="saveBtn" class="primary-btn">店舗を保存する</button>
       </div>
-
-      <div class="admin-actions">
-        <button type="submit" class="primary-btn">保存する</button>
-        <button type="button" id="clearBtn">入力をクリア</button>
-      </div>
+      <p id="saveStatus" class="status muted">入力後に保存してください。</p>
     </form>
-
-    <p id="saveStatus" class="status"></p>
   </section>
 
   <section class="admin-card">
-    <h2>Supabase施設一覧</h2>
-    <p class="small">
-      読み込める範囲はSupabaseのRLS設定に従います。
-    </p>
+    <div class="card-heading list-heading">
+      <div>
+        <span class="section-label">FACILITIES</span>
+        <h2>登録店舗一覧</h2>
+      </div>
+      <button type="button" id="scrollToFormBtn" class="primary-btn small-btn">＋ 新規登録</button>
+    </div>
+
+    <div class="list-tools">
+      <label class="search-box">
+        <span>⌕</span>
+        <input type="search" id="facilitySearch" placeholder="店舗名・住所・カテゴリで検索">
+      </label>
+      <select id="publishFilter" aria-label="公開状態で絞り込み">
+        <option value="all">すべて</option>
+        <option value="published">公開中</option>
+        <option value="hidden">非公開</option>
+        <option value="unverified">未確認</option>
+      </select>
+    </div>
+
+    <p id="listResultText" class="small"></p>
     <div id="facilityList" class="facility-list"></div>
   </section>
 
-  <section class="admin-card">
-    <h2>Supabaseテーブル作成SQL</h2>
-    <p class="small">
-      SupabaseのSQL Editorに貼って使えます。まずは select の公開設定だけ推奨です。
-    </p>
-
-    <pre class="sql-box"><code>create table if not exists public.facilities (
-  id bigint generated by default as identity primary key,
-  name text not null,
-  category text not null default '安いご飯',
-  description text default '',
-  address text default '',
-  phone text default '',
-  hours text default '',
-  closed text default '',
-  map_url text default '',
-  official_url text default '',
-  instagram text default '',
-      image_url text default '',
-  source_memo text default '',
-  tags text[] default '{}',
-  memo text default '',
-  verified boolean default false,
-  is_published boolean default true,
-  sort_order integer default 9999,
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
-);
-
-alter table public.facilities enable row level security;
-
-create policy "Public can read published facilities"
-on public.facilities
-for select
-to anon
-using (is_published = true);</code></pre>
-  </section>
+  <details class="admin-card setup-details">
+    <summary>Storageアップロードでエラーが出る場合</summary>
+    <p>SupabaseのStorage Policiesで、<code>shop-photos</code>へのINSERTを許可する必要があります。現状はログインなしの試験運用用です。本運用前に管理者ログインを追加してください。</p>
+  </details>
 </main>
 
+<div class="toast" id="toast"></div>
 <script src="supabase-config.js?v=3"></script>
-<script src="admin.js?v=6"></script>
+<script src="admin.js?v=7"></script>
 </body>
 </html>
