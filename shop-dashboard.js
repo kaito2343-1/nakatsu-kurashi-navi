@@ -1,352 +1,107 @@
-/* ============================================================
-   中津くらしナビ shop-dashboard.js
-   shop-dashboard.html 専用のページロジック
+(function(){
+"use strict";
+function $(s,r){return (r||document).querySelector(s)}
+function esc(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+function toast(msg){var el=$("#toast");el.textContent=msg;el.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove("show")},1800)}
+function timeAgo(iso){var t=Date.parse(iso);if(!t)return"未更新";var m=Math.round((Date.now()-t)/60000);if(m<1)return"たった今";if(m<60)return m+"分前";var h=Math.round(m/60);if(h<24)return h+"時間前";return Math.round(h/24)+"日前"}
+var auth=window.NAKATSU_AUTH;
+var client=null;
+var STATUS=["空きあり","やや混雑","満席"];
 
-   やること：
-   1. ログイン確認（未ログインならログイン案内を表示）
-   2. 自分が申請・承認された店舗の一覧表示
-      - 承認済み：空き状況を更新するボタン、写真アップロード
-      - 承認待ち：その旨を表示
-   3. 新しい店舗を管理したい時の申請フォーム（店名検索→申請）
-   ============================================================ */
+async function init(){
+ client=auth&&auth.client;
+ if(!client){showLogin("接続設定を確認してください。");return}
+ var session=await auth.getSession();
+ if(!session||!session.user){showLogin();return}
+ showPortal(session);
+}
+function showLogin(message){
+ $("#loginView").hidden=false;$("#portalView").hidden=true;$("#logoutBtn").hidden=true;
+ if(message)$("#loginMessage").textContent=message;
+}
+async function showPortal(session){
+ $("#loginView").hidden=true;$("#portalView").hidden=false;$("#logoutBtn").hidden=false;
+ $("#userEmail").textContent=session.user.email+" でログイン中";
+ await loadShops(session.user.id);
+}
+$("#loginForm").addEventListener("submit",async function(e){
+ e.preventDefault();var btn=$("#loginSubmit"),msg=$("#loginMessage");
+ btn.disabled=true;msg.textContent="ログイン中…";
+ var res=await auth.signIn($("#loginEmail").value.trim(),$("#loginPassword").value);
+ btn.disabled=false;
+ if(res.error){msg.textContent="ログインできませんでした："+res.error.message;return}
+ var session=await auth.getSession();if(session)showPortal(session);
+});
+$("#logoutBtn").addEventListener("click",async function(){await auth.signOut();showLogin();toast("ログアウトしました")});
 
-(function () {
-  "use strict";
-
-  function $(sel, root) { return (root || document).querySelector(sel); }
-  function escapeHtml(value) {
-    return String(value == null ? "" : value)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-  }
-
-  var STATUS_OPTIONS = ["空きあり", "やや混雑", "満席"];
-
-  function timeAgoLabel(isoString) {
-    var then = Date.parse(isoString);
-    if (!then) return "まだ更新なし";
-    var minutes = Math.round((Date.now() - then) / 60000);
-    if (minutes < 1) return "たった今";
-    if (minutes < 60) return minutes + "分前";
-    var hours = Math.round(minutes / 60);
-    if (hours < 24) return hours + "時間前";
-    return Math.round(hours / 24) + "日前";
-  }
-
-  async function main() {
-    var loggedOutEl = document.getElementById("dashLoggedOut");
-    var loggedInEl = document.getElementById("dashLoggedIn");
-
-    var session = await window.NAKATSU_AUTH.getSession();
-
-    if (!session || !session.user) {
-      loggedOutEl.hidden = false;
-      loggedInEl.hidden = true;
-      return;
-    }
-
-    loggedOutEl.hidden = true;
-    loggedInEl.hidden = false;
-
-    var userEmailEl = document.getElementById("dashUserEmail");
-    if (userEmailEl) userEmailEl.textContent = session.user.email;
-
-    await loadMyShops(session.user.id);
-    setupRequestForm(session.user.id);
-  }
-
-  async function loadMyShops(userId) {
-    var listEl = document.getElementById("dashMyShops");
-    var client = window.NAKATSU_AUTH.client;
-    listEl.innerHTML = '<p class="dash-loading">読み込み中…</p>';
-
-    var ownRes = await client.from("shop_owners").select("*").eq("user_id", userId);
-    if (ownRes.error) {
-      listEl.innerHTML = '<p class="dash-error">読み込みに失敗しました：' + escapeHtml(ownRes.error.message) + "</p>";
-      return;
-    }
-
-    var rows = ownRes.data || [];
-    if (!rows.length) {
-      listEl.innerHTML = '<p class="dash-empty">まだ管理している店舗がありません。下のフォームから申請してください。</p>';
-      return;
-    }
-
-    var facilityIds = rows.filter(function (r) { return r.approved; }).map(function (r) { return r.facility_id; });
-    var statusMap = {};
-    var photoMap = {};
-
-    if (facilityIds.length) {
-      var statusRes = await client.from("shop_status").select("*").in("facility_id", facilityIds);
-      if (!statusRes.error) {
-        (statusRes.data || []).forEach(function (row) {
-          statusMap[String(row.facility_id)] = row;
-        });
-      }
-
-      var photoRes = await client.from("shop_photos").select("*").in("facility_id", facilityIds);
-      if (!photoRes.error) {
-        (photoRes.data || []).forEach(function (row) {
-          photoMap[String(row.facility_id)] = row;
-        });
-      }
-    }
-
-    listEl.innerHTML = rows.map(function (row) {
-      if (!row.approved) {
-        return (
-          '<div class="dash-shop-card is-pending">' +
-            '<p class="dash-shop-name">' + escapeHtml(row.facility_name || ("施設ID:" + row.facility_id)) + "</p>" +
-            '<p class="dash-pending-note">⏳ 承認待ちです。サイト運営側の確認が済むと、ここから空き状況を更新できるようになります。</p>' +
-          "</div>"
-        );
-      }
-
-      var status = statusMap[String(row.facility_id)];
-      var currentLabel = status ? status.status + "（" + timeAgoLabel(status.updated_at) + "更新）" : "まだ未設定";
-      var photo = photoMap[String(row.facility_id)];
-
-      return (
-        '<div class="dash-shop-card" data-facility-id="' + escapeHtml(row.facility_id) + '" data-facility-name="' + escapeHtml(row.facility_name || "") + '">' +
-          '<p class="dash-shop-name">' + escapeHtml(row.facility_name || ("施設ID:" + row.facility_id)) + "</p>" +
-          '<p class="dash-current-status">現在：<strong>' + escapeHtml(currentLabel) + "</strong></p>" +
-          '<div class="dash-status-btns">' +
-            STATUS_OPTIONS.map(function (s) {
-              return '<button type="button" class="dash-status-btn" data-status="' + escapeHtml(s) + '">' + escapeHtml(s) + "</button>";
-            }).join("") +
-          "</div>" +
-          '<p class="dash-update-msg" aria-live="polite"></p>' +
-
-          '<div class="dash-photo-block">' +
-            '<p class="dash-photo-label">お店の写真</p>' +
-            '<div class="dash-photo-preview">' +
-              (photo
-                ? '<img src="' + escapeHtml(photo.photo_url) + '" alt="' + escapeHtml(row.facility_name || "") + 'の写真">'
-                : '<span class="dash-photo-empty">未設定</span>') +
-            "</div>" +
-            '<label class="dash-photo-upload-btn">' +
-              "写真を選ぶ" +
-              '<input type="file" accept="image/*" class="dash-photo-input" hidden>' +
-            "</label>" +
-            (photo ? '<button type="button" class="dash-photo-remove-btn">写真を削除</button>' : "") +
-            '<p class="dash-photo-msg" aria-live="polite"></p>' +
-          "</div>" +
-        "</div>"
-      );
-    }).join("");
-
-    Array.prototype.slice.call(listEl.querySelectorAll(".dash-shop-card:not(.is-pending)")).forEach(function (card) {
-      card.querySelectorAll(".dash-status-btn").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          updateStatus(card, btn.dataset.status, userId);
-        });
-      });
-
-      var fileInput = card.querySelector(".dash-photo-input");
-      if (fileInput) {
-        fileInput.addEventListener("change", function () {
-          if (fileInput.files && fileInput.files[0]) {
-            uploadPhoto(card, fileInput.files[0], userId);
-          }
-        });
-      }
-
-      var removeBtn = card.querySelector(".dash-photo-remove-btn");
-      if (removeBtn) {
-        removeBtn.addEventListener("click", function () {
-          removePhoto(card, userId);
-        });
-      }
-    });
-  }
-
-  async function updateStatus(card, newStatus, userId) {
-    var facilityId = Number(card.dataset.facilityId);
-    var facilityName = card.dataset.facilityName;
-    var msgEl = card.querySelector(".dash-update-msg");
-    var client = window.NAKATSU_AUTH.client;
-
-    msgEl.textContent = "更新中…";
-
-    var res = await client.from("shop_status").upsert({
-      facility_id: facilityId,
-      facility_name: facilityName,
-      status: newStatus,
-      updated_at: new Date().toISOString(),
-      updated_by: userId
-    }, { onConflict: "facility_id" });
-
-    if (res.error) {
-      msgEl.textContent = "更新に失敗しました：" + res.error.message;
-      return;
-    }
-
-    msgEl.textContent = "✅ 「" + newStatus + "」に更新しました";
-    var currentEl = card.querySelector(".dash-current-status");
-    if (currentEl) currentEl.innerHTML = "現在：<strong>" + escapeHtml(newStatus) + "（たった今更新）</strong>";
-  }
-
-  /* 写真を最大幅1280pxにリサイズしてJPEGに変換（通信量・保存容量を抑えるため） */
-  function resizeImageFile(file) {
-    return new Promise(function (resolve, reject) {
-      var img = new Image();
-      var reader = new FileReader();
-
-      reader.onload = function (e) { img.src = e.target.result; };
-      reader.onerror = function () { reject(new Error("ファイルの読み込みに失敗しました")); };
-
-      img.onload = function () {
-        var maxWidth = 1280;
-        var scale = Math.min(1, maxWidth / img.width);
-        var canvas = document.createElement("canvas");
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
-
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-        canvas.toBlob(function (blob) {
-          if (!blob) { reject(new Error("画像の変換に失敗しました")); return; }
-          resolve(blob);
-        }, "image/jpeg", 0.82);
-      };
-      img.onerror = function () { reject(new Error("画像として読み込めませんでした")); };
-
-      reader.readAsDataURL(file);
-    });
-  }
-
-  async function uploadPhoto(card, file, userId) {
-    var facilityId = Number(card.dataset.facilityId);
-    var msgEl = card.querySelector(".dash-photo-msg");
-    var previewEl = card.querySelector(".dash-photo-preview");
-    var client = window.NAKATSU_AUTH.client;
-
-    if (!file.type || file.type.indexOf("image/") !== 0) {
-      msgEl.textContent = "画像ファイルを選んでください。";
-      return;
-    }
-    if (file.size > 15 * 1024 * 1024) {
-      msgEl.textContent = "ファイルが大きすぎます（15MBまで）。";
-      return;
-    }
-
-    msgEl.textContent = "アップロード中…";
-
-    try {
-      var blob = await resizeImageFile(file);
-      var path = facilityId + "/" + Date.now() + ".jpg";
-
-      var uploadRes = await client.storage.from("shop-photos").upload(path, blob, {
-        contentType: "image/jpeg",
-        upsert: false
-      });
-      if (uploadRes.error) throw uploadRes.error;
-
-      var urlRes = client.storage.from("shop-photos").getPublicUrl(path);
-      var publicUrl = urlRes.data.publicUrl;
-
-      var dbRes = await client.from("shop_photos").upsert({
-        facility_id: facilityId,
-        photo_url: publicUrl,
-        updated_at: new Date().toISOString(),
-        updated_by: userId
-      }, { onConflict: "facility_id" });
-      if (dbRes.error) throw dbRes.error;
-
-      previewEl.innerHTML = '<img src="' + escapeHtml(publicUrl) + '" alt="アップロードした写真">';
-      msgEl.textContent = "✅ 写真を更新しました";
-
-      if (!card.querySelector(".dash-photo-remove-btn")) {
-        var removeBtn = document.createElement("button");
-        removeBtn.type = "button";
-        removeBtn.className = "dash-photo-remove-btn";
-        removeBtn.textContent = "写真を削除";
-        removeBtn.addEventListener("click", function () { removePhoto(card, userId); });
-        card.querySelector(".dash-photo-upload-btn").insertAdjacentElement("afterend", removeBtn);
-      }
-    } catch (err) {
-      msgEl.textContent = "失敗しました：" + (err.message || "不明なエラー");
-    }
-  }
-
-  async function removePhoto(card, userId) {
-    var facilityId = Number(card.dataset.facilityId);
-    var msgEl = card.querySelector(".dash-photo-msg");
-    var previewEl = card.querySelector(".dash-photo-preview");
-    var client = window.NAKATSU_AUTH.client;
-
-    msgEl.textContent = "削除中…";
-
-    var res = await client.from("shop_photos").delete().eq("facility_id", facilityId);
-    if (res.error) {
-      msgEl.textContent = "削除に失敗しました：" + res.error.message;
-      return;
-    }
-
-    previewEl.innerHTML = '<span class="dash-photo-empty">未設定</span>';
-    msgEl.textContent = "写真を削除しました";
-    var removeBtn = card.querySelector(".dash-photo-remove-btn");
-    if (removeBtn) removeBtn.remove();
-  }
-
-  function setupRequestForm(userId) {
-    var input = document.getElementById("dashSearchInput");
-    var resultsEl = document.getElementById("dashSearchResults");
-    if (!input || typeof facilities === "undefined") return;
-
-    input.addEventListener("input", function () {
-      var q = input.value.trim();
-      if (q.length < 2) {
-        resultsEl.innerHTML = "";
-        return;
-      }
-
-      var matches = facilities.filter(function (f) {
-        return String(f.name || "").indexOf(q) !== -1;
-      }).slice(0, 8);
-
-      if (!matches.length) {
-        resultsEl.innerHTML = '<p class="dash-empty">見つかりませんでした。</p>';
-        return;
-      }
-
-      resultsEl.innerHTML = matches.map(function (f) {
-        return (
-          '<div class="dash-search-result">' +
-            '<span>' + escapeHtml(f.category) + " " + escapeHtml(f.name) + "</span>" +
-            '<button type="button" class="dash-request-btn" data-id="' + escapeHtml(f.id) + '" data-name="' + escapeHtml(f.name) + '">この店舗を申請</button>' +
-          "</div>"
-        );
-      }).join("");
-
-      resultsEl.querySelectorAll(".dash-request-btn").forEach(function (btn) {
-        btn.addEventListener("click", async function () {
-          btn.disabled = true;
-          btn.textContent = "送信中…";
-
-          var client = window.NAKATSU_AUTH.client;
-          var res = await client.from("shop_owners").insert({
-            user_id: userId,
-            facility_id: Number(btn.dataset.id),
-            facility_name: btn.dataset.name,
-            approved: false
-          });
-
-          if (res.error) {
-            btn.textContent = "失敗：" + res.error.message;
-            btn.disabled = false;
-            return;
-          }
-
-          btn.textContent = "✅ 申請しました（承認をお待ちください）";
-          await loadMyShops(userId);
-        });
-      });
-    });
-  }
-
-  document.addEventListener("nakatsu:app-ready", function () {
-    setTimeout(main, 200);
-  });
+async function loadShops(userId){
+ $("#portalLoading").hidden=false;$("#portalEmpty").hidden=true;$("#shopList").innerHTML="";
+ var own=await client.from("shop_owners").select("*").eq("user_id",userId);
+ $("#portalLoading").hidden=true;
+ if(own.error){$("#portalEmpty").hidden=false;$("#portalEmpty").innerHTML="<strong>読み込みに失敗しました</strong><p>"+esc(own.error.message)+"</p>";return}
+ var rows=own.data||[];
+ if(!rows.length){$("#portalEmpty").hidden=false;return}
+ var approvedIds=rows.filter(function(r){return r.approved}).map(function(r){return r.facility_id});
+ var statusMap={},photoMap={},profileMap={};
+ if(approvedIds.length){
+  var results=await Promise.all([
+   client.from("shop_status").select("*").in("facility_id",approvedIds),
+   client.from("shop_photos").select("*").in("facility_id",approvedIds),
+   client.from("shop_profiles").select("*").in("facility_id",approvedIds)
+  ]);
+  (results[0].data||[]).forEach(function(r){statusMap[String(r.facility_id)]=r});
+  (results[1].data||[]).forEach(function(r){photoMap[String(r.facility_id)]=r});
+  (results[2].data||[]).forEach(function(r){profileMap[String(r.facility_id)]=r});
+ }
+ $("#shopList").innerHTML=rows.map(function(row){
+  if(!row.approved)return '<article class="shop-card pending-card"><h2>'+esc(row.facility_name||"店舗")+'</h2><p>⏳ 現在、運営側の承認待ちです。</p></article>';
+  var id=String(row.facility_id),st=statusMap[id],photo=photoMap[id],profile=profileMap[id]||{};
+  var current=st&&st.status?st.status:"未設定",updated=st&&st.updated_at?timeAgo(st.updated_at)+"に更新":"まだ更新されていません";
+  return '<article class="shop-card" data-id="'+esc(id)+'" data-name="'+esc(row.facility_name||"")+'">'+
+   '<header class="shop-card-head"><div class="shop-title"><div class="shop-avatar">'+(photo?'<img src="'+esc(photo.photo_url)+'" alt="">':'🏪')+'</div><div><h2>'+esc(row.facility_name||("施設ID:"+id))+'</h2><p>店舗情報を管理できます</p></div></div><span class="approved-badge">承認済み</span></header>'+
+   '<div class="shop-dashboard-grid">'+
+    '<section class="panel"><p class="panel-label">LIVE STATUS</p><h3>現在の状況</h3><div class="current-status" data-status="'+esc(current)+'"><div><strong>'+esc(current)+'</strong><small>'+esc(updated)+'</small></div><span class="status-dot"></span></div><div class="status-buttons">'+STATUS.map(function(s){return'<button class="status-btn '+(s===current?"active":"")+'" type="button" data-status="'+s+'">'+s+'</button>'}).join("")+'</div><p class="save-message status-message"></p></section>'+
+    '<section class="panel"><p class="panel-label">TODAY</p><h3>本日のおすすめ</h3><div class="profile-grid"><label class="full">おすすめ内容<textarea class="recommendation" rows="5" placeholder="例：本日限定ランチ、数量限定商品など">'+esc(profile.recommendation||"")+'</textarea></label></div><button class="primary-btn save-profile-btn" type="button">おすすめを更新</button><p class="save-message profile-message"></p></section>'+
+    '<section class="panel"><p class="panel-label">PHOTO</p><h3>店舗写真</h3><div class="photo-preview">'+(photo?'<img src="'+esc(photo.photo_url)+'" alt="店舗写真">':'<span>店舗写真は未設定です</span>')+'</div><div class="photo-actions"><label class="file-label">写真を選ぶ<input class="photo-input" type="file" accept="image/jpeg,image/png,image/webp" hidden></label><button class="danger-btn remove-photo" type="button">削除</button></div><p class="save-message photo-message"></p></section>'+
+    '<section class="panel"><p class="panel-label">BUSINESS HOURS</p><h3>営業時間・定休日</h3><div class="profile-grid"><label>営業時間<input class="hours-input" value="'+esc(profile.hours||"")+'" placeholder="11:00〜21:00"></label><label>定休日<input class="closed-input" value="'+esc(profile.closed||"")+'" placeholder="火曜日"></label><label class="full">臨時のお知らせ<textarea class="notice-input" rows="3" placeholder="臨時休業、営業時間変更など">'+esc(profile.notice||"")+'</textarea></label></div><button class="primary-btn save-business-btn" type="button">営業情報を更新</button><p class="save-message business-message"></p></section>'+
+   '</div></article>';
+ }).join("");
+ bindCards(userId);
+}
+function bindCards(userId){
+ document.querySelectorAll(".shop-card[data-id]").forEach(function(card){
+  card.querySelectorAll(".status-btn").forEach(function(btn){btn.onclick=function(){updateStatus(card,btn.dataset.status,userId)}});
+  $(".save-profile-btn",card).onclick=function(){saveProfile(card,userId,"recommendation")};
+  $(".save-business-btn",card).onclick=function(){saveProfile(card,userId,"business")};
+  $(".photo-input",card).onchange=function(){if(this.files&&this.files[0])uploadPhoto(card,this.files[0],userId)};
+  $(".remove-photo",card).onclick=function(){removePhoto(card)};
+ });
+}
+async function updateStatus(card,status,userId){
+ var msg=$(".status-message",card);msg.textContent="更新中…";
+ var res=await client.from("shop_status").upsert({facility_id:Number(card.dataset.id),facility_name:card.dataset.name,status:status,updated_at:new Date().toISOString(),updated_by:userId},{onConflict:"facility_id"});
+ if(res.error){msg.textContent="更新失敗："+res.error.message;return}
+ var box=$(".current-status",card);box.dataset.status=status;$("strong",box).textContent=status;$("small",box).textContent="たった今更新";
+ card.querySelectorAll(".status-btn").forEach(function(b){b.classList.toggle("active",b.dataset.status===status)});
+ msg.textContent="更新しました";toast("空き状況を更新しました");
+}
+async function saveProfile(card,userId,mode){
+ var msg=mode==="recommendation"?$(".profile-message",card):$(".business-message",card);msg.textContent="保存中…";
+ var payload={facility_id:Number(card.dataset.id),facility_name:card.dataset.name,recommendation:$(".recommendation",card).value.trim(),hours:$(".hours-input",card).value.trim(),closed:$(".closed-input",card).value.trim(),notice:$(".notice-input",card).value.trim(),updated_at:new Date().toISOString(),updated_by:userId};
+ var res=await client.from("shop_profiles").upsert(payload,{onConflict:"facility_id"});
+ if(res.error){msg.textContent="保存失敗："+res.error.message;return}
+ msg.textContent="更新しました";toast("店舗情報を更新しました");
+}
+function resize(file){
+ return new Promise(function(resolve,reject){var img=new Image(),reader=new FileReader();reader.onload=function(e){img.src=e.target.result};reader.onerror=function(){reject(new Error("読み込み失敗"))};img.onload=function(){var max=1600,scale=Math.min(1,max/img.width),c=document.createElement("canvas");c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext("2d").drawImage(img,0,0,c.width,c.height);c.toBlob(function(b){b?resolve(b):reject(new Error("画像変換失敗"))},"image/jpeg",.84)};img.onerror=function(){reject(new Error("画像を読み込めません"))};reader.readAsDataURL(file)})
+}
+async function uploadPhoto(card,file,userId){
+ var msg=$(".photo-message",card);if(!file.type.startsWith("image/")){msg.textContent="画像を選んでください";return}if(file.size>15*1024*1024){msg.textContent="15MB以下にしてください";return}
+ msg.textContent="アップロード中…";
+ try{var blob=await resize(file),id=Number(card.dataset.id),path=id+"/"+Date.now()+".jpg";var up=await client.storage.from("shop-photos").upload(path,blob,{contentType:"image/jpeg",upsert:false});if(up.error)throw up.error;var url=client.storage.from("shop-photos").getPublicUrl(path).data.publicUrl;var db=await client.from("shop_photos").upsert({facility_id:id,photo_url:url,updated_at:new Date().toISOString(),updated_by:userId},{onConflict:"facility_id"});if(db.error)throw db.error;$(".photo-preview",card).innerHTML='<img src="'+esc(url)+'" alt="店舗写真">';$(".shop-avatar",card).innerHTML='<img src="'+esc(url)+'" alt="">';msg.textContent="写真を更新しました";toast("店舗写真を更新しました")}catch(e){msg.textContent="失敗："+(e.message||"不明なエラー")}
+}
+async function removePhoto(card){
+ if(!confirm("店舗写真を削除しますか？"))return;var msg=$(".photo-message",card),id=Number(card.dataset.id);msg.textContent="削除中…";var res=await client.from("shop_photos").delete().eq("facility_id",id);if(res.error){msg.textContent="削除失敗："+res.error.message;return}$(".photo-preview",card).innerHTML="<span>店舗写真は未設定です</span>";$(".shop-avatar",card).textContent="🏪";msg.textContent="削除しました";toast("店舗写真を削除しました")
+}
+document.addEventListener("DOMContentLoaded",init);
 })();
