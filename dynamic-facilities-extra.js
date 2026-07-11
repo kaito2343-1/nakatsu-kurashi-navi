@@ -261,4 +261,4 @@ if (document.readyState === "loading") {
   }, { once: true });
 } else {
   setTimeout(loadDynamicFacilities, 200);
-}
+})();
