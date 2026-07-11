@@ -255,7 +255,10 @@
     }
   }
 
+if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", function () {
     setTimeout(loadDynamicFacilities, 200);
-  });
-})();
+  }, { once: true });
+} else {
+  setTimeout(loadDynamicFacilities, 200);
+}
