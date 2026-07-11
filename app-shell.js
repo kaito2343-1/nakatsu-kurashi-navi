@@ -56,7 +56,7 @@
     "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
     "supabase-auth.js?v=2",
     "dynamic-facilities-extra.js?v=5", 
-  "shop-profile-public.js?v=1",
+  
      "ranking.js?v=1",
     "ui-extra.js?v=1",
     "ai-detail-extra.js?v=1",
@@ -73,6 +73,7 @@
     "status-note-extra.js?v=2",
     "phase6-business-upgrade.js?v=7",
       "phase6-position-fix.js?v=1"
+     "shop-profile-public.js?v=2"
   ];
 
   /* 現在実行中の app-shell.js 自身のURLから、サイトのベースパスを割り出す
