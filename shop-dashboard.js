@@ -1,4 +1,4 @@
-(function(){
+ふ(function(){
 "use strict";
 function $(s,r){return (r||document).querySelector(s)}
 function esc(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
@@ -103,5 +103,9 @@ async function uploadPhoto(card,file,userId){
 async function removePhoto(card){
  if(!confirm("店舗写真を削除しますか？"))return;var msg=$(".photo-message",card),id=Number(card.dataset.id);msg.textContent="削除中…";var res=await client.from("shop_photos").delete().eq("facility_id",id);if(res.error){msg.textContent="削除失敗："+res.error.message;return}$(".photo-preview",card).innerHTML="<span>店舗写真は未設定です</span>";$(".shop-avatar",card).textContent="🏪";msg.textContent="削除しました";toast("店舗写真を削除しました")
 }
-document.addEventListener("DOMContentLoaded",init);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init, { once: true });
+} else {
+  init();
+}
 })();
