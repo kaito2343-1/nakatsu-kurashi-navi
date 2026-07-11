@@ -1,0 +1,100 @@
+/* 中津くらしナビ：トップ画像を中津城写真に変更
+   既存の店舗データ・検索・お気に入り・現在地機能は変更しません。 */
+
+body[data-page="home"] .nk-hero {
+  min-height: 560px;
+  background:
+    linear-gradient(90deg,
+      rgba(7, 31, 59, 0.92) 0%,
+      rgba(7, 31, 59, 0.74) 42%,
+      rgba(7, 31, 59, 0.24) 70%,
+      rgba(7, 31, 59, 0.08) 100%),
+    url("nakatsu-castle-hero.jpg") center 42% / cover no-repeat !important;
+}
+
+body[data-page="home"] .nk-hero::before {
+  background:
+    linear-gradient(180deg,
+      rgba(0,0,0,0.04) 0%,
+      rgba(0,0,0,0.02) 60%,
+      rgba(7,31,59,0.28) 100%) !important;
+  opacity: 1 !important;
+  mask-image: none !important;
+}
+
+body[data-page="home"] .nk-hero-inner {
+  min-height: 560px;
+  grid-template-columns: minmax(0, 700px) 1fr;
+}
+
+body[data-page="home"] .nk-hero-copy {
+  padding-top: 86px;
+  padding-bottom: 100px;
+}
+
+body[data-page="home"] .nk-eyebrow,
+body[data-page="home"] .nk-hero h1,
+body[data-page="home"] .nk-hero-lead,
+body[data-page="home"] .nk-hero-links,
+body[data-page="home"] .nk-hero-links a {
+  color: #fff !important;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.34);
+}
+
+body[data-page="home"] .nk-eyebrow {
+  color: #ffd08c !important;
+}
+
+body[data-page="home"] .nk-hero-art {
+  display: none !important;
+}
+
+body[data-page="home"] .nk-hero-search {
+  background: rgba(255,255,255,0.96);
+  box-shadow: 0 20px 52px rgba(0,0,0,0.25);
+}
+
+@media (max-width: 880px) {
+  body[data-page="home"] .nk-hero {
+    min-height: 620px;
+    background:
+      linear-gradient(180deg,
+        rgba(7,31,59,0.30) 0%,
+        rgba(7,31,59,0.48) 38%,
+        rgba(7,31,59,0.92) 100%),
+      url("nakatsu-castle-hero.jpg") center 24% / cover no-repeat !important;
+  }
+
+  body[data-page="home"] .nk-hero-inner {
+    min-height: 620px;
+    display: block;
+  }
+
+  body[data-page="home"] .nk-hero-copy {
+    padding: 250px 0 74px;
+  }
+}
+
+@media (max-width: 620px) {
+  body[data-page="home"] .nk-hero {
+    min-height: 600px;
+    background-position: 58% 20%;
+  }
+
+  body[data-page="home"] .nk-hero-inner {
+    min-height: 600px;
+  }
+
+  body[data-page="home"] .nk-hero-copy {
+    padding: 225px 0 64px;
+  }
+
+  body[data-page="home"] .nk-hero h1 {
+    font-size: 35px;
+    line-height: 1.2;
+  }
+
+  body[data-page="home"] .nk-hero-lead {
+    font-size: 12px;
+  }
+}
