@@ -1,6 +1,9 @@
 /* 店舗管理ポータルの更新内容を公開サイトへ反映 */
-(function () {
+((function () {
   "use strict";
+
+  var photoMap = {};
+  
 
   function normalize(value) {
     return String(value || "")
