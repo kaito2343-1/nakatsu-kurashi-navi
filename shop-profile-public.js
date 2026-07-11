@@ -166,11 +166,54 @@
   }
 
   function patchCard(row) {
-    var card = findCard(row);
+  var card = findCard(row);
 
-    if (!card) {
-      return;
+  if (!card) {
+    return;
+  }
+    var photoUrl = photoMap[String(row.facility_id)];
+
+if (photoUrl) {
+  var image =
+    card.querySelector(".p6-shop-photo") ||
+    card.querySelector(".shop-profile-photo");
+
+  if (!image) {
+    image = document.createElement("img");
+    image.className = "shop-profile-photo";
+
+    var title = card.querySelector(
+      ".card-title, h2, h3"
+    );
+
+    if (title) {
+      title.insertAdjacentElement(
+        "afterend",
+        image
+      );
+    } else {
+      card.insertBefore(
+        image,
+        card.firstChild
+      );
     }
+  }
+
+  image.src =
+    photoUrl +
+    "?v=" +
+    Date.now();
+
+  image.alt =
+    row.facility_name || "店舗写真";
+
+  image.style.width = "100%";
+  image.style.maxHeight = "300px";
+  image.style.objectFit = "cover";
+  image.style.borderRadius = "18px";
+  image.style.margin = "12px 0";
+}
+    
 
     setRow(
       card,
@@ -323,17 +366,39 @@
     }
 
     try {
-      var result =
-        await window.NAKATSU_AUTH.client
-          .from("shop_profiles")
-          .select(
-            "facility_id," +
-            "facility_name," +
-            "recommendation," +
-            "hours," +
-            "closed," +
-            "notice"
-          );
+   var results = await Promise.all([
+  window.NAKATSU_AUTH.client
+    .from("shop_profiles")
+    .select(
+      "facility_id," +
+      "facility_name," +
+      "recommendation," +
+      "hours," +
+      "closed," +
+      "notice"
+    ),
+
+  window.NAKATSU_AUTH.client
+    .from("shop_photos")
+    .select("facility_id,photo_url")
+]);
+
+var result = results[0];
+var photoResult = results[1];
+
+if (result.error) {
+  throw result.error;
+}
+
+if (photoResult.error) {
+  throw photoResult.error;
+}
+
+var photoMap = {};
+
+(photoResult.data || []).forEach(function (photo) {
+  photoMap[String(photo.facility_id)] = photo.photo_url;
+});
 
       if (result.error) {
         throw result.error;
