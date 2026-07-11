@@ -55,7 +55,7 @@
     "supabase-config.js?v=3",
     "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
     "supabase-auth.js?v=2",
-    "dynamic-facilities-extra.js?v=4",
+    "dynamic-facilities-extra.js?v=5",
 
     "ranking.js?v=1",
     "ui-extra.js?v=1",
