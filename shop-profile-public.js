@@ -1,66 +1,405 @@
-/* 店舗管理ポータルで更新した情報を公開サイトへ反映 */
-(function(){
-"use strict";
+/* 店舗管理ポータルの更新内容を公開サイトへ反映 */
+(function () {
+  "use strict";
 
-async function applyShopProfiles(){
-  if(
-    typeof facilities==="undefined"||
-    !window.NAKATSU_AUTH||
-    !window.NAKATSU_AUTH.client
-  ){
-    return;
+  function normalize(value) {
+    return String(value || "")
+      .replace(/\s+/g, "")
+      .toLowerCase();
   }
 
-  var client=window.NAKATSU_AUTH.client;
+  function escapeHtml(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
 
-  try{
-    var res=await client
-      .from("shop_profiles")
-      .select("facility_id,facility_name,recommendation,hours,closed,notice");
+  function findFacility(row) {
+    if (
+      typeof facilities === "undefined" ||
+      !Array.isArray(facilities)
+    ) {
+      return null;
+    }
 
-    if(res.error)throw res.error;
+    var savedName = normalize(row.facility_name);
 
-    (res.data||[]).forEach(function(row){
-      var f=facilities.find(function(x){
-        var sameId=String(x.id)===String(row.facility_id);
+    return facilities.find(function (facility) {
+      var sameId =
+        String(facility.id) ===
+        String(row.facility_id);
 
-        var siteName=String(x.name||x.title||"")
-          .replace(/\s+/g,"")
-          .toLowerCase();
+      var siteName = normalize(
+        facility.name ||
+        facility.title
+      );
 
-        var savedName=String(row.facility_name||"")
-          .replace(/\s+/g,"")
-          .toLowerCase();
+      return (
+        sameId ||
+        (
+          savedName &&
+          siteName === savedName
+        )
+      );
+    }) || null;
+  }
 
-        return sameId||(savedName&&siteName===savedName);
-      });
+  function applyToFacility(row) {
+    var facility = findFacility(row);
 
-      if(!f)return;
+    if (!facility) {
+      return;
+    }
 
-      if(row.hours)f.hours=row.hours;
-      if(row.closed)f.closed=row.closed;
-      if(row.recommendation)f.todayRecommendation=row.recommendation;
-      if(row.notice)f.shopNotice=row.notice;
+    if (row.hours) {
+      facility.hours = row.hours;
+      facility.customHours = row.hours;
+    }
+
+    if (row.closed) {
+      facility.closed = row.closed;
+      facility.customClosed = row.closed;
+    }
+
+    if (row.recommendation) {
+      facility.todayRecommendation =
+        row.recommendation;
+
+      facility.today_note =
+        row.recommendation;
+
+      facility.recommendation =
+        row.recommendation;
+    }
+
+    if (row.notice) {
+      facility.shopNotice =
+        row.notice;
+
+      facility.notice =
+        row.notice;
+    }
+  }
+
+  function findCard(row) {
+    var cards = Array.prototype.slice.call(
+      document.querySelectorAll(
+        "#cardList .card, .card[data-id], [data-facility-id]"
+      )
+    );
+
+    var savedName = normalize(
+      row.facility_name
+    );
+
+    return cards.find(function (card) {
+      var cardId =
+        card.dataset.id ||
+        card.dataset.facilityId ||
+        "";
+
+      if (
+        String(cardId) ===
+        String(row.facility_id)
+      ) {
+        return true;
+      }
+
+      var title = card.querySelector(
+        ".card-title, h2, h3, [class*='title']"
+      );
+
+      return (
+        title &&
+        savedName &&
+        normalize(title.textContent) ===
+          savedName
+      );
+    }) || null;
+  }
+
+  function setRow(card, label, value) {
+    if (!value) {
+      return;
+    }
+
+    var nodes = Array.prototype.slice.call(
+      card.querySelectorAll(
+        "p, li, tr, .info-row, .card-info > div"
+      )
+    );
+
+    var target = nodes.find(function (node) {
+      return (
+        normalize(node.textContent)
+          .indexOf(normalize(label)) === 0
+      );
     });
 
-    if(typeof render==="function"){
-      render();
+    if (!target) {
+      return;
     }
-  }catch(e){
-    console.warn("[shop-profile-public] 読み込み失敗",e);
+
+    var valueElement = target.querySelector(
+      "span, dd, td:last-child"
+    );
+
+    if (valueElement) {
+      valueElement.textContent = value;
+      return;
+    }
+
+    var strong = target.querySelector(
+      "strong, dt, th"
+    );
+
+    if (strong) {
+      target.innerHTML =
+        strong.outerHTML +
+        "<span>" +
+        escapeHtml(value) +
+        "</span>";
+    }
   }
-}
 
-if(document.readyState==="loading"){
+  function patchCard(row) {
+    var card = findCard(row);
+
+    if (!card) {
+      return;
+    }
+
+    setRow(
+      card,
+      "営業時間",
+      row.hours
+    );
+
+    setRow(
+      card,
+      "定休日",
+      row.closed
+    );
+
+    var oldBox = card.querySelector(
+      ".shop-profile-public-box"
+    );
+
+    if (oldBox) {
+      oldBox.remove();
+    }
+
+    if (
+      !row.recommendation &&
+      !row.notice
+    ) {
+      return;
+    }
+
+    var box =
+      document.createElement("div");
+
+    box.className =
+      "shop-profile-public-box";
+
+    var html = "";
+
+    if (row.recommendation) {
+      html +=
+        "<p>" +
+          "<strong>📣 本日のおすすめ</strong>" +
+          "<span>" +
+            escapeHtml(
+              row.recommendation
+            ) +
+          "</span>" +
+        "</p>";
+    }
+
+    if (row.notice) {
+      html +=
+        "<p>" +
+          "<strong>店舗からのお知らせ</strong>" +
+          "<span>" +
+            escapeHtml(
+              row.notice
+            ) +
+          "</span>" +
+        "</p>";
+    }
+
+    box.innerHTML = html;
+
+    var mapButton =
+      Array.prototype.slice
+        .call(
+          card.querySelectorAll(
+            "a, button"
+          )
+        )
+        .find(function (element) {
+          return (
+            normalize(
+              element.textContent
+            ).indexOf(
+              normalize("地図で見る")
+            ) !== -1
+          );
+        });
+
+    if (
+      mapButton &&
+      mapButton.parentNode
+    ) {
+      mapButton.parentNode.insertBefore(
+        box,
+        mapButton
+      );
+    } else {
+      card.appendChild(box);
+    }
+  }
+
+  function addStyle() {
+    if (
+      document.getElementById(
+        "shopProfilePublicStyle"
+      )
+    ) {
+      return;
+    }
+
+    var style =
+      document.createElement("style");
+
+    style.id =
+      "shopProfilePublicStyle";
+
+    style.textContent =
+      ".shop-profile-public-box{" +
+        "margin:14px 0;" +
+        "padding:14px 16px;" +
+        "border-radius:16px;" +
+        "background:#eef7f4;" +
+        "border:1px solid #cde4dd;" +
+      "}" +
+
+      ".shop-profile-public-box p{" +
+        "margin:0;" +
+        "display:grid;" +
+        "gap:5px;" +
+      "}" +
+
+      ".shop-profile-public-box p+p{" +
+        "margin-top:12px;" +
+        "padding-top:12px;" +
+        "border-top:1px solid #d7e8e2;" +
+      "}" +
+
+      ".shop-profile-public-box strong{" +
+        "font-size:13px;" +
+        "color:#0e5148;" +
+      "}" +
+
+      ".shop-profile-public-box span{" +
+        "font-size:14px;" +
+        "line-height:1.7;" +
+        "color:#233b36;" +
+      "}";
+
+    document.head.appendChild(style);
+  }
+
+  async function applyShopProfiles() {
+    if (
+      typeof facilities === "undefined" ||
+      !window.NAKATSU_AUTH ||
+      !window.NAKATSU_AUTH.client
+    ) {
+      return;
+    }
+
+    try {
+      var result =
+        await window.NAKATSU_AUTH.client
+          .from("shop_profiles")
+          .select(
+            "facility_id," +
+            "facility_name," +
+            "recommendation," +
+            "hours," +
+            "closed," +
+            "notice"
+          );
+
+      if (result.error) {
+        throw result.error;
+      }
+
+      var rows = result.data || [];
+
+      addStyle();
+
+      rows.forEach(
+        applyToFacility
+      );
+
+      if (
+        typeof render === "function"
+      ) {
+        render();
+      }
+
+      [
+        300,
+        900,
+        1800,
+        3000
+      ].forEach(function (delay) {
+        setTimeout(function () {
+          rows.forEach(
+            patchCard
+          );
+        }, delay);
+      });
+
+    } catch (error) {
+      console.warn(
+        "[shop-profile-public] 読み込み失敗",
+        error
+      );
+    }
+  }
+
+  function start() {
+    setTimeout(
+      applyShopProfiles,
+      500
+    );
+  }
+
+  if (
+    document.readyState === "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      start,
+      {
+        once: true
+      }
+    );
+  } else {
+    start();
+  }
+
   document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-      setTimeout(applyShopProfiles,900);
-    },
-    {once:true}
+    "nakatsu:app-ready",
+    start,
+    {
+      once: true
+    }
   );
-}else{
-  setTimeout(applyShopProfiles,900);
-}
-
 })();
