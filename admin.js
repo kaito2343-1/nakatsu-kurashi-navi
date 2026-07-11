@@ -1,315 +1,35 @@
-/* ============================================================
-   中津くらしナビ：Supabase簡易管理画面
-   ファイル名：admin.js
-   ============================================================ */
-
-(function () {
-  const form = document.getElementById("facilityForm");
-  const listEl = document.getElementById("facilityList");
-  const connectionStatus = document.getElementById("connectionStatus");
-  const saveStatus = document.getElementById("saveStatus");
-
-  const fields = {
-    dbId: document.getElementById("dbId"),
-    name: document.getElementById("name"),
-    category: document.getElementById("category"),
-    description: document.getElementById("description"),
-    address: document.getElementById("address"),
-    phone: document.getElementById("phone"),
-    hours: document.getElementById("hours"),
-    closed: document.getElementById("closed"),
-    mapUrl: document.getElementById("mapUrl"),
-    officialUrl: document.getElementById("officialUrl"),
-    instagram: document.getElementById("instagram"),
-         imageUrl: document.getElementById("imageUrl"),
-         tags: document.getElementById("tags"),
-    memo: document.getElementById("memo"),
-    sourceMemo: document.getElementById("sourceMemo"),
-    sortOrder: document.getElementById("sortOrder"),
-    verified: document.getElementById("verified"),
-    isPublished: document.getElementById("isPublished")
-  };
-
-  function getConfig() {
-    return window.NAKATSU_SUPABASE_CONFIG || {};
-  }
-
-  function isReady(config) {
-    return Boolean(
-      config &&
-      config.enabled === true &&
-      config.url &&
-      config.publicKey &&
-      config.table
-    );
-  }
-
-  function cleanBaseUrl(url) {
-    return String(url || "").replace(/\/+$/, "");
-  }
-
-  function isJwtLike(value) {
-    return String(value || "").startsWith("eyJ");
-  }
-  function getHeaders(config, preferRepresentation) {
-    const headers = {
-      "apikey": config.publicKey,
-   
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-    };
-
-        if (preferRepresentation) {
-      headers.Prefer = "return=minimal";
-    }
-
-    return headers;
-  }
-
-  function tableUrl(config) {
-
-    return cleanBaseUrl(config.url) + "/rest/v1/" + encodeURIComponent(config.table);
-  }
-
-  function setStatus(el, message, type) {
-    if (!el) return;
-
-    el.textContent = message;
-    el.dataset.type = type || "info";
-  }
-
-  function parseTags(value) {
-    return String(value || "")
-      .split(",")
-      .map(function (item) {
-        return item.trim();
-      })
-      .filter(Boolean);
-  }
-
-  function toPayload() {
-    return {
-      name: fields.name.value.trim(),
-      category: fields.category.value.trim() || "安いご飯",
-      description: fields.description.value.trim(),
-      address: fields.address.value.trim(),
-      phone: fields.phone.value.trim(),
-      hours: fields.hours.value.trim(),
-      closed: fields.closed.value.trim(),
-      map_url: fields.mapUrl.value.trim(),
-      official_url: fields.officialUrl.value.trim(),
-      instagram: fields.instagram.value.trim(),
-             image_url: fields.imageUrl.value.trim(),
-      tags: parseTags(fields.tags.value),
-      memo: fields.memo.value.trim(),
-      source_memo: fields.sourceMemo.value.trim(),
-      verified: fields.verified.checked,
-      is_published: fields.isPublished.checked,
-      sort_order: fields.sortOrder.value ? Number(fields.sortOrder.value) : 9999,
-      updated_at: new Date().toISOString()
-    };
-  }
-
-  function clearForm() {
-    if (!form) return;
-
-    form.reset();
-    fields.dbId.value = "";
-    fields.isPublished.checked = true;
-    setStatus(saveStatus, "", "info");
-  }
-
-  function fillForm(row) {
-    fields.dbId.value = row.id || "";
-    fields.name.value = row.name || "";
-    fields.category.value = row.category || "";
-    fields.description.value = row.description || "";
-    fields.address.value = row.address || "";
-    fields.phone.value = row.phone || "";
-    fields.hours.value = row.hours || "";
-    fields.closed.value = row.closed || "";
-    fields.mapUrl.value = row.map_url || "";
-    fields.officialUrl.value = row.official_url || "";
-    fields.instagram.value = row.instagram || "";
-         fields.imageUrl.value = row.image_url || "";
-    fields.tags.value = Array.isArray(row.tags) ? row.tags.join(", ") : "";
-    fields.memo.value = row.memo || "";
-    fields.sourceMemo.value = row.source_memo || "";
-    fields.sortOrder.value = row.sort_order || "";
-    fields.verified.checked = Boolean(row.verified);
-    fields.isPublished.checked = row.is_published !== false;
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-
-    setStatus(saveStatus, "編集モード：ID " + row.id + " を読み込みました", "info");
-  }
-
-  async function fetchFacilities() {
-    const config = getConfig();
-
-    if (!isReady(config)) {
-      setStatus(connectionStatus, "Supabase設定が未入力です。supabase-config.js を編集してください。", "error");
-
-      if (listEl) {
-        listEl.innerHTML = "<p class='empty'>Supabase設定後に一覧が表示されます。</p>";
-      }
-
-      return [];
-    }
-
-    const params = new URLSearchParams();
-    params.set("select", "*");
-    params.set("order", "sort_order.asc.nullslast");
-
-    const response = await fetch(tableUrl(config) + "?" + params.toString(), {
-      method: "GET",
-      headers: getHeaders(config)
-    });
-
-    if (!response.ok) {
-      throw new Error("読み込み失敗: HTTP " + response.status);
-    }
-
-    return await response.json();
-  }
-
-  function renderList(rows) {
-    if (!listEl) return;
-
-    if (!rows.length) {
-      listEl.innerHTML = "<p class='empty'>まだSupabase側の施設データがありません。</p>";
-      return;
-    }
-
-    listEl.innerHTML = rows.map(function (row) {
-      const published = row.is_published === false ? "非公開" : "公開";
-
-      return `
-        <article class="facility-item">
-          <div>
-            <strong>${escapeHtml(row.name || "")}</strong>
-            <p>${escapeHtml(row.category || "")} / ID: ${escapeHtml(row.id)}</p>
-            <small>${escapeHtml(published)}・${escapeHtml(row.address || "住所未入力")}</small>
-          </div>
-          <button type="button" data-id="${escapeHtml(row.id)}">編集</button>
-        </article>
-      `;
-    }).join("");
-
-    listEl.querySelectorAll("button[data-id]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        const row = rows.find(function (item) {
-          return String(item.id) === String(btn.dataset.id);
-        });
-
-        if (row) {
-          fillForm(row);
-        }
-      });
-    });
-  }
-
-  async function loadList() {
-    try {
-      setStatus(connectionStatus, "Supabaseに接続中...", "info");
-
-      const rows = await fetchFacilities();
-
-      renderList(rows);
-      setStatus(connectionStatus, "接続OK：" + rows.length + "件読み込みました", "success");
-    } catch (error) {
-      console.error(error);
-
-      setStatus(connectionStatus, error.message, "error");
-
-      if (listEl) {
-        listEl.innerHTML = "<p class='empty'>読み込みに失敗しました。RLS設定・URL・公開用キーを確認してください。</p>";
-      }
-    }
-  }
-
-  async function saveFacility(event) {
-    event.preventDefault();
-
-    const config = getConfig();
-
-    if (!isReady(config)) {
-      setStatus(saveStatus, "Supabase設定が未入力です。", "error");
-      return;
-    }
-
-    const payload = toPayload();
-
-    if (!payload.name) {
-      setStatus(saveStatus, "店舗・施設名を入力してください。", "error");
-      return;
-    }
-
-    const dbId = fields.dbId.value.trim();
-    const isUpdate = Boolean(dbId);
-
-    try {
-      setStatus(saveStatus, "保存中...", "info");
-
-      const url = isUpdate
-        ? tableUrl(config) + "?id=eq." + encodeURIComponent(dbId)
-        : tableUrl(config);
-
-      const response = await fetch(url, {
-        method: isUpdate ? "PATCH" : "POST",
-        headers: getHeaders(config, true),
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error("保存失敗: HTTP " + response.status + " " + text);
-      }
-
-      setStatus(saveStatus, isUpdate ? "更新しました。" : "追加しました。", "success");
-
-      await loadList();
-
-      if (!isUpdate) {
-        clearForm();
-      }
-    } catch (error) {
-      console.error(error);
-      setStatus(saveStatus, error.message, "error");
-    }
-  }
-
-  function escapeHtml(value) {
-    return String(value || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  const testConnectionBtn = document.getElementById("testConnectionBtn");
-  const reloadBtn = document.getElementById("reloadBtn");
-  const clearBtn = document.getElementById("clearBtn");
-
-  if (testConnectionBtn) {
-    testConnectionBtn.addEventListener("click", loadList);
-  }
-
-  if (reloadBtn) {
-    reloadBtn.addEventListener("click", loadList);
-  }
-
-  if (clearBtn) {
-    clearBtn.addEventListener("click", clearForm);
-  }
-
-  if (form) {
-    form.addEventListener("submit", saveFacility);
-  }
-
-  document.addEventListener("DOMContentLoaded", loadList);
+(function(){
+"use strict";
+const form=document.getElementById("facilityForm"),listEl=document.getElementById("facilityList"),connectionStatus=document.getElementById("connectionStatus"),saveStatus=document.getElementById("saveStatus"),uploadStatus=document.getElementById("uploadStatus"),saveBtn=document.getElementById("saveBtn");
+const fields={dbId:$("#dbId"),name:$("#name"),category:$("#category"),description:$("#description"),address:$("#address"),phone:$("#phone"),hours:$("#hours"),closed:$("#closed"),mapUrl:$("#mapUrl"),officialUrl:$("#officialUrl"),instagram:$("#instagram"),imageUrl:$("#imageUrl"),tags:$("#tags"),memo:$("#memo"),sourceMemo:$("#sourceMemo"),sortOrder:$("#sortOrder"),verified:$("#verified"),isPublished:$("#isPublished")};
+let allRows=[],selectedFile=null,previewObjectUrl="";
+function $(s){return document.querySelector(s)}
+function config(){return window.NAKATSU_SUPABASE_CONFIG||{}}
+function ready(c){return !!(c&&c.enabled===true&&c.url&&c.publicKey&&c.table)}
+function clean(url){return String(url||"").replace(/\/+$/,"")}
+function headers(c,prefer){const h={apikey:c.publicKey,Authorization:"Bearer "+c.publicKey,Accept:"application/json","Content-Type":"application/json"};if(prefer)h.Prefer="return=minimal";return h}
+function tableUrl(c){return clean(c.url)+"/rest/v1/"+encodeURIComponent(c.table)}
+function bucketName(c){return c.storageBucket||"shop-photos"}
+function setStatus(el,msg,type){if(!el)return;el.textContent=msg;el.dataset.type=type||"info"}
+function showToast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.classList.remove("show"),1900)}
+function escapeHtml(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+function parseTags(v){return String(v||"").split(",").map(x=>x.trim()).filter(Boolean)}
+function safeName(file){const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"");return Date.now()+"-"+Math.random().toString(36).slice(2,9)+"."+(ext||"jpg")}
+function publicImageUrl(c,path){return clean(c.url)+"/storage/v1/object/public/"+encodeURIComponent(bucketName(c))+"/"+path.split("/").map(encodeURIComponent).join("/")}
+function setPreview(url){const box=$("#photoPreview");if(!url){box.innerHTML="<span>📷</span><p>写真を選ぶとここに表示されます</p>";return}box.innerHTML='<img src="'+escapeHtml(url)+'" alt="店舗写真プレビュー">'}
+function chooseFile(file){if(!file)return;if(!["image/jpeg","image/png","image/webp"].includes(file.type)){setStatus(uploadStatus,"JPG・PNG・WebPのみ選択できます。","error");return}if(file.size>5*1024*1024){setStatus(uploadStatus,"画像サイズは5MB以下にしてください。","error");return}selectedFile=file;if(previewObjectUrl)URL.revokeObjectURL(previewObjectUrl);previewObjectUrl=URL.createObjectURL(file);setPreview(previewObjectUrl);setStatus(uploadStatus,file.name+" を選択しました。保存時にアップロードします。","success")}
+async function uploadPhoto(file){const c=config();const path="facilities/"+safeName(file);setStatus(uploadStatus,"写真をアップロード中...","info");const res=await fetch(clean(c.url)+"/storage/v1/object/"+encodeURIComponent(bucketName(c))+"/"+path.split("/").map(encodeURIComponent).join("/"),{method:"POST",headers:{apikey:c.publicKey,Authorization:"Bearer "+c.publicKey,"Content-Type":file.type,"x-upsert":"false"},body:file});if(!res.ok){const txt=await res.text();throw new Error("写真アップロード失敗: HTTP "+res.status+" "+txt)}const url=publicImageUrl(c,path);fields.imageUrl.value=url;setStatus(uploadStatus,"写真をアップロードしました。","success");return url}
+function payload(){return{name:fields.name.value.trim(),category:fields.category.value.trim()||"安いご飯",description:fields.description.value.trim(),address:fields.address.value.trim(),phone:fields.phone.value.trim(),hours:fields.hours.value.trim(),closed:fields.closed.value.trim(),map_url:fields.mapUrl.value.trim(),official_url:fields.officialUrl.value.trim(),instagram:fields.instagram.value.trim(),image_url:fields.imageUrl.value.trim(),tags:parseTags(fields.tags.value),memo:fields.memo.value.trim(),source_memo:fields.sourceMemo.value.trim(),verified:fields.verified.checked,is_published:fields.isPublished.checked,sort_order:fields.sortOrder.value?Number(fields.sortOrder.value):9999,updated_at:new Date().toISOString()}}
+function clearForm(){form.reset();fields.dbId.value="";fields.imageUrl.value="";fields.isPublished.checked=true;selectedFile=null;if(previewObjectUrl)URL.revokeObjectURL(previewObjectUrl);previewObjectUrl="";setPreview("");$("#formTitle").textContent="新しい店舗を登録";$("#editModeText").textContent="必要な情報を入力して保存してください。";saveBtn.textContent="店舗を保存する";setStatus(saveStatus,"入力後に保存してください。","info");setStatus(uploadStatus,"写真は未選択です。","info")}
+function fillForm(row){fields.dbId.value=row.id||"";fields.name.value=row.name||"";fields.category.value=row.category||"";fields.description.value=row.description||"";fields.address.value=row.address||"";fields.phone.value=row.phone||"";fields.hours.value=row.hours||"";fields.closed.value=row.closed||"";fields.mapUrl.value=row.map_url||"";fields.officialUrl.value=row.official_url||"";fields.instagram.value=row.instagram||"";fields.imageUrl.value=row.image_url||"";fields.tags.value=Array.isArray(row.tags)?row.tags.join(", "):"";fields.memo.value=row.memo||"";fields.sourceMemo.value=row.source_memo||"";fields.sortOrder.value=row.sort_order||"";fields.verified.checked=!!row.verified;fields.isPublished.checked=row.is_published!==false;selectedFile=null;setPreview(row.image_url||"");setStatus(uploadStatus,row.image_url?"現在の写真を表示しています。変更する場合は新しい写真を選択してください。":"写真は未登録です。","info");$("#formTitle").textContent="店舗を編集";$("#editModeText").textContent="ID "+row.id+" を編集中です。";saveBtn.textContent="変更を保存する";$("#editSection").scrollIntoView({behavior:"smooth",block:"start"})}
+async function fetchRows(){const c=config();if(!ready(c)){throw new Error("Supabase設定が未入力です。")}const p=new URLSearchParams({select:"*",order:"sort_order.asc.nullslast"});const r=await fetch(tableUrl(c)+"?"+p,{headers:headers(c)});if(!r.ok)throw new Error("読み込み失敗: HTTP "+r.status);return r.json()}
+function updateStats(rows){$("#totalCount").textContent=rows.length;$("#publishedCount").textContent=rows.filter(r=>r.is_published!==false).length;$("#hiddenCount").textContent=rows.filter(r=>r.is_published===false).length;$("#unverifiedCount").textContent=rows.filter(r=>!r.verified).length}
+function filteredRows(){const q=$("#facilitySearch").value.trim().toLowerCase(),f=$("#publishFilter").value;return allRows.filter(r=>{const text=[r.name,r.category,r.address,r.description].join(" ").toLowerCase();if(q&&!text.includes(q))return false;if(f==="published"&&r.is_published===false)return false;if(f==="hidden"&&r.is_published!==false)return false;if(f==="unverified"&&r.verified)return false;return true})}
+function renderList(){const rows=filteredRows();$("#listResultText").textContent=rows.length+"件を表示中";if(!rows.length){listEl.innerHTML='<p class="empty">条件に合う店舗がありません。</p>';return}listEl.innerHTML=rows.map(r=>`<article class="facility-item"><div class="facility-thumb">${r.image_url?`<img src="${escapeHtml(r.image_url)}" alt="">`:"🏪"}</div><div class="facility-info"><strong>${escapeHtml(r.name||"")}</strong><p>${escapeHtml(r.category||"未分類")} / ID: ${escapeHtml(r.id)}</p><small>${escapeHtml(r.address||"住所未入力")}</small><div class="item-badges"><span class="badge ${r.is_published===false?"hidden":""}">${r.is_published===false?"非公開":"公開中"}</span>${!r.verified?'<span class="badge unverified">未確認</span>':""}</div></div><div class="item-actions"><button type="button" data-edit="${escapeHtml(r.id)}">編集</button><button type="button" class="delete-btn" data-delete="${escapeHtml(r.id)}" data-name="${escapeHtml(r.name||"店舗")}">削除</button></div></article>`).join("");listEl.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{const row=allRows.find(x=>String(x.id)===String(b.dataset.edit));if(row)fillForm(row)});listEl.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteRow(b.dataset.delete,b.dataset.name))}
+async function loadList(){try{setStatus(connectionStatus,"Supabaseに接続中...","info");allRows=await fetchRows();updateStats(allRows);renderList();setStatus(connectionStatus,"接続OK："+allRows.length+"件を読み込みました。","success")}catch(e){console.error(e);setStatus(connectionStatus,e.message,"error");listEl.innerHTML='<p class="empty">一覧の読み込みに失敗しました。</p>'}}
+async function saveFacility(e){e.preventDefault();const c=config();if(!ready(c)){setStatus(saveStatus,"Supabase設定が未入力です。","error");return}if(!fields.name.value.trim()||!fields.category.value.trim()){setStatus(saveStatus,"店舗名とカテゴリを入力してください。","error");return}saveBtn.disabled=true;try{setStatus(saveStatus,"保存中...","info");if(selectedFile)await uploadPhoto(selectedFile);const id=fields.dbId.value.trim(),isUpdate=!!id,url=isUpdate?tableUrl(c)+"?id=eq."+encodeURIComponent(id):tableUrl(c);const r=await fetch(url,{method:isUpdate?"PATCH":"POST",headers:headers(c,true),body:JSON.stringify(payload())});if(!r.ok){const txt=await r.text();throw new Error("保存失敗: HTTP "+r.status+" "+txt)}setStatus(saveStatus,isUpdate?"店舗情報を更新しました。":"店舗を追加しました。","success");showToast(isUpdate?"更新しました":"登録しました");await loadList();clearForm()}catch(err){console.error(err);setStatus(saveStatus,err.message,"error")}finally{saveBtn.disabled=false}}
+async function deleteRow(id,name){if(!confirm("「"+name+"」を削除しますか？\nこの操作は元に戻せません。"))return;const c=config();try{const r=await fetch(tableUrl(c)+"?id=eq."+encodeURIComponent(id),{method:"DELETE",headers:headers(c,true)});if(!r.ok){const txt=await r.text();throw new Error("削除失敗: HTTP "+r.status+" "+txt)}showToast("削除しました");await loadList()}catch(e){alert(e.message)}}
+$("#photoFile").addEventListener("change",e=>chooseFile(e.target.files[0]));
+$("#removePhotoBtn").onclick=()=>{selectedFile=null;fields.imageUrl.value="";setPreview("");setStatus(uploadStatus,"写真を外しました。保存すると画像なしになります。","info")};
+$("#testConnectionBtn").onclick=loadList;$("#reloadBtn").onclick=loadList;$("#clearBtn").onclick=clearForm;$("#newBtn").onclick=clearForm;$("#scrollToFormBtn").onclick=()=>{clearForm();$("#editSection").scrollIntoView({behavior:"smooth"})};$("#facilitySearch").addEventListener("input",renderList);$("#publishFilter").addEventListener("change",renderList);form.addEventListener("submit",saveFacility);document.addEventListener("DOMContentLoaded",loadList);
 })();
