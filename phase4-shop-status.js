@@ -7,6 +7,7 @@
       ・3時間以上更新が無ければ「情報が古い可能性」表示に切り替え
    3. 予約URL（facility.reservationUrl）があれば「予約する」ボタンを追加
    4. ハンバーガーメニューに「店舗管理画面」リンクを追加（ログイン時のみ）
+   5. 店舗写真をfacilitiesにマージ（getFacilityImageUrlが自動で拾う）
 
    読み込み位置：supabase-auth.js の後、phase1/phase2/phase3 の後
    ============================================================ */
@@ -76,6 +77,35 @@
     var then = Date.parse(isoString);
     if (!then) return true;
     return (Date.now() - then) > 3 * 60 * 60 * 1000; // 3時間
+  }
+
+  /* =========================================================
+     1b. 店舗写真をfacilitiesにマージ（getFacilityImageUrlが自動で拾う）
+  ========================================================= */
+  async function attachPhotos() {
+    if (typeof facilities === "undefined") return;
+
+    var auth = window.NAKATSU_AUTH;
+    var client = auth && auth.client;
+    if (!client) return;
+
+    try {
+      var res = await client.from("shop_photos").select("facility_id,photo_url");
+      if (res.error) throw res.error;
+
+      var changed = false;
+      (res.data || []).forEach(function (row) {
+        var facility = facilities.find(function (f) { return String(f.id) === String(row.facility_id); });
+        if (facility && facility.imageUrl !== row.photo_url) {
+          facility.imageUrl = row.photo_url;
+          changed = true;
+        }
+      });
+
+      if (changed && typeof render === "function") render();
+    } catch (err) {
+      console.warn("[phase4] shop_photos取得に失敗:", err);
+    }
   }
 
   /* =========================================================
@@ -275,6 +305,7 @@
     addStyle();
     upgradeLoginModal();
     addDashboardMenuItem();
+    attachPhotos();
 
     document.addEventListener("nakatsu:rendered", annotateShopStatus);
     annotateShopStatus();
