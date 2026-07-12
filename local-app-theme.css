@@ -1,0 +1,805 @@
+/* ============================================================
+   中津くらしナビ：地域密着型アプリUIテーマ
+   生成したモックアップを基準に、既存機能を壊さず見た目を統一する。
+   ============================================================ */
+
+:root {
+  --local-bg: #f7f2e8;
+  --local-bg-soft: #fbf8f1;
+  --local-surface: #ffffff;
+  --local-surface-warm: #fffdf8;
+  --local-ink: #272923;
+  --local-muted: #6d756b;
+  --local-line: #e8e4db;
+  --local-green: #4c9f52;
+  --local-green-deep: #347d3c;
+  --local-green-soft: #e7f4e6;
+  --local-blue: #3589bb;
+  --local-blue-deep: #246b96;
+  --local-blue-soft: #e5f2f8;
+  --local-orange: #e8a23a;
+  --local-orange-soft: #fff1d9;
+  --local-red: #dc5b52;
+  --local-radius-xl: 28px;
+  --local-radius-lg: 20px;
+  --local-radius-md: 15px;
+  --local-shadow-sm: 0 5px 18px rgba(59, 70, 55, 0.08);
+  --local-shadow-md: 0 14px 40px rgba(59, 70, 55, 0.12);
+}
+
+html {
+  background: var(--local-bg);
+}
+
+body {
+  color: var(--local-ink) !important;
+  background:
+    radial-gradient(circle at 8% 2%, rgba(76, 159, 82, 0.08), transparent 22rem),
+    radial-gradient(circle at 94% 9%, rgba(53, 137, 187, 0.08), transparent 24rem),
+    var(--local-bg) !important;
+  font-family: "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+body a,
+body button,
+body input,
+body select,
+body textarea {
+  font-family: inherit;
+}
+
+body ::selection {
+  color: #fff;
+  background: var(--local-green);
+}
+
+/* ---------- 共通ヘッダー ---------- */
+body[data-page="home"] .nk-header,
+body[data-page="shops"] .shops-header,
+body .site-header {
+  border-bottom: 1px solid rgba(70, 91, 68, 0.08) !important;
+  background: rgba(255, 253, 248, 0.92) !important;
+  box-shadow: 0 8px 28px rgba(60, 71, 57, 0.05) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+body[data-page="home"] .nk-brand-mark,
+body[data-page="shops"] .shops-brand-mark,
+body .brand-mark {
+  color: var(--local-green-deep) !important;
+  border-color: rgba(76, 159, 82, 0.17) !important;
+  background: linear-gradient(145deg, #fff, #f4faf3) !important;
+  box-shadow: var(--local-shadow-sm) !important;
+}
+
+body[data-page="home"] .nk-brand strong,
+body[data-page="shops"] .shops-brand strong,
+body .site-brand strong {
+  color: var(--local-ink) !important;
+}
+
+body[data-page="home"] .nk-brand small,
+body[data-page="shops"] .shops-brand small,
+body .site-brand small {
+  color: var(--local-muted) !important;
+}
+
+body[data-page="home"] .nk-desktop-nav a::after,
+body[data-page="shops"] .shops-desktop-nav a::after {
+  background: var(--local-green) !important;
+}
+
+body[data-page="home"] .nk-icon-link,
+body[data-page="home"] .nk-menu-button,
+body[data-page="shops"] .shops-favorite-link {
+  color: var(--local-ink) !important;
+  border-color: var(--local-line) !important;
+  background: #fff !important;
+  box-shadow: 0 3px 12px rgba(50, 63, 48, 0.06) !important;
+}
+
+/* ---------- ホーム：アプリ風ヒーロー ---------- */
+body[data-page="home"] {
+  --home-navy: var(--local-ink);
+  --home-navy-deep: #243329;
+  --home-blue: var(--local-blue);
+  --home-sky: var(--local-blue-soft);
+  --home-orange: var(--local-orange);
+  --home-orange-deep: #ca8221;
+  --home-cream: var(--local-bg);
+  --home-paper: var(--local-surface-warm);
+  --home-white: var(--local-surface);
+  --home-ink: var(--local-ink);
+  --home-muted: var(--local-muted);
+  --home-line: var(--local-line);
+  --home-green: var(--local-green);
+  --home-shadow-sm: var(--local-shadow-sm);
+  --home-shadow-md: var(--local-shadow-md);
+  padding-bottom: 92px !important;
+}
+
+body[data-page="home"] .app.home-app {
+  background: transparent !important;
+}
+
+body[data-page="home"] .home-top-note {
+  color: #536252 !important;
+  background: #edf6eb !important;
+}
+
+body[data-page="home"] .home-top-note a {
+  color: var(--local-green-deep) !important;
+}
+
+body[data-page="home"] .nk-hero {
+  position: relative;
+  min-height: 0 !important;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 78% 20%, rgba(53, 137, 187, 0.13), transparent 17rem),
+    radial-gradient(circle at 94% 92%, rgba(76, 159, 82, 0.12), transparent 21rem),
+    linear-gradient(180deg, #fffdf8 0%, #f8f4ea 100%) !important;
+}
+
+body[data-page="home"] .nk-hero-inner {
+  min-height: 520px !important;
+  grid-template-columns: minmax(0, 1.02fr) minmax(390px, 0.98fr) !important;
+  gap: 34px;
+}
+
+body[data-page="home"] .nk-hero-copy {
+  padding: 66px 0 78px !important;
+}
+
+.local-greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 8px 13px 8px 8px;
+  border: 1px solid #e5ebdf;
+  border-radius: 999px;
+  color: #3f4f3e;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 5px 16px rgba(61, 78, 58, 0.07);
+}
+
+.local-greeting > span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--local-green);
+  font-weight: 900;
+}
+
+.local-greeting strong,
+.local-greeting small {
+  display: block;
+  line-height: 1.35;
+}
+
+.local-greeting strong {
+  font-size: 12px;
+}
+
+.local-greeting small {
+  color: var(--local-muted);
+  font-size: 10px;
+}
+
+body[data-page="home"] .nk-eyebrow,
+body[data-page="home"] .nk-section-kicker,
+body[data-page="shops"] .shops-kicker,
+body[data-page="shops"] .shops-panel-kicker {
+  color: var(--local-green-deep) !important;
+  letter-spacing: 0.14em !important;
+}
+
+body[data-page="home"] .nk-hero h1 {
+  color: var(--local-ink) !important;
+  font-size: clamp(42px, 5vw, 66px) !important;
+  line-height: 1.22 !important;
+  letter-spacing: 0.02em !important;
+}
+
+body[data-page="home"] .nk-hero-lead {
+  color: #566157 !important;
+  font-size: 15px !important;
+  line-height: 1.9 !important;
+}
+
+body[data-page="home"] .nk-hero-search,
+body[data-page="shops"] .search-row {
+  border: 1px solid rgba(69, 86, 66, 0.11) !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  box-shadow: 0 10px 30px rgba(54, 70, 52, 0.11) !important;
+}
+
+body[data-page="home"] .nk-hero-search:focus-within,
+body[data-page="shops"] .search-row:focus-within {
+  border-color: rgba(76, 159, 82, 0.55) !important;
+  box-shadow: 0 0 0 4px rgba(76, 159, 82, 0.12), 0 12px 30px rgba(54, 70, 52, 0.12) !important;
+}
+
+body[data-page="home"] .nk-hero-search button,
+body[data-page="shops"] .search-row button {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--local-green), var(--local-green-deep)) !important;
+  box-shadow: 0 6px 16px rgba(52, 125, 60, 0.22) !important;
+}
+
+body[data-page="home"] .nk-hero-links a,
+body[data-page="shops"] .shops-popular-searches button {
+  color: var(--local-green-deep) !important;
+}
+
+body[data-page="home"] .nk-sun {
+  background: #f5c76f !important;
+}
+
+body[data-page="home"] .nk-mountain-back {
+  fill: #dcebd8 !important;
+}
+
+body[data-page="home"] .nk-mountain-front {
+  fill: #9fc6ae !important;
+}
+
+body[data-page="home"] .nk-river {
+  fill: #b8dceb !important;
+}
+
+body[data-page="home"] .nk-castle {
+  fill: #fffdf7 !important;
+  stroke: #3f7692 !important;
+}
+
+body[data-page="home"] .nk-bridge {
+  stroke: #547c71 !important;
+}
+
+body[data-page="home"] .nk-floating-card {
+  border: 1px solid rgba(255,255,255,.9) !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.91) !important;
+  box-shadow: var(--local-shadow-md) !important;
+}
+
+body[data-page="home"] .nk-floating-card span {
+  background: var(--local-green-soft) !important;
+}
+
+/* ---------- ホーム：カテゴリとカード ---------- */
+body[data-page="home"] .nk-category-section {
+  position: relative;
+  z-index: 4;
+  margin-top: -34px !important;
+}
+
+body[data-page="home"] .nk-category-section .home-shell,
+body[data-page="home"] .nk-featured-panel,
+body[data-page="home"] .nk-area-panel,
+body[data-page="home"] .nk-news-panel,
+body[data-page="home"] .nk-owner-panel {
+  border: 1px solid rgba(66, 80, 63, 0.08) !important;
+  border-radius: var(--local-radius-xl) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: var(--local-shadow-sm) !important;
+}
+
+body[data-page="home"] .nk-category-rail {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  overflow: visible !important;
+  gap: 10px !important;
+}
+
+body[data-page="home"] .nk-category-card {
+  min-height: 94px !important;
+  padding: 12px 6px !important;
+  border: 1px solid #ece9e1 !important;
+  border-radius: 17px !important;
+  background: #fff !important;
+  box-shadow: 0 3px 12px rgba(54, 66, 51, 0.06) !important;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease !important;
+}
+
+body[data-page="home"] .nk-category-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(76, 159, 82, 0.35) !important;
+  box-shadow: 0 10px 22px rgba(54, 66, 51, 0.1) !important;
+}
+
+body[data-page="home"] .nk-category-card.is-active {
+  color: var(--local-green-deep) !important;
+  border-color: #cfe6ce !important;
+  background: var(--local-green-soft) !important;
+}
+
+body[data-page="home"] .nk-category-icon {
+  width: 40px !important;
+  height: 40px !important;
+  display: grid !important;
+  place-items: center !important;
+  margin-inline: auto !important;
+  border-radius: 13px !important;
+  color: var(--local-green-deep) !important;
+  background: var(--local-green-soft) !important;
+}
+
+body[data-page="home"] .nk-category-card:nth-child(3n+2) .nk-category-icon {
+  color: var(--local-blue-deep) !important;
+  background: var(--local-blue-soft) !important;
+}
+
+body[data-page="home"] .nk-category-card:nth-child(3n) .nk-category-icon {
+  color: #a56815 !important;
+  background: var(--local-orange-soft) !important;
+}
+
+body[data-page="home"] .nk-place-card {
+  border: 1px solid #ebe7de !important;
+  border-radius: var(--local-radius-lg) !important;
+  background: #fff !important;
+  box-shadow: 0 5px 18px rgba(55, 66, 52, 0.07) !important;
+}
+
+body[data-page="home"] .nk-place-visual {
+  background: linear-gradient(145deg, var(--local-green-soft), var(--local-blue-soft)) !important;
+}
+
+body[data-page="home"] .nk-place-tag,
+body[data-page="home"] .nk-place-status {
+  color: var(--local-green-deep) !important;
+  background: var(--local-green-soft) !important;
+}
+
+body[data-page="home"] .nk-place-link,
+body[data-page="home"] .nk-section-heading a {
+  color: var(--local-green-deep) !important;
+}
+
+body[data-page="home"] .nk-nearby-button {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--local-blue), var(--local-blue-deep)) !important;
+  box-shadow: 0 8px 22px rgba(36, 107, 150, 0.2) !important;
+}
+
+body[data-page="home"] .nk-map-visual {
+  border-radius: 19px !important;
+  background: #eff6f0 !important;
+}
+
+body[data-page="home"] .nk-map-chip {
+  border-color: #dfe8dd !important;
+  color: #435446 !important;
+  background: #fff !important;
+}
+
+body[data-page="home"] .nk-purpose-card {
+  border: 1px solid #e9e6de !important;
+  border-radius: 18px !important;
+  background: #fff !important;
+  box-shadow: 0 4px 14px rgba(56, 68, 53, 0.06) !important;
+}
+
+body[data-page="home"] .nk-purpose-card > span {
+  background: var(--local-green-soft) !important;
+}
+
+body[data-page="home"] .nk-purpose-card:nth-child(even) > span {
+  background: var(--local-blue-soft) !important;
+}
+
+body[data-page="home"] .nk-owner-panel {
+  color: var(--local-ink) !important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(232, 162, 58, 0.16), transparent 11rem),
+    #fffdf8 !important;
+}
+
+body[data-page="home"] .nk-owner-badge {
+  color: var(--local-green-deep) !important;
+  background: var(--local-green-soft) !important;
+}
+
+body[data-page="home"] .nk-owner-panel a {
+  color: #fff !important;
+  background: var(--local-green) !important;
+}
+
+body[data-page="home"] .nk-trust-section {
+  background: #f1f7ee !important;
+}
+
+body[data-page="home"] .nk-footer,
+body .site-footer {
+  background: #30453a !important;
+}
+
+/* ---------- 店舗検索ページ ---------- */
+body[data-page="shops"] {
+  --shops-navy: var(--local-ink);
+  --shops-navy-deep: #25382e;
+  --shops-blue: var(--local-blue);
+  --shops-sky: var(--local-blue-soft);
+  --shops-orange: var(--local-orange);
+  --shops-orange-deep: #c98221;
+  --shops-cream: var(--local-bg);
+  --shops-paper: var(--local-surface-warm);
+  --shops-white: #fff;
+  --shops-ink: var(--local-ink);
+  --shops-muted: var(--local-muted);
+  --shops-line: var(--local-line);
+  --shops-green: var(--local-green);
+  --shops-shadow-sm: var(--local-shadow-sm);
+  --shops-shadow-md: var(--local-shadow-md);
+}
+
+body[data-page="shops"] .shops-intro {
+  border: 1px solid rgba(72, 88, 68, 0.08) !important;
+  border-radius: 0 0 32px 32px !important;
+  background:
+    radial-gradient(circle at 84% 14%, rgba(53,137,187,.13), transparent 15rem),
+    linear-gradient(180deg, #fffdf8, #f4f1e7) !important;
+}
+
+body[data-page="shops"] .shops-intro h1 {
+  color: var(--local-ink) !important;
+}
+
+body[data-page="shops"] .shops-intro-art svg {
+  fill: #fffdf8 !important;
+  stroke: #40839c !important;
+}
+
+body[data-page="shops"] .shops-art-sun {
+  background: #f3c86e !important;
+}
+
+body[data-page="shops"] .shops-search-panel {
+  border: 1px solid rgba(64, 83, 62, 0.08) !important;
+  border-radius: var(--local-radius-xl) !important;
+  background: rgba(255,255,255,.96) !important;
+  box-shadow: var(--local-shadow-md) !important;
+}
+
+body[data-page="shops"] .shops-popular-searches button,
+body[data-page="shops"] .cat-btn,
+body[data-page="shops"] .fav-only-btn,
+body[data-page="shops"] .reset-btn {
+  border: 1px solid var(--local-line) !important;
+  color: #4b554b !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+body[data-page="shops"] .cat-btn.active,
+body[data-page="shops"] .fav-only-btn.active {
+  color: #fff !important;
+  border-color: var(--local-green) !important;
+  background: var(--local-green) !important;
+}
+
+body[data-page="shops"] .open-now-toggle {
+  border-color: #dce8d9 !important;
+  background: #f5faf3 !important;
+}
+
+body[data-page="shops"] .card-list {
+  gap: 18px !important;
+}
+
+body[data-page="shops"] .card {
+  border: 1px solid #e8e4dc !important;
+  border-radius: 22px !important;
+  background: #fff !important;
+  box-shadow: var(--local-shadow-sm) !important;
+}
+
+body[data-page="shops"] .card::before {
+  height: 5px !important;
+  background: var(--cat-color, var(--local-green)) !important;
+}
+
+body[data-page="shops"] .card-title {
+  color: var(--local-ink) !important;
+}
+
+body[data-page="shops"] .card-category {
+  color: var(--local-green-deep) !important;
+}
+
+body[data-page="shops"] .card-info {
+  border: 1px solid #ece9e1 !important;
+  background: #faf8f3 !important;
+}
+
+body[data-page="shops"] .map-btn {
+  color: var(--local-blue-deep) !important;
+  background: var(--local-blue-soft) !important;
+}
+
+body[data-page="shops"] .tel-btn {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--local-green), var(--local-green-deep)) !important;
+}
+
+body[data-page="shops"] .official-btn {
+  border-color: var(--local-line) !important;
+  background: #fff !important;
+}
+
+/* ---------- その他ページの共通カード ---------- */
+body:not([data-page="home"]):not([data-page="shops"]) .app {
+  background: transparent !important;
+}
+
+body:not([data-page="home"]):not([data-page="shops"]) main > section,
+body:not([data-page="home"]):not([data-page="shops"]) .page-section,
+body:not([data-page="home"]):not([data-page="shops"]) .content-panel,
+body:not([data-page="home"]):not([data-page="shops"]) .favorite-card,
+body:not([data-page="home"]):not([data-page="shops"]) .ranking-card {
+  border-color: var(--local-line) !important;
+  border-radius: var(--local-radius-lg) !important;
+  background: #fff !important;
+  box-shadow: var(--local-shadow-sm) !important;
+}
+
+/* ---------- 下部ナビ：モックアップに近い白いタブバー ---------- */
+body .bottom-nav {
+  right: max(12px, env(safe-area-inset-right)) !important;
+  bottom: max(10px, env(safe-area-inset-bottom)) !important;
+  left: max(12px, env(safe-area-inset-left)) !important;
+  width: auto !important;
+  max-width: 520px !important;
+  min-height: 66px !important;
+  margin-inline: auto !important;
+  padding: 7px 8px !important;
+  border: 1px solid rgba(63, 78, 60, 0.11) !important;
+  border-radius: 22px !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 14px 40px rgba(45, 59, 43, 0.19) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+body .bottom-nav-btn {
+  min-height: 52px !important;
+  border-radius: 16px !important;
+  color: #7b827a !important;
+  background: transparent !important;
+}
+
+body .bottom-nav-btn.is-active,
+body .bottom-nav-btn:hover {
+  color: var(--local-green-deep) !important;
+  background: var(--local-green-soft) !important;
+}
+
+body .bottom-nav-icon .ic,
+body .bottom-nav-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+body .bottom-nav-label {
+  font-size: 10px !important;
+  letter-spacing: 0 !important;
+}
+
+/* ---------- フォーカス ---------- */
+body button:focus-visible,
+body a:focus-visible,
+body input:focus-visible {
+  outline: 3px solid rgba(76, 159, 82, 0.3) !important;
+  outline-offset: 3px !important;
+}
+
+@media (min-width: 881px) {
+  body .bottom-nav {
+    display: none !important;
+  }
+
+  body[data-page="home"],
+  body[data-page="shops"] {
+    padding-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 1120px) {
+  body[data-page="home"] .nk-category-rail {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 880px) {
+  body[data-page="home"] .home-shell {
+    width: min(100% - 24px, 720px) !important;
+  }
+
+  body[data-page="home"] .home-top-note {
+    display: none !important;
+  }
+
+  body[data-page="home"] .nk-header,
+  body[data-page="shops"] .shops-header {
+    top: 8px !important;
+    width: calc(100% - 16px) !important;
+    margin: 8px auto 0 !important;
+    border: 1px solid rgba(66, 81, 63, 0.09) !important;
+    border-radius: 19px !important;
+  }
+
+  body[data-page="home"] .nk-header-inner,
+  body[data-page="shops"] .shops-header-inner {
+    min-height: 61px !important;
+    padding-inline: 11px !important;
+  }
+
+  body[data-page="home"] .nk-hero-inner {
+    display: flex !important;
+    min-height: 0 !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+
+  body[data-page="home"] .nk-hero-copy {
+    padding: 34px 0 10px !important;
+  }
+
+  body[data-page="home"] .nk-hero h1 {
+    font-size: clamp(34px, 9vw, 46px) !important;
+  }
+
+  body[data-page="home"] .nk-hero-art {
+    position: relative !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    min-height: 238px !important;
+    margin-top: -6px;
+  }
+
+  body[data-page="home"] .nk-castle-art {
+    right: 50% !important;
+    width: 470px !important;
+    max-width: none !important;
+    transform: translateX(50%) !important;
+  }
+
+  body[data-page="home"] .nk-floating-card-a {
+    top: 35px !important;
+    left: 0 !important;
+  }
+
+  body[data-page="home"] .nk-floating-card-b {
+    right: 0 !important;
+    bottom: 28px !important;
+  }
+
+  body[data-page="home"] .nk-category-section {
+    margin-top: -12px !important;
+  }
+}
+
+@media (max-width: 620px) {
+  body[data-page="home"] .nk-brand small,
+  body[data-page="shops"] .shops-brand-copy small {
+    display: none !important;
+  }
+
+  body[data-page="home"] .nk-brand strong,
+  body[data-page="shops"] .shops-brand strong {
+    font-size: 15px !important;
+  }
+
+  .local-greeting {
+    margin-bottom: 12px;
+  }
+
+  body[data-page="home"] .nk-hero-copy {
+    padding-top: 27px !important;
+  }
+
+  body[data-page="home"] .nk-eyebrow {
+    font-size: 9px !important;
+  }
+
+  body[data-page="home"] .nk-hero h1 {
+    font-size: 34px !important;
+  }
+
+  body[data-page="home"] .nk-hero-lead {
+    margin-top: 12px !important;
+    font-size: 12px !important;
+  }
+
+  body[data-page="home"] .nk-hero-search {
+    min-height: 58px !important;
+    grid-template-columns: 24px minmax(0, 1fr) 72px !important;
+    margin-top: 18px !important;
+    border-radius: 18px !important;
+  }
+
+  body[data-page="home"] .nk-hero-links {
+    font-size: 9px !important;
+  }
+
+  body[data-page="home"] .nk-hero-art {
+    min-height: 214px !important;
+  }
+
+  body[data-page="home"] .nk-castle-art {
+    width: 420px !important;
+  }
+
+  body[data-page="home"] .nk-floating-card {
+    min-width: 130px !important;
+    padding: 8px 9px !important;
+  }
+
+  body[data-page="home"] .nk-floating-card strong {
+    font-size: 9px !important;
+  }
+
+  body[data-page="home"] .nk-category-section .home-shell {
+    width: calc(100% - 16px) !important;
+    padding: 17px 13px !important;
+  }
+
+  body[data-page="home"] .nk-category-rail {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  body[data-page="home"] .nk-category-card {
+    min-height: 82px !important;
+    padding: 9px 3px !important;
+  }
+
+  body[data-page="home"] .nk-category-card strong {
+    font-size: 10px !important;
+  }
+
+  body[data-page="home"] .nk-category-card small {
+    font-size: 8px !important;
+  }
+
+  body[data-page="home"] .nk-category-icon {
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 11px !important;
+  }
+
+  body[data-page="home"] .nk-featured-panel,
+  body[data-page="home"] .nk-area-panel,
+  body[data-page="home"] .nk-news-panel,
+  body[data-page="home"] .nk-owner-panel,
+  body[data-page="shops"] .shops-search-panel {
+    border-radius: 22px !important;
+  }
+
+  body[data-page="home"] .nk-place-card {
+    flex-basis: 82% !important;
+  }
+
+  body[data-page="shops"] .shops-intro {
+    margin: 10px 8px 0 !important;
+    border-radius: 24px !important;
+  }
+
+  body[data-page="shops"] .shops-search-panel {
+    margin-inline: 8px !important;
+  }
+
+  body[data-page="shops"] .card {
+    border-radius: 20px !important;
+  }
+}
