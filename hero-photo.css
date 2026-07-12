@@ -98,3 +98,101 @@ body[data-page="home"] .nk-hero-search {
     font-size: 12px;
   }
 }
+/* ============================================================
+   中津城ヘッダー・最終適用
+   local-app-theme.cssより優先して写真を表示
+   ============================================================ */
+
+html body[data-page="home"] .app.home-app .nk-hero {
+  min-height: 560px !important;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(20, 37, 26, 0.88) 0%,
+      rgba(20, 37, 26, 0.68) 43%,
+      rgba(20, 37, 26, 0.20) 72%,
+      rgba(20, 37, 26, 0.05) 100%
+    ),
+    url("nakatsu-castle-hero.jpg") center 42% / cover no-repeat !important;
+}
+
+html body[data-page="home"] .app.home-app .nk-hero::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.02) 0%,
+      rgba(0, 0, 0, 0.04) 60%,
+      rgba(15, 35, 23, 0.36) 100%
+    ) !important;
+  opacity: 1 !important;
+  mask-image: none !important;
+}
+
+html body[data-page="home"] .app.home-app .nk-hero-inner {
+  min-height: 560px !important;
+  grid-template-columns: minmax(0, 700px) 1fr !important;
+}
+
+html body[data-page="home"] .app.home-app .nk-hero-copy {
+  padding: 86px 0 100px !important;
+}
+
+html body[data-page="home"] .app.home-app .nk-hero h1,
+html body[data-page="home"] .app.home-app .nk-hero-lead,
+html body[data-page="home"] .app.home-app .nk-hero-links,
+html body[data-page="home"] .app.home-app .nk-hero-links a {
+  color: #ffffff !important;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.46) !important;
+}
+
+html body[data-page="home"] .app.home-app .nk-eyebrow {
+  color: #ffe0a8 !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.42) !important;
+}
+
+html body[data-page="home"] .app.home-app .nk-hero-art {
+  display: none !important;
+}
+
+@media (max-width: 880px) {
+  html body[data-page="home"] .app.home-app .nk-hero {
+    min-height: 620px !important;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(15, 35, 23, 0.16) 0%,
+        rgba(15, 35, 23, 0.32) 38%,
+        rgba(15, 35, 23, 0.92) 100%
+      ),
+      url("nakatsu-castle-hero.jpg") 58% 22% / cover no-repeat !important;
+  }
+
+  html body[data-page="home"] .app.home-app .nk-hero-inner {
+    min-height: 620px !important;
+    display: block !important;
+  }
+
+  html body[data-page="home"] .app.home-app .nk-hero-copy {
+    padding: 250px 0 74px !important;
+  }
+}
+
+@media (max-width: 620px) {
+  html body[data-page="home"] .app.home-app .nk-hero {
+    min-height: 600px !important;
+    background-position: 58% 20% !important;
+  }
+
+  html body[data-page="home"] .app.home-app .nk-hero-inner {
+    min-height: 600px !important;
+  }
+
+  html body[data-page="home"] .app.home-app .nk-hero-copy {
+    padding: 225px 0 64px !important;
+  }
+
+  html body[data-page="home"] .app.home-app .nk-hero h1 {
+    font-size: 35px !important;
+    line-height: 1.2 !important;
+  }
+}
