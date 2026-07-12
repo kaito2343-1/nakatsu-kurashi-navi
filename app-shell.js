@@ -3,7 +3,8 @@
 
   var STYLES = [
     "style.css?v=9",
-    "design-refresh.css?v=2"
+    "design-refresh.css?v=2",
+    "local-app-theme.css?v=1"
   ];
 
   var SCRIPTS = [
@@ -57,7 +58,8 @@
     "phase6-business-upgrade.js?v=7",
     "phase6-position-fix.js?v=1",
 
-    "shop-profile-public.js?v=3"
+    "shop-profile-public.js?v=3",
+    "local-app-theme.js?v=1"
   ];
 
   function getBasePath() {
