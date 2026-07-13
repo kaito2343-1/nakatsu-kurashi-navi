@@ -54,8 +54,9 @@
     "phase6-business-upgrade.js?v=7",
     "phase6-position-fix.js?v=1",
 
-    "shop-profile-public.js?v=3",
-    "local-app-theme.js?v=1"
+        "shop-profile-public.js?v=3",
+    "local-app-theme.js?v=1",
+    "search-ux-upgrade.js?v=1"
   ];
 
   function getBasePath() {
