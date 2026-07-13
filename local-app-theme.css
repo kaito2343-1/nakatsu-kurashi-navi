@@ -803,3 +803,61 @@ body input:focus-visible {
     border-radius: 20px !important;
   }
 }
+/* ============================================================
+   スマホ下部ナビの位置ずれ修正
+   ============================================================ */
+
+@media (max-width: 880px) {
+  html body .bottom-nav {
+    position: fixed !important;
+
+    left: max(12px, env(safe-area-inset-left)) !important;
+    right: max(12px, env(safe-area-inset-right)) !important;
+    bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+
+    width: auto !important;
+    max-width: 520px !important;
+    min-height: 66px !important;
+
+    margin: 0 auto !important;
+
+    /* 左へずれる原因を解除 */
+    transform: none !important;
+
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+
+    padding: 7px 8px !important;
+    box-sizing: border-box !important;
+
+    border-radius: 22px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: 0 14px 40px rgba(45, 59, 43, 0.19) !important;
+
+    z-index: 9999 !important;
+  }
+
+  html body .bottom-nav-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 52px !important;
+
+    margin: 0 !important;
+    padding: 6px 2px !important;
+    box-sizing: border-box !important;
+  }
+
+  html body .bottom-nav-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  html body .bottom-nav-label {
+    display: block !important;
+    font-size: 10px !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+  }
+}
