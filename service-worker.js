@@ -5,7 +5,7 @@
    HTMLはネット優先、CSS・JS・画像はキャッシュ優先です。
    ============================================================ */
 
-const CACHE_VERSION = "v5";
+const CACHE_VERSION = "v6";
 
 const CACHE_NAME =
   "nakatsu-kurashi-navi-" + CACHE_VERSION;
@@ -23,8 +23,8 @@ const APP_SHELL = [
   "./style.css?v=9",
   "./design-refresh.css?v=2",
   "./manifest.webmanifest",
-  "./app-shell.js?v=10",
-  "./local-app-theme.css?v=1",
+  "./app-shell.js?v=11",
+  "./local-app-theme.css?v=2",
   "./local-app-theme.js?v=1",
   "./supabase-auth.js?v=1",
   "./phase4-shop-status.js?v=1",
