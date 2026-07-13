@@ -43,16 +43,16 @@
 
     "ranking.js?v=1",
     "ui-extra.js?v=1",
-    "ai-detail-extra.js?v=1",
+  
     "home-page-extra.js?v=1",
     "about-extra.js?v=1",
 
     "core-upgrade.js?v=1",
 
     "design-refresh.js?v=2",
-    "phase1-features.js?v=1",
+  
     "phase2-features.js?v=1",
-    "phase3-features.js?v=1",
+   
     "phase4-shop-status.js?v=1",
     "status-note-extra.js?v=2",
     "phase6-business-upgrade.js?v=7",
