@@ -4,7 +4,7 @@
   var STYLES = [
     "style.css?v=9",
     "design-refresh.css?v=2",
-    "local-app-theme.css?v=1"
+    "local-app-theme.css?v=2"
   ];
 
   var SCRIPTS = [
