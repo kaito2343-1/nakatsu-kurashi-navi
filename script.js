@@ -1160,3 +1160,67 @@ function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+/* =========================================================
+   検索・カテゴリ選択後に結果一覧へ自動スクロール
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+  const searchButton = document.querySelector(
+    "#searchButton, [data-search-button], .search-button"
+  );
+
+  const searchInput = document.querySelector(
+    "#searchInput, [data-search-input], .search-input"
+  );
+
+  const searchForm = searchButton
+    ? searchButton.closest("form")
+    : null;
+
+  const resultArea = document.querySelector(
+    "#searchResults, #facilityList, #results, .results-section, .facility-grid"
+  );
+
+  function scrollToResults() {
+    if (!resultArea) return;
+
+    /*
+     * 検索結果の描画が終わるまで少し待つ
+     */
+    window.setTimeout(function () {
+      resultArea.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }, 150);
+  }
+
+  if (searchButton) {
+    searchButton.addEventListener("click", scrollToResults);
+  }
+
+  if (searchForm) {
+    searchForm.addEventListener("submit", scrollToResults);
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        scrollToResults();
+      }
+    });
+  }
+
+  /*
+   * カテゴリボタンを押した時も結果へ移動
+   */
+  document.addEventListener("click", function (event) {
+    const categoryButton = event.target.closest(
+      "[data-category], .category-btn, .filter-button"
+    );
+
+    if (categoryButton) {
+      scrollToResults();
+    }
+  });
+});
