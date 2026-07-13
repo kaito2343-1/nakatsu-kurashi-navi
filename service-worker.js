@@ -1,11 +1,11 @@
 /* ============================================================
    中津くらしナビ service-worker.js
 
-   初回アクセス時に必要なファイルをキャッシュします。
    HTMLはネット優先、CSS・JS・画像はキャッシュ優先です。
+   v7で古いphase1/phase3等のキャッシュを破棄します。
    ============================================================ */
 
-const CACHE_VERSION = "v6";
+const CACHE_VERSION = "v7";
 
 const CACHE_NAME =
   "nakatsu-kurashi-navi-" + CACHE_VERSION;
@@ -26,7 +26,7 @@ const APP_SHELL = [
   "./app-shell.js?v=11",
   "./local-app-theme.css?v=2",
   "./local-app-theme.js?v=1",
-  "./supabase-auth.js?v=1",
+  "./supabase-auth.js?v=2",
   "./phase4-shop-status.js?v=1",
   "./shop-dashboard.js?v=1",
 
