@@ -2331,5 +2331,149 @@ body[data-page="home"] .toast {
 
 </script>
 <link rel="stylesheet" href="local-app-theme.css?v=1" data-theme-final>
+
+   <style>
+#cardList .home-share-btn {
+  width: 100%;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 16px;
+  color: #fff;
+  background: #0e5148;
+  font-size: 16px;
+  font-weight: 900;
+}
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  function addShareButtons() {
+    document.querySelectorAll(
+      "#cardList .card, #cardList article, #cardList [data-id]"
+    ).forEach(function (card) {
+      if (
+        card.querySelector(
+          ".home-share-btn, .share-btn"
+        )
+      ) {
+        return;
+      }
+
+      var title =
+        card.querySelector(".card-title") ||
+        card.querySelector("h3");
+
+      var mapButton = Array.from(
+        card.querySelectorAll("a, button")
+      ).find(function (element) {
+        return element.textContent
+          .replace(/\s+/g, "")
+          .includes("地図で見る");
+      });
+
+      if (!title || !mapButton) {
+        return;
+      }
+
+      var button =
+        document.createElement("button");
+
+      button.type = "button";
+      button.className = "home-share-btn";
+      button.textContent = "↗ この店舗を共有";
+
+      button.addEventListener(
+        "click",
+        function () {
+          var shopName =
+            title.textContent.trim();
+
+          var url =
+            window.location.origin +
+            window.location.pathname +
+            "?q=" +
+            encodeURIComponent(shopName);
+
+          var shareData = {
+            title:
+              shopName +
+              "｜中津くらしナビ",
+            text:
+              shopName +
+              "を中津くらしナビで見る",
+            url: url
+          };
+
+          if (navigator.share) {
+            navigator.share(shareData)
+              .catch(function (error) {
+                if (
+                  !error ||
+                  error.name !== "AbortError"
+                ) {
+                  window.prompt(
+                    "URLをコピーしてください",
+                    url
+                  );
+                }
+              });
+          } else {
+            window.prompt(
+              "URLをコピーしてください",
+              url
+            );
+          }
+        }
+      );
+
+      mapButton.insertAdjacentElement(
+        "afterend",
+        button
+      );
+    });
+  }
+
+  function start() {
+    addShareButtons();
+
+    var cardList =
+      document.getElementById("cardList");
+
+    if (
+      cardList &&
+      "MutationObserver" in window
+    ) {
+      new MutationObserver(
+        addShareButtons
+      ).observe(cardList, {
+        childList: true,
+        subtree: true
+      });
+    }
+
+    window.setInterval(
+      addShareButtons,
+      1000
+    );
+  }
+
+  if (
+    document.readyState === "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      start
+    );
+  } else {
+    start();
+  }
+})();
+</script>
 </body>
 </html>
