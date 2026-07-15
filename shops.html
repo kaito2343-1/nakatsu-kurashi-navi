@@ -1582,5 +1582,121 @@ body[data-page="shops"] .bottom-nav {
 </script>
 
 <link rel="stylesheet" href="local-app-theme.css?v=1" data-theme-final>
+  
+<style>
+#cardList .share-btn {
+  width: 100%;
+  min-height: 58px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 16px;
+  color: #ffffff;
+  background: #0e5148;
+  font-size: 16px;
+  font-weight: 900;
+}
+</style>
+
+<script>
+(function () {
+  "use strict";
+
+  function copyShareUrl(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url)
+        .then(function () {
+          alert("店舗ページのURLをコピーしました");
+        })
+        .catch(function () {
+          window.prompt("このURLをコピーしてください", url);
+        });
+    } else {
+      window.prompt("このURLをコピーしてください", url);
+    }
+  }
+
+  function addShareButtons() {
+    document.querySelectorAll("#cardList .card").forEach(function (card) {
+      if (card.querySelector(".share-btn")) {
+        return;
+      }
+
+      var titleElement =
+        card.querySelector(".card-title") ||
+        card.querySelector("h3");
+
+      var mapButton =
+        card.querySelector(".map-btn") ||
+        card.querySelector('a[href*="google.com/maps"]') ||
+        card.querySelector('a[href*="maps/search"]');
+
+      if (!titleElement || !mapButton) {
+        return;
+      }
+
+      var title = titleElement.textContent.trim();
+      var id = card.getAttribute("data-id");
+
+      var shareButton = document.createElement("button");
+      shareButton.type = "button";
+      shareButton.className = "share-btn";
+      shareButton.textContent = "↗ この店舗を共有";
+
+      shareButton.addEventListener("click", function () {
+        var url = new URL(window.location.href);
+
+        url.searchParams.set("q", title);
+
+        if (id) {
+          url.hash = "facility-" + id;
+        }
+
+        var shareData = {
+          title: title + "｜中津くらしナビ",
+          text: title + "を中津くらしナビで見る",
+          url: url.toString()
+        };
+
+        if (navigator.share) {
+          navigator.share(shareData).catch(function (error) {
+            if (!error || error.name !== "AbortError") {
+              copyShareUrl(shareData.url);
+            }
+          });
+        } else {
+          copyShareUrl(shareData.url);
+        }
+      });
+
+      mapButton.insertAdjacentElement("afterend", shareButton);
+    });
+  }
+
+  function startShareButtonWatcher() {
+    addShareButtons();
+
+    var cardList = document.getElementById("cardList");
+
+    if (cardList && "MutationObserver" in window) {
+      new MutationObserver(addShareButtons).observe(cardList, {
+        childList: true,
+        subtree: true
+      });
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      startShareButtonWatcher
+    );
+  } else {
+    startShareButtonWatcher();
+  }
+})();
+</script>
 </body>
 </html>
