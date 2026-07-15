@@ -925,7 +925,11 @@ function createCardHtml(facility) {
   const telButton = facility.phone
     ? '<a class="tel-btn" href="tel:' + encodeURIComponent(facility.phone) + '">📞 電話する</a>'
     : "";
-
+const shareButton =
+  '<button type="button" class="share-btn home-share-btn" ' +
+  'data-share-id="' + facility.id + '">' +
+  '↗ この店舗を共有' +
+  '</button>';
   return (
     '<article class="card ' + colorClass + '" data-id="' + facility.id + '">' +
       '<div class="card-top">' +
@@ -960,6 +964,7 @@ function createCardHtml(facility) {
         officialButton +
         instaButton +
         telButton +
+     shareButton +
       "</div>" +
     "</article>"
   );
@@ -1045,7 +1050,67 @@ function render() {
       toggleFavorite(Number(btn.dataset.id), btn);
     });
   });
+const shareButtons =
+  cardListEl.querySelectorAll(".share-btn");
 
+shareButtons.forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    const facilityId =
+      Number(btn.dataset.shareId);
+
+    const facility =
+      facilities.find(function (item) {
+        return item.id === facilityId;
+      });
+
+    if (!facility) {
+      return;
+    }
+
+    const url =
+      new URL(window.location.href);
+
+    url.searchParams.set(
+      "q",
+      facility.name
+    );
+
+    url.hash =
+      "facility-" + facility.id;
+
+    const shareData = {
+      title:
+        facility.name +
+        "｜中津くらしナビ",
+
+      text:
+        facility.name +
+        "を中津くらしナビで見る",
+
+      url: url.toString()
+    };
+
+    if (navigator.share) {
+      navigator.share(shareData)
+        .catch(function (error) {
+          if (
+            !error ||
+            error.name !== "AbortError"
+          ) {
+            window.prompt(
+              "URLをコピーしてください",
+              shareData.url
+            );
+          }
+        });
+    } else {
+      window.prompt(
+        "URLをコピーしてください",
+        shareData.url
+      );
+    }
+  });
+});
   renderFavOnlyButton();
 }
 function scrollToResults() {
