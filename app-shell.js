@@ -8,7 +8,7 @@
   ];
 
   var SCRIPTS = [
-    "script.js?v=9",
+    "script.js?v=10",
 
     "data/izakaya2-extra.js?v=1",
     "data/ramen-extra.js?v=1",
