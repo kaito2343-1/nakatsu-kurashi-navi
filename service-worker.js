@@ -5,7 +5,7 @@
    v7で古いphase1/phase3等のキャッシュを破棄します。
    ============================================================ */
 
-const CACHE_VERSION = "v7";
+const CACHE_VERSION = "v8";
 
 const CACHE_NAME =
   "nakatsu-kurashi-navi-" + CACHE_VERSION;
@@ -23,7 +23,7 @@ const APP_SHELL = [
   "./style.css?v=9",
   "./design-refresh.css?v=2",
   "./manifest.webmanifest",
-  "./app-shell.js?v=11",
+  "./app-shell.js?v=12",
   "./local-app-theme.css?v=2",
   "./local-app-theme.js?v=1",
   "./supabase-auth.js?v=2",
